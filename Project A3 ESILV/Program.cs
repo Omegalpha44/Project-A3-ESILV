@@ -1,3 +1,12 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World! \n ceci est un test");
-Console.WriteLine("Ceci est un test que je fais dans le but de faire un truc propre");
+﻿namespace Solution
+{
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+            //Console.ReadKey();
+        }
+    }
+    
+}
