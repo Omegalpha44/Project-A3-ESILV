@@ -29,7 +29,11 @@ namespace Project_A3_ESILV
             get { return disponible; }
             set { disponible = value; }
         }
-        
 
+        #region Constructeurs
+        #endregion
+
+        #region Méthodes
+        #endregion
     }
 }
