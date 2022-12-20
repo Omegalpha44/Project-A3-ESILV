@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project_A3_ESILV
 {
-    abstract internal class PersonneEnt
+    abstract internal class PersonneEnt : IId
     {
         int id;
         string nom;
