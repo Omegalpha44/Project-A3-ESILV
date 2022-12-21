@@ -178,6 +178,8 @@ namespace Project_A3_ESILV
             clients.Sort((x, y) => x.PrixCommandes().CompareTo(y.PrixCommandes()));
         }
         #endregion
+        #region gestion sous la forme d'un arbre n-aire des salaries
         
+        #endregion
     }
 }

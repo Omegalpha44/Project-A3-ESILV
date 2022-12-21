@@ -69,5 +69,13 @@ namespace Project_A3_ESILV
             if(poste == "chauffeur")  livraison++;
         }
 
+        public override string ToString()
+        {
+            return "Salarié : " + base.ToString() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire;
+        }
+        public static  bool Equal(Salarie s1, Salarie s2)
+        {
+            return s1.Nom == s2.Nom && s2.Prenom == s2.Prenom;
+        }
     }
 }

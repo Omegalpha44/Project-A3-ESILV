@@ -61,7 +61,12 @@ namespace Project_A3_ESILV
             get { return telephone; }
             set { telephone = value; }
         }
-        
+
         //méthodes
+        public override string ToString()
+        {
+            return nom + " " + prenom;
+            
+        }
     }
 }
