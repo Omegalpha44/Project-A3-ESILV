@@ -33,6 +33,32 @@ namespace Project_A3_ESILV
         {
             commandes.Remove(command);
         }
+        public void RetireCommand(int id)
+        {
+            foreach (Command command in commandes)
+            {
+                if (command.Id == id)
+                {
+                    commandes.Remove(command);
+                    break;
+                }
+            }
+        }
+        #endregion
+        #region affichage
+        public override string ToString()
+        {
+            string res = "Client : " + base.ToString();
+            foreach(Command com in commandes)
+            {
+                res += "\n"+com.ToString();
+            }
+            return res;
+        }
+        public void AfficherClient()
+        {
+            Console.WriteLine(this);
+        }
         #endregion
         public int PrixCommandes() // renvoie la somme totale payé par la personne
         {

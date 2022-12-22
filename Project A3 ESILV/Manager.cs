@@ -11,6 +11,7 @@ namespace Project_A3_ESILV
         List<Salarie> salaries;
         List<Client> clients;
         List<Vehicule> vehicules;
+        SalariesArbre salariesHierarchie;
 
         //constructeur
         public Manager(List<Salarie> salaries, List<Client> clients, List<Vehicule> vehicules)
@@ -18,6 +19,7 @@ namespace Project_A3_ESILV
             this.salaries = salaries;
             this.clients = clients;
             this.vehicules = vehicules;
+            this.salariesHierarchie = null;
         }
 
         //getter-setter
@@ -147,11 +149,11 @@ namespace Project_A3_ESILV
             }
             return v;
         }
-        public Command GenerationDeCommande(string depart, string arrive, Client client, int prix) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
+        public Command GenerationDeCommande(string depart, string arrive, Client client, int prix,int id) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
         {
             Salarie s = ChooseDriver();
             Vehicule v = ChooseVehicle();
-            Command c = new Command(client, arrive, depart, prix, v, s);
+            Command c = new Command(client, arrive, depart, prix, v, s,id);
             return c;
         }
         #endregion
@@ -179,7 +181,7 @@ namespace Project_A3_ESILV
         }
         #endregion
         #region gestion sous la forme d'un arbre n-aire des salaries
-        
+
         #endregion
     }
 }

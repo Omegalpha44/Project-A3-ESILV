@@ -8,7 +8,7 @@ namespace Solution
             static void Main(string[] args)
         {
             #region test des arbres n-aire
-            Salarie s0 = new Salarie(0, "0", "0", new DateTime(10,10,10), "0", "0", 0, new DateTime(10,10,10), "chauffeur", 0);
+            Salarie s0 = new Salarie(0, "Patrick", "Jean", new DateTime(1956,5,5), "0", "0", 0, new DateTime(10,10,10), "PDG", 0);
             Salarie s1 = new Salarie(1, "1", "1", new DateTime(1, 1, 1), "1", "1", 1, new DateTime(1, 1, 1), "chauffeur", 1);
             Salarie s2 = new Salarie(2, "2", "2", new DateTime(2, 2, 2), "2", "2", 2, new DateTime(2, 2, 2), "chauffeur", 2);
             Salarie s3 = new Salarie(3, "3", "3", new DateTime(3, 3, 3), "3", "3", 3, new DateTime(3, 3, 3), "chauffeur", 3);
@@ -26,6 +26,17 @@ namespace Solution
             salarieArbre.AfficherHierarchie();
             salarieArbre.RetirerSalarie("7", "7", "chauffeur");
             salarieArbre.AfficherHierarchie();
+            string[] tab = salarieArbre.CoupleSalarieEmployeur("1", "1","chauffeur");
+            Console.WriteLine(tab[0] + tab[1]);
+            string[,] graphe = salarieArbre.GrapheAdjacence();
+            for (int i = 0; i < graphe.GetLength(0); i++)
+            {
+                for (int j = 0; j < graphe.GetLength(1); j++)
+                {
+                    Console.Write(graphe[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
             #endregion
 
 

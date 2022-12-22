@@ -30,10 +30,10 @@ namespace Project_A3_ESILV
             set { disponible = value; }
         }
 
-        #region Constructeurs
-        #endregion
-
-        #region Méthodes
-        #endregion
+        //méthodes
+        public override string ToString()
+        {
+            return "Vehicule : " + immatriculation + " disponible : " + disponible;
+        }
     }
 }

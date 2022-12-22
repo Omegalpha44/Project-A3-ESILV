@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project_A3_ESILV
 {
-    internal class Command : IPrix
+    internal class Command : IPrix,IId
     {
         Client client;
         string arrivee;
@@ -14,9 +14,10 @@ namespace Project_A3_ESILV
         int prix;
         Vehicule vehicule;
         Salarie chauffeur;
+        int id;
         
         //constructeur
-        public Command(Client client, string arrivee, string depart, int prix, Vehicule vehicule, Salarie chauffeur)
+        public Command(Client client, string arrivee, string depart, int prix, Vehicule vehicule, Salarie chauffeur,int id)
         {
             this.client = client;
             this.arrivee = arrivee;
@@ -24,6 +25,8 @@ namespace Project_A3_ESILV
             this.prix = prix;
             this.vehicule = vehicule;
             this.chauffeur = chauffeur;
+            this.id = id;
+
         }
 
         //getter-setter
@@ -46,6 +49,16 @@ namespace Project_A3_ESILV
             get { return prix; }
             set { prix = value; }
         }
-        
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
+        //méthodes
+        public override string ToString()
+        {
+            return "Commande n°" + id + " : " + client.Nom + " " + client.Prenom + " a commandé un " + vehicule.Immatriculation + " pour aller de " + depart + " à " + arrivee + " pour un prix de " + prix + "€." + " Le chauffeur est " + chauffeur.Nom + " " + chauffeur.Prenom + " " + chauffeur.Nom;
+        }
     }
 }
