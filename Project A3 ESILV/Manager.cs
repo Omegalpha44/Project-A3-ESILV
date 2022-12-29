@@ -155,11 +155,11 @@ namespace Project_A3_ESILV
             }
             return v;
         }
-        public Command GenerationDeCommande(string depart, string arrive, Client client, int prix,int id) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
+        public Commande GenerationDeCommande(string depart, string arrive, Client client, int prix,int id) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
         {
             Salarie s = ChooseDriver();
             Vehicule v = ChooseVehicle();
-            Command c = new Command(client, arrive, depart, prix, v, s,id);
+            Commande c = new Commande(client, arrive, depart, prix, v, s,id);
             return c;
         }
         #endregion
