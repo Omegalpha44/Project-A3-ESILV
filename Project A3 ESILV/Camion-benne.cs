@@ -8,22 +8,26 @@ namespace Project_A3_ESILV
 {
     internal class Camion_benne : Vehicule
     {
+        #region Champs
         List<string> equipements;
+        #endregion
 
-        //constructeur
+        #region constructeur
         public Camion_benne(string immatriculation, List<string> equipements) : base(immatriculation)
         {
             this.equipements = equipements;
         }
+        #endregion
 
-        //getter-setter
+        #region getter-setter
         public List<string> Equipements
         {
             get { return equipements; }
             set { equipements = value; }
         }
+        #endregion
 
-        //méthodes
+        #region Méthodes
         public override string ToString()
         {
             string res = "Camion_benne : " + base.ToString() + " equipements : ";
@@ -33,6 +37,7 @@ namespace Project_A3_ESILV
             }
             return res;
         }
-        
+        #endregion
+
     }
 }

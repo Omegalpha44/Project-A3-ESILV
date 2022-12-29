@@ -8,15 +8,16 @@ namespace Project_A3_ESILV
 {
     internal class Salarie : PersonneEnt,IPrix
     {
-
+        #region Champs
         DateTime dateEmbauche;
         string poste;
         int salaire;
         bool hasDrivenToday; // vérifie si le conducteur a conduit aujourd'hui (false si non, true si oui) NE S'APPLIQUE QUE SI CHAUFFEUR
         int livraison; // nombre de livraison effectuées par le conducteur NE S'APPLIQUE QUE SI CHAUFFEUR
         bool isFree; //false si le conducteur est occupé, true si il est libre NE S'APPLIQUE QUE SI CHAUFFEUR
+        #endregion
 
-        //constructeur
+        #region Constructeur
         public Salarie(int id, string nom, string prenom, DateTime dateNaissance, string adresse, string adresseMail, int telephone, DateTime dateEmbauche, string poste, int salaire) : base(id, nom, prenom, dateNaissance, adresse, adresseMail, telephone)
         {
             this.dateEmbauche = dateEmbauche;
@@ -26,8 +27,9 @@ namespace Project_A3_ESILV
             this.livraison = 0;
             this.isFree = true;
         }
+        #endregion
 
-        //getter-setter
+        #region getter-setter
         public DateTime DateEmbauche
         {
             get { return dateEmbauche; }
@@ -62,13 +64,13 @@ namespace Project_A3_ESILV
             get { if (poste == "chauffeur") return isFree; else return false; }
             set { isFree = value; }
         }
+        #endregion
 
-        //méthodes
+        #region méthodes
         public void AjoutLivraison()  // ajoute une livraison au conducteur
         {
             if(poste == "chauffeur")  livraison++;
         }
-
         public override string ToString()
         {
             return "Salarié : " + base.ToString() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire;
@@ -77,5 +79,6 @@ namespace Project_A3_ESILV
         {
             return s1.Nom == s2.Nom && s2.Prenom == s2.Prenom;
         }
+        #endregion
     }
 }

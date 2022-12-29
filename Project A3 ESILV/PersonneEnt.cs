@@ -8,6 +8,7 @@ namespace Project_A3_ESILV
 {
     abstract internal class PersonneEnt : IId
     {
+        #region Champs
         int id;
         string nom;
         string prenom;
@@ -15,8 +16,9 @@ namespace Project_A3_ESILV
         string adresse;
         string adresseMail;
         int telephone;
+        #endregion
 
-        //constructeur
+        #region constructeur
         public PersonneEnt(int id, string nom, string prenom, DateTime dateNaissance, string adresse, string adresseMail, int telephone)
         {
             this.id = id;
@@ -27,8 +29,9 @@ namespace Project_A3_ESILV
             this.adresseMail = adresseMail;
             this.telephone = telephone;
         }
+        #endregion
 
-        //getter-setter
+        #region getter-setter
         public int Id
         {
             get { return id; }
@@ -61,12 +64,14 @@ namespace Project_A3_ESILV
             get { return telephone; }
             set { telephone = value; }
         }
+        #endregion
 
-        //méthodes
+        #region Méthodes
         public override string ToString()
         {
             return nom + " " + prenom;
             
         }
+        #endregion
     }
 }

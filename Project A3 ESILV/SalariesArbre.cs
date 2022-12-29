@@ -2,17 +2,29 @@
 {
     internal class SalariesArbre
     {
+        #region Champs
         Salarie s;
         SalariesArbre frere;
         SalariesArbre fils;
+        #endregion
 
+        #region Constructeurs
         public SalariesArbre(Salarie s)
         {
             this.s = s;
             frere = null;
             fils = null;
         }
+        #endregion
+
+        #region Propriétés
+
         public Salarie S { get; }
+
+        #endregion
+
+        #region Méthodes
+
         #region gestion de l'arbre
         public void CreerArbre(List<Salarie> salaries, SalariesArbre boss = null) // création rapide d'un arbre n-aire L'ORDRE N'EST PAS RESPECTE
         {
@@ -54,6 +66,7 @@
             }
         }
         #endregion
+
         #region ToString
         public override string ToString() // renvoie sous forme de string les information des salaries de l'arbres n-aire
         {
@@ -63,6 +76,7 @@
             return self;
         }
         #endregion
+
         #region permet de déterminer les employées ou le manager de la personne indiqué
         bool IsInSalariesList(string prenom, string nom, string poste) // vérifie si l'employée est dans la liste des frères
         {
@@ -115,6 +129,7 @@
             if (fils != null) fils.AfficherHierarchie(s);
         }
         #endregion
+
         #region Ajout et retrait d'un salarié en fonctiond de différent paramètres
         public void AjouterSalarie(Salarie sal, string managerNom, string managerPrenom) // permet de rajouter un salarié dans l'ordre hiérarchique. NE FONCTIONNE PAS POUR LE PDG
         {
@@ -200,6 +215,7 @@
             }
         }
         #endregion
+
         #region affichage graphique de la hiérarchie
         public string[] CoupleSalarieEmployeur(string nom, string prenom, string poste, Salarie boss = null) // re"nvoie un couple contenant le patron et l'employée
         {
@@ -249,6 +265,8 @@
             }
             return graphe;
         }
+        #endregion
+
         #endregion
     }
 }

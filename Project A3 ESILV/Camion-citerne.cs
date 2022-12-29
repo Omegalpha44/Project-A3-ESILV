@@ -8,17 +8,20 @@ namespace Project_A3_ESILV
 {
     internal class Camion_citerne : Vehicule
     {
+        #region Champs
         int capacite;
         string type;
+        #endregion
 
-        //constructeur
+        #region Constructeur
         public Camion_citerne(string immatriculation, int capacite, string type) : base(immatriculation)
         {
             this.capacite = capacite;
             this.type = type;
         }
+        #endregion
 
-        //getter-setter
+        #region getter-setter
         public int Capacite
         {
             get { return capacite; }
@@ -29,11 +32,13 @@ namespace Project_A3_ESILV
             get { return type; }
             set { type = value; }
         }
+        #endregion
 
-        //méthodes
+        #region Méthodes
         public override string ToString()
         {
             return "Camion_citerne : " + base.ToString() + " attributs : " + capacite + " " + type;
         }
+        #endregion
     }
 }

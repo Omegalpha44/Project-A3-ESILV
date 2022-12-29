@@ -5,7 +5,7 @@ namespace Solution
 {
     public class Program
     {
-            static void Main(string[] args)
+        static void Main(string[] args)
         {
             #region test des arbres n-aire
             Salarie s0 = new Salarie(0, "Patrick", "Jean", new DateTime(1956,5,5), "0", "0", 0, new DateTime(10,10,10), "PDG", 0);

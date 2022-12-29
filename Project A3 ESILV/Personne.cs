@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project_A3_ESILV
 {
-    internal abstract class Personne
+    internal abstract class Personne // classe vide : à supprimer
     {
         #region Champs
         #endregion

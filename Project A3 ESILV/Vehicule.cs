@@ -8,18 +8,21 @@ namespace Project_A3_ESILV
 {
     abstract internal class Vehicule
     {
+        #region Champs
         // les attributs ne sont pas définis dans le sujet, je prends l'exemple donc de Uber en ne définissant que l'immatriculation du véhicule pour le reconnaitre. Cette classe est abstracte
         string immatriculation;
         bool disponible;
+        #endregion
 
-        //constructeur
+        #region Constructeur
         public Vehicule(string immatriculation)
         {
             this.immatriculation = immatriculation;
             this.disponible = true;
         }
+        #endregion
 
-        //getter-setter
+        #region getter-setter
         public string Immatriculation
         {
             get { return immatriculation; }
@@ -29,11 +32,13 @@ namespace Project_A3_ESILV
             get { return disponible; }
             set { disponible = value; }
         }
+        #endregion
 
-        //méthodes
+        #region Méthodes
         public override string ToString()
         {
             return "Vehicule : " + immatriculation + " disponible : " + disponible;
         }
+        #endregion
     }
 }

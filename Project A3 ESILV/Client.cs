@@ -9,21 +9,25 @@ namespace Project_A3_ESILV
 {
     internal class Client : PersonneEnt
     {
+        #region Champs
         List<Command> commandes;
+        #endregion
 
-        //constructeur 
+        #region Constructeur
         public Client(int id, string nom, string prenom, DateTime dateNaissance, string adresse, string adresseMail, int telephone) : base(id, nom, prenom, dateNaissance, adresse, adresseMail, telephone)
         {
             this.commandes = new List<Command>();
         }
+        #endregion
 
-        //getter-setter
+        #region getter-setter
         public List<Command> Commandes
         {
             get { return commandes; }
         }
+        #endregion
 
-        //méthodes
+        #region méthodes
         #region ajout et retrait de commande
         public void AjouteCommande(Command command)
         {
@@ -72,6 +76,7 @@ namespace Project_A3_ESILV
             }
             return prix;
         }
+        #endregion
     }
-    
+
 }

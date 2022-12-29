@@ -8,12 +8,14 @@ namespace Project_A3_ESILV
 {
     internal class Manager
     {
+        #region Champs
         List<Salarie> salaries;
         List<Client> clients;
         List<Vehicule> vehicules;
         SalariesArbre salariesHierarchie;
+        #endregion
 
-        //constructeur
+        #region Constructeur
         public Manager(List<Salarie> salaries, List<Client> clients, List<Vehicule> vehicules)
         {
             this.salaries = salaries;
@@ -21,8 +23,9 @@ namespace Project_A3_ESILV
             this.vehicules = vehicules;
             this.salariesHierarchie = null;
         }
+        #endregion
 
-        //getter-setter
+        #region getter-setter
         public List<Salarie> Salaries
         {
             get { return salaries; }
@@ -35,8 +38,10 @@ namespace Project_A3_ESILV
         {
             get { return vehicules; }
         }
+        #endregion
 
-        //methodes
+        #region Methodes
+
         #region Ajout et retrait d'éléments dans les listes de la classe
         public void AjouterClient(Client client)
         {
@@ -119,6 +124,7 @@ namespace Project_A3_ESILV
             }
         }
         #endregion
+
         #region Génération de commandes
         private Salarie ChooseDriver()
         {
@@ -157,6 +163,7 @@ namespace Project_A3_ESILV
             return c;
         }
         #endregion
+
         #region tri des clients
         public void TriClientParOrdreAlphabetique() // tri les clients par ordre alphabétique
         {
@@ -180,7 +187,10 @@ namespace Project_A3_ESILV
             clients.Sort((x, y) => x.PrixCommandes().CompareTo(y.PrixCommandes()));
         }
         #endregion
+
         #region gestion sous la forme d'un arbre n-aire des salaries
+
+        #endregion
 
         #endregion
     }
