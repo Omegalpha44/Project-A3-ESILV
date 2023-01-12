@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Project_A3_ESILV
 {
-    internal class Camion_benne : Vehicule
+    internal class Camion_benne : Camion
     {
         #region Champs
         List<string> equipements;
         #endregion
 
         #region constructeur
-        public Camion_benne(string immatriculation, List<string> equipements) : base(immatriculation)
+        public Camion_benne(string immatriculation, int capacite, List<string> matieresTransportees, List<string> equipements) : base(immatriculation, capacite, matieresTransportees)
         {
             this.equipements = equipements;
         }

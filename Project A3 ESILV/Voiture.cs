@@ -6,30 +6,30 @@ using System.Threading.Tasks;
 
 namespace Project_A3_ESILV
 {
-    internal class Camion_citerne : Camion
+    internal class Voiture: Vehicule
     {
         #region Champs
-        string typeCuve;
+        int nbPlaces;
         #endregion
 
         #region Constructeur
-        public Camion_citerne(string immatriculation, int capacite, List<string> matieresTransportees, string typeCuve) : base(immatriculation, capacite, matieresTransportees)
+        public Voiture(string immatriculation, int nbPlaces): base(immatriculation)
         {
-            this.typeCuve = typeCuve;
+            this.nbPlaces = nbPlaces;
         }
         #endregion
 
         #region getter-setter
-        public string TypeCuve
+        public int NbPlaces
         {
-            get { return typeCuve; }
+            get { return nbPlaces; }
         }
         #endregion
 
         #region Méthodes
         public override string ToString()
         {
-            return "Camion_citerne : " + base.ToString() + " Type de cuve : " + typeCuve;
+            return base.ToString()+ " NbPlaces : "+nbPlaces;
         }
         #endregion
     }
