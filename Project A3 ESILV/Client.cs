@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Project_A3_ESILV
 {
-    internal class Client : PersonneEnt
+    internal class Client : Personne
     {
         #region Champs
         List<Commande> commandes;

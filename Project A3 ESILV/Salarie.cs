@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project_A3_ESILV
 {
-    internal class Salarie : PersonneEnt,IPrix
+    internal class Salarie : Personne,IPrix
     {
         #region Champs
         DateTime dateEmbauche;
