@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_A3_ESILV
+﻿namespace Project_A3_ESILV
 {
     abstract internal class Personne : IId
     {
@@ -72,7 +66,7 @@ namespace Project_A3_ESILV
         public override string ToString()
         {
             return nom + " " + prenom;
-            
+
         }
         public virtual string ToStringComplete()
         {

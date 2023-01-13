@@ -265,6 +265,44 @@
             }
             return graphe;
         }
+
+        public void Affichage(int profondeur = 0, int profondeurPere = 0, List<Tuple<int, int>> UnfinishedBranch = null)
+        {
+            if (UnfinishedBranch == null) UnfinishedBranch = new List<Tuple<int, int>>();
+            if (s != null)
+            {
+                if (profondeurPere == 0 && profondeur == 0)
+                {
+                    Console.WriteLine(s.Nom + " " + s.Prenom + " " + s.Poste);
+                    if (fils != null)
+                    {
+                        if (frere != null) UnfinishedBranch.Add(new Tuple<int, int>(profondeur, profondeurPere));
+                        fils.Affichage(profondeur + 2, profondeur + 1, UnfinishedBranch);
+                    }
+                    if (frere != null) frere.Affichage(profondeur, profondeurPere, UnfinishedBranch);
+
+                }
+                else
+                {
+                    string temp = "";
+                    for (int i = 0; i < profondeurPere; i++)
+                    {
+                        if (UnfinishedBranch.Contains(new Tuple<int, int>(profondeurPere, i))) temp += "│   ";
+                        else temp += "    ";
+                    }
+                    if (profondeurPere != 0) temp += "├── ";
+                    Console.WriteLine(temp + s.Nom + " " + s.Prenom + " " + s.Poste);
+                    if (fils != null)
+                    {
+                        if (frere != null) UnfinishedBranch.Add(new Tuple<int, int>(profondeur, profondeurPere));
+                        fils.Affichage(profondeur + 1, profondeur, UnfinishedBranch);
+                    }
+                    if (frere != null) frere.Affichage(profondeur, profondeurPere, UnfinishedBranch);
+                }
+
+            }
+
+        }
         #endregion
 
         #endregion

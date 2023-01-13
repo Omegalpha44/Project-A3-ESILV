@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_A3_ESILV
+﻿namespace Project_A3_ESILV
 {
     internal class Graphe
     {
@@ -31,7 +25,7 @@ namespace Project_A3_ESILV
         #endregion
 
         #region Méthodes
-        public int[] Dijkstra(Graphe graphe,string sommetDepart)
+        public int[] Dijkstra(Graphe graphe, string sommetDepart)
         {
             // Initialise le tableau des distances, des parents, et des sommets à visiter
             int[] distances = new int[graphe.sommets.Count];

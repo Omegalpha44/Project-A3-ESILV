@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_A3_ESILV
+﻿namespace Project_A3_ESILV
 {
     internal class Manager
     {
@@ -162,11 +156,11 @@ namespace Project_A3_ESILV
             }
             return v;
         }
-        public Commande GenerationDeCommande(string depart, string arrive, Client client, int prix,int id) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
+        public Commande GenerationDeCommande(string depart, string arrive, Client client, int prix, int id) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
         {
             Salarie s = ChooseDriver();
             Vehicule v = ChooseVehicle();
-            Commande c = new Commande(client, arrive, depart, prix, v, s,id);
+            Commande c = new Commande(client, arrive, depart, prix, v, s, id);
             return c;
         }
         #endregion
@@ -174,7 +168,8 @@ namespace Project_A3_ESILV
         #region tri des clients
         public void TriClientParOrdreAlphabetique() // tri les clients par ordre alphabétique
         {
-            clients.Sort((x, y) => {
+            clients.Sort((x, y) =>
+            {
                 if (x.Nom == y.Nom)
                 {
                     return x.Prenom.CompareTo(y.Prenom);

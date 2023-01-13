@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_A3_ESILV
+﻿namespace Project_A3_ESILV
 {
-    internal class Salarie : Personne,IPrix
+    internal class Salarie : Personne, IPrix
     {
         #region Champs
         DateTime dateEmbauche;
@@ -23,7 +17,7 @@ namespace Project_A3_ESILV
             this.dateEmbauche = dateEmbauche;
             this.poste = poste;
             this.salaire = salaire;
-            this.hasDrivenToday = false; 
+            this.hasDrivenToday = false;
             this.livraison = 0;
             this.isFree = true;
         }
@@ -69,7 +63,7 @@ namespace Project_A3_ESILV
         #region méthodes
         public void AjoutLivraison()  // ajoute une livraison au conducteur
         {
-            if(poste == "chauffeur")  livraison++;
+            if (poste == "chauffeur") livraison++;
         }
         public override string ToString()
         {
@@ -79,7 +73,7 @@ namespace Project_A3_ESILV
         {
             return "Salarié : " + base.ToStringComplete() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire;
         }
-        public static  bool Equal(Salarie s1, Salarie s2)
+        public static bool Equal(Salarie s1, Salarie s2)
         {
             return s1.Nom == s2.Nom && s2.Prenom == s2.Prenom;
         }

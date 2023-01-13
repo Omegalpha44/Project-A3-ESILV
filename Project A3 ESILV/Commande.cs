@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_A3_ESILV
+﻿namespace Project_A3_ESILV
 {
-    internal class Commande : IPrix,IId
+    internal class Commande : IPrix, IId
     {
         #region Champs
         Client client;
@@ -19,7 +13,7 @@ namespace Project_A3_ESILV
         #endregion
 
         #region Constructeurs
-        public Commande(Client client, string arrivee, string depart, int prix, Vehicule vehicule, Salarie chauffeur,int id)
+        public Commande(Client client, string arrivee, string depart, int prix, Vehicule vehicule, Salarie chauffeur, int id)
         {
             this.client = client;
             this.arrivee = arrivee;
