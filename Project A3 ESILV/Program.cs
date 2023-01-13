@@ -38,7 +38,8 @@ namespace Solution
                 Console.WriteLine();
             }
             #endregion
-
+            AffichageGraphique graphique = new AffichageGraphique(new Manager());
+            graphique.MainAffichage();
 
         }
     }

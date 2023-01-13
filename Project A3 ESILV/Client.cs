@@ -59,6 +59,17 @@ namespace Project_A3_ESILV
             }
             return res;
         }
+        public override string ToStringComplete()
+        {
+            //renvoie une string contenant tout les paramètres protected de la classe Personne
+            string res = "Client : " + base.ToStringComplete();
+            foreach (Commande com in commandes)
+            {
+                res += "\n" + com.ToString();
+            }
+            return res;
+
+        }
         public void AfficherClient()
         {
             Console.WriteLine(this);

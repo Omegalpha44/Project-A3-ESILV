@@ -9,13 +9,13 @@ namespace Project_A3_ESILV
     abstract internal class Personne : IId
     {
         #region Champs
-        int id;
-        string nom;
-        string prenom;
-        DateTime dateNaissance;
-        string adresse;
-        string adresseMail;
-        int telephone;
+        protected int id;
+        protected string nom;
+        protected string prenom;
+        protected DateTime dateNaissance;
+        protected string adresse;
+        protected string adresseMail;
+        protected int telephone;
         #endregion
 
         #region constructeur
@@ -44,10 +44,12 @@ namespace Project_A3_ESILV
         public string Prenom
         {
             get { return prenom; }
+            set { prenom = value; }
         }
         public DateTime DateNaissance
         {
             get { return dateNaissance; }
+            set { dateNaissance = value; }
         }
         public string Adresse
         {
@@ -71,6 +73,10 @@ namespace Project_A3_ESILV
         {
             return nom + " " + prenom;
             
+        }
+        public virtual string ToStringComplete()
+        {
+            return "Nom : " + nom + "\nPrenom : " + prenom + "\nDate de naissance : " + dateNaissance + "\nAdresse : " + adresse + "\nAdresse mail : " + adresseMail + "\nTelephone : " + telephone + "\n";
         }
         #endregion
     }

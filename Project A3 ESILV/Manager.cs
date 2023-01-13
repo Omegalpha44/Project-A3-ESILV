@@ -23,6 +23,13 @@ namespace Project_A3_ESILV
             this.vehicules = vehicules;
             this.salariesHierarchie = null;
         }
+        public Manager()
+        {
+            this.salaries = new List<Salarie>();
+            this.clients = new List<Client>();
+            this.vehicules = new List<Vehicule>();
+            this.salariesHierarchie = null;
+        }
         #endregion
 
         #region getter-setter

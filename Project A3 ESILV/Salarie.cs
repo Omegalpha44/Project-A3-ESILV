@@ -75,6 +75,10 @@ namespace Project_A3_ESILV
         {
             return "Salarié : " + base.ToString() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire;
         }
+        public override string ToStringComplete()
+        {
+            return "Salarié : " + base.ToStringComplete() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire;
+        }
         public static  bool Equal(Salarie s1, Salarie s2)
         {
             return s1.Nom == s2.Nom && s2.Prenom == s2.Prenom;
