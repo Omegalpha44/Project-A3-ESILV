@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_A3_ESILV
+﻿namespace Project_A3_ESILV
 {
     internal class Client : Personne
     {
@@ -53,9 +46,9 @@ namespace Project_A3_ESILV
         public override string ToString()
         {
             string res = "Client : " + base.ToString();
-            foreach(Commande com in commandes)
+            foreach (Commande com in commandes)
             {
-                res += "\n"+com.ToString();
+                res += "\n" + com.ToString();
             }
             return res;
         }

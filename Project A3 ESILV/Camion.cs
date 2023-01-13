@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_A3_ESILV
+﻿namespace Project_A3_ESILV
 {
-    internal class Camion: Vehicule
+    internal class Camion : Vehicule
     {
         #region Champs
         int capacite;
@@ -14,7 +8,7 @@ namespace Project_A3_ESILV
         #endregion
 
         #region constructeur
-        public Camion(string immatriculation,int capacite, List<string> matiereTransportees) : base(immatriculation)
+        public Camion(string immatriculation, int capacite, List<string> matiereTransportees) : base(immatriculation)
         {
             this.capacite = capacite;
             this.matiereTransportees = matiereTransportees;

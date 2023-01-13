@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_A3_ESILV
+﻿namespace Project_A3_ESILV
 {
-    internal class Voiture: Vehicule
+    internal class Voiture : Vehicule
     {
         #region Champs
         int nbPlaces;
         #endregion
 
         #region Constructeur
-        public Voiture(string immatriculation, int nbPlaces): base(immatriculation)
+        public Voiture(string immatriculation, int nbPlaces) : base(immatriculation)
         {
             this.nbPlaces = nbPlaces;
         }
@@ -29,7 +23,7 @@ namespace Project_A3_ESILV
         #region Méthodes
         public override string ToString()
         {
-            return base.ToString()+ " NbPlaces : "+nbPlaces;
+            return base.ToString() + " NbPlaces : " + nbPlaces;
         }
         #endregion
     }
