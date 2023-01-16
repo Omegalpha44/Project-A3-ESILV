@@ -39,6 +39,11 @@
         {
             get { return vehicules; }
         }
+        public SalariesArbre SalariesHierarchie
+        {
+            get { return salariesHierarchie; }
+            set { salariesHierarchie = value; }
+        }
         #endregion
 
         #region Methodes

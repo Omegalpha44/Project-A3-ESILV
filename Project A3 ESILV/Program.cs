@@ -38,9 +38,10 @@ namespace Solution
                 }
                 Console.WriteLine();
             }
-            salarieArbre.Affichage();
+            salarieArbre.Affichage2();
+
             #endregion
-            AffichageGraphique graphique = new AffichageGraphique(new Manager());
+            AffichageGraphique graphique = new AffichageGraphique(@"employee.txt");
             graphique.MainAffichage();
 
         }

@@ -65,6 +65,11 @@
                 frere.AfficherArbre();
             }
         }
+        public int NombreFreres()
+        {
+            if (frere != null) return 1 + frere.NombreFreres();
+            else return 1;
+        }
         #endregion
 
         #region ToString
@@ -130,7 +135,13 @@
         }
         #endregion
 
-        #region Ajout et retrait d'un salarié en fonctiond de différent paramètres
+        #region Ajout et retrait d'un salarié en fonction de différent paramètres
+        public void AjouterBoss(Salarie sal)
+        {
+            Salarie temp = s;
+            s = sal;
+            AjouterSalarie(temp, sal.Nom, sal.Prenom);
+        }
         public void AjouterSalarie(Salarie sal, string managerNom, string managerPrenom) // permet de rajouter un salarié dans l'ordre hiérarchique. NE FONCTIONNE PAS POUR LE PDG
         {
             if (s.Nom == managerNom && s.Prenom == managerPrenom)
@@ -147,7 +158,7 @@
             {
                 if (frere != null) frere.AjouterSalarie(sal, managerNom, managerPrenom);
                 if (fils != null) fils.AjouterSalarie(sal, managerNom, managerPrenom);
-                else Console.WriteLine("Le manager n'existe pas");
+                
             }
         }
         void AjouterFrere(SalariesArbre test) // permet d'ajouter un frère en bout de liste
@@ -303,8 +314,55 @@
             }
 
         }
-        #endregion
+        public void Affichage2(int profondeur = 0, int profondeurPere = 0, List<int> barreNonFini = null, int pass = 0)
+        {
+            if (barreNonFini == null) barreNonFini = new List<int>();
+            if (s != null)
+            {
+                if (profondeurPere == 0 && profondeur == 0) // il s'agit nécessairement du PDG
+                {
+                    Console.WriteLine(s.Nom + " " + s.Prenom + " " + s.Poste);
+                    pass = fils.NombreFreres();
+                    if (fils != null)
+                    {
+                        if (frere != null) barreNonFini.Add(profondeurPere);
+                        fils.Affichage2(2, 1, barreNonFini,pass);
+                    }
+                    if (frere != null) frere.Affichage2(profondeur, profondeurPere, barreNonFini,pass);
 
-        #endregion
+                }
+                else
+                {
+                    
+                    string temp = "";
+                    for (int i = 0; i < profondeurPere; i++)
+                    {
+                        if (profondeurPere == 1) pass-=1;
+                        if (barreNonFini.Contains(i) || (i ==1  && pass>0)) temp += "│   ";
+                        else temp += "    ";
+                    }
+                    if (profondeurPere != 0)
+                    {
+                        if (frere != null) temp += "├── ";
+                        else
+                        {
+                            temp += "└── ";
+                            barreNonFini.Remove(profondeurPere);
+                        }
+                        Console.WriteLine(temp + s.Nom + " " + s.Prenom + " " + s.Poste);
+                        if (fils != null)
+                        {
+                            if (frere != null) barreNonFini.Add(profondeur);
+                            fils.Affichage2(profondeur + 1, profondeur, barreNonFini,pass);
+                        }
+                        if (frere != null) frere.Affichage2(profondeur, profondeurPere, barreNonFini,pass);
+                    }
+
+                }
+            }
+            #endregion
+
+            #endregion
+        }
     }
 }
