@@ -2,95 +2,155 @@
 {
     internal class Graphe
     {
-        //----------------------------------------------------------------------------------------
-        //  Choix d'un graphe ORIENTE car il peux y avoir des travaux dans un sens de circulation
-        //----------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------
+        //  Choix d'un graphe ORIENTE car il peux y avoir des travaux dans un sens de circulation et pas dans l'autre
+        //-----------------------------------------------------------------------------------------------------------
 
         #region Champs
-        List<String> sommets; //liste des sommets du graphes, ici ce sont les noms des villes
-        List<(String, String, int)> aretes;
-
+        List<string> sommets; //liste des sommets du graphes, ici ce sont les noms des villes
+        List<Arete> aretes;
 
         #endregion
 
         #region Constructeurs
-        public Graphe(List<string> sommets, List<(string, string, int)> aretes)
+        public Graphe(List<string> sommets, List<Arete> aretes)
         {
-            sommets = sommets;
-            aretes = aretes;
+            this.sommets = sommets;
+            this.aretes = aretes;
         }
         #endregion
 
         #region Propriétés
+        public List<string> Sommets { 
+            get => sommets; 
+            set => sommets = value; 
+        }
+
+        public List<Arete> Aretes { 
+            get => aretes; 
+            set => aretes = value; 
+        }
         #endregion
 
         #region Méthodes
-        public int[] Dijkstra(Graphe graphe, string sommetDepart)
+
+        public float[,] graphToMatr()
         {
-            // Initialise le tableau des distances, des parents, et des sommets à visiter
-            int[] distances = new int[graphe.sommets.Count];
-            string[] parents = new string[graphe.sommets.Count];
-            string[] sommetsRestants = new string[graphe.sommets.Count];
-            for (int i = 0; i < graphe.sommets.Count; i++)
+            int n= sommets.Count;
+            float[,] matr = new float[n,n];
+            //initialisation de la matrice int.MaxValue représente +inf
+            for (int i = 0; i < n; i++)
             {
-                distances[i] = -1; //-1 correspond à une distance infinie ici
-                parents[i] = "";
-                sommetsRestants[i] = graphe.sommets[i];
+                for (int j = 0; j < n; j++)
+                {
+                    matr[i, j] = int.MaxValue;
+                }
             }
-            return null;
+
+            //remplissage de la matrice d'adjacence : à chaque nom de ville on associe un
+            //entier via la position de la ville dans la liste Sommet
+            //Exemple : si Paris est à la position 3 et Lyon à la 4, matr[3,4] donne la distance Paris->Lyon
+
+            foreach (Arete arete in aretes)
+            {
+                matr[sommets.IndexOf(arete.Depart), sommets.IndexOf(arete.Arrivee)] = arete.Distance;
+            }
+            return matr;
         }
 
-        public static string Dijkstra(string deb, string fin, List<Tuple<string, string, int>> arretes) // algorithme de Dijkstra
-                                                                                                        // deb = ville de départ, fin = ville d'arrivée, arretes = liste des arretes du graphe
+        public static void AfficheMatrice(float[,] mat)
         {
-            List<string> sommets = new List<string>();
-            List<string> sommetsTraites = new List<string>();
-            List<string> sommetsNonTraites = new List<string>();
-            Dictionary<string, int> distances = new Dictionary<string, int>(); // distance entre le sommet de départ et le sommet en question
-            Dictionary<string, string> predecesseurs = new Dictionary<string, string>(); // sommet précédent
-            foreach (Tuple<string, string, int> arrete in arretes)
+            for (int i = 0; i < mat.GetLength(0); i++)
             {
-                if (!sommets.Contains(arrete.Item1)) sommets.Add(arrete.Item1);
-                if (!sommets.Contains(arrete.Item2)) sommets.Add(arrete.Item2);
-            }
-            foreach (string sommet in sommets) // on reset les distances
-            {
-                distances.Add(sommet, int.MaxValue);
-                predecesseurs.Add(sommet, null);
-                sommetsNonTraites.Add(sommet);
-            }
-            distances[deb] = 0;
-            while (sommetsNonTraites.Count > 0)
-            {
-                string sommetActuel = sommetsNonTraites[0];
-                foreach (string sommet in sommetsNonTraites)
+                for (int j = 0; j < mat.GetLength(1); j++)
                 {
-                    if (distances[sommet] < distances[sommetActuel]) sommetActuel = sommet;
+                    Console.Write(mat[i, j] + " ");
                 }
-                sommetsNonTraites.Remove(sommetActuel);
-                sommetsTraites.Add(sommetActuel);
-                foreach (Tuple<string, string, int> arrete in arretes)
-                {
-                    if (arrete.Item1 == sommetActuel && !sommetsTraites.Contains(arrete.Item2))
-                    {
-                        int distance = distances[sommetActuel] + arrete.Item3;
-                        if (distance < distances[arrete.Item2])
-                        {
-                            distances[arrete.Item2] = distance;
-                            predecesseurs[arrete.Item2] = sommetActuel;
-                        }
-                    }
-                }
+                Console.WriteLine();
             }
-            string chemin = fin;
-            string predecesseur = predecesseurs[fin];
-            while (predecesseur != null)
-            {
-                chemin = predecesseur + " -> " + chemin;
-                predecesseur = predecesseurs[predecesseur];
-            }
-            return chemin;
         }
+
+        public void Relachement(float[] distances, string ville1, string ville2)
+        {
+            if (distances[sommets.IndexOf(ville1)] > distances[sommets.IndexOf(ville2)]) 
+            { 
+
+            }
+            else 
+            { 
+
+            }
+        }
+
+        public int[] Dijkstra(string sommetDepart)
+        {
+            // Initialise le tableau des distances, des parents, et des sommets à visiter
+            int n = sommets.Count;
+            float[] distances = new float[n];
+            string[] parents = new string[n];
+            string[] sommetsRestants = new string[n];
+            for (int i = 0; i < n; i++)
+            {
+                distances[i] = int.MaxValue; //correspond à une distance infinie ici
+                parents[i] = "";
+                sommetsRestants[i] = sommets[i];
+            }
+            //return null;
+        }
+
+
+
+        //public static string Dijkstra(string deb, string fin, List<Tuple<string, string, int>> arretes) // algorithme de Dijkstra
+        //                                                                                                // deb = ville de départ, fin = ville d'arrivée, arretes = liste des arretes du graphe
+        //{
+        //    List<string> sommets = new List<string>();
+        //    List<string> sommetsTraites = new List<string>();
+        //    List<string> sommetsNonTraites = new List<string>();
+        //    Dictionary<string, int> distances = new Dictionary<string, int>(); // distance entre le sommet de départ et le sommet en question
+        //    Dictionary<string, string> predecesseurs = new Dictionary<string, string>(); // sommet précédent
+        //    foreach (Tuple<string, string, int> arrete in arretes)
+        //    {
+        //        if (!sommets.Contains(arrete.Item1)) sommets.Add(arrete.Item1);
+        //        if (!sommets.Contains(arrete.Item2)) sommets.Add(arrete.Item2);
+        //    }
+        //    foreach (string sommet in sommets) // on reset les distances
+        //    {
+        //        distances.Add(sommet, int.MaxValue);
+        //        predecesseurs.Add(sommet, null);
+        //        sommetsNonTraites.Add(sommet);
+        //    }
+        //    distances[deb] = 0;
+        //    while (sommetsNonTraites.Count > 0)
+        //    {
+        //        string sommetActuel = sommetsNonTraites[0];
+        //        foreach (string sommet in sommetsNonTraites)
+        //        {
+        //            if (distances[sommet] < distances[sommetActuel]) sommetActuel = sommet;
+        //        }
+        //        sommetsNonTraites.Remove(sommetActuel);
+        //        sommetsTraites.Add(sommetActuel);
+        //        foreach (Tuple<string, string, int> arrete in arretes)
+        //        {
+        //            if (arrete.Item1 == sommetActuel && !sommetsTraites.Contains(arrete.Item2))
+        //            {
+        //                int distance = distances[sommetActuel] + arrete.Item3;
+        //                if (distance < distances[arrete.Item2])
+        //                {
+        //                    distances[arrete.Item2] = distance;
+        //                    predecesseurs[arrete.Item2] = sommetActuel;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    string chemin = fin;
+        //    string predecesseur = predecesseurs[fin];
+        //    while (predecesseur != null)
+        //    {
+        //        chemin = predecesseur + " -> " + chemin;
+        //        predecesseur = predecesseurs[predecesseur];
+        //    }
+        //    return chemin;
+        //}
         #endregion
     }
 }
