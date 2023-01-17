@@ -34,16 +34,16 @@
 
         #region Méthodes
 
-        public float[,] graphToMatr()
+        public float[,] GraphToMatr()
         {
-            int n= sommets.Count;
-            float[,] matr = new float[n,n];
+            int n = sommets.Count();
+            float[,] matr = new float[n, n];
             //initialisation de la matrice int.MaxValue représente +inf
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    matr[i, j] = int.MaxValue;
+                    matr[i, j] = float.MaxValue;
                 }
             }
 
@@ -70,36 +70,89 @@
             }
         }
 
-        public void Relachement(float[] distances, string ville1, string ville2)
+        private int MinDistance(float[] distances, List<string> sommetsRestants)
         {
-            if (distances[sommets.IndexOf(ville1)] > distances[sommets.IndexOf(ville2)]) 
-            { 
-
+            int minIndex = 0;
+            float minValue = int.MaxValue;
+            for (int i = 0; i < sommetsRestants.Count; i++)
+            {
+                int index = sommets.IndexOf(sommetsRestants[i]);
+                if (distances[index] < minValue)
+                {
+                    minValue = distances[index];
+                    minIndex = index;
+                }
             }
-            else 
-            { 
+            return minIndex;
+        }
 
+        // Méthode RemoveSommet à utiliser si on ne souhaite pas utiliser la méthode Remove déjà implémentée sur les listes C#
+        // /!\ RemoveSommet ~ O(n) et Remove ~ O(n) aussi mais + optimisée
+
+        private List<string> Removesommet(List<string> sommetsrestants, string sommet)
+        {
+            List<string> temp = new List<string>();
+            for (int i = 0; i < sommetsrestants.Count(); i++)
+            {
+                if (sommetsrestants[i] != sommet)
+                {
+                    temp.Add(sommetsrestants[i]);
+                }
+            }
+            return temp;
+        }
+
+        public void Relachement(float[] distances, float[,] matrAdj, string[] parent, string ville1, string ville2)
+        {
+            int u = sommets.IndexOf(ville1);
+            int v = sommets.IndexOf(ville2);
+
+            if (distances[v] > distances[u] + matrAdj[u,v]) 
+            {
+                distances[v] = distances[u] + matrAdj[u, v];
+                parent[v] = ville2;
             }
         }
 
-        public int[] Dijkstra(string sommetDepart)
+        public float[] Dijkstra(string sommetDepart)
         {
+        
+        
             // Initialise le tableau des distances, des parents, et des sommets à visiter
             int n = sommets.Count;
+            float[,] matrAdj = this.GraphToMatr();
             float[] distances = new float[n];
             string[] parents = new string[n];
-            string[] sommetsRestants = new string[n];
+            List<string> sommetsRestants = new List<string>(sommets);
             for (int i = 0; i < n; i++)
             {
                 distances[i] = int.MaxValue; //correspond à une distance infinie ici
-                parents[i] = "";
                 sommetsRestants[i] = sommets[i];
             }
-            //return null;
+            distances[sommets.IndexOf(sommetDepart)] = 0;
+
+            // Boucle principale de l'algorithme
+            while (sommetsRestants.Count > 0)
+            {
+                // Trouve le sommet avec la distance minimale
+                int u = MinDistance(distances, sommetsRestants);
+
+                // Retire le sommet trouvé de la liste des sommets restants
+                sommetsRestants.Remove(sommets[u]);
+
+                // Pour chaque voisin v du sommet u
+                for (int v = 0; v < n; v++)
+                {
+                    if (matrAdj[u, v] > 0) // s'il existe une arête (u,v)
+                    {
+                        Relachement(distances, matrAdj, parents, sommets[u], sommets[v]);
+                    }
+                }
+            }
+            return distances;
         }
 
-
-
+        #region autre implémentation de Dijkstra (avec dictionnaire, tuples...)
         //public static string Dijkstra(string deb, string fin, List<Tuple<string, string, int>> arretes) // algorithme de Dijkstra
         //                                                                                                // deb = ville de départ, fin = ville d'arrivée, arretes = liste des arretes du graphe
         //{
@@ -151,6 +204,8 @@
         //    }
         //    return chemin;
         //}
+        #endregion
+
         #endregion
     }
 }
