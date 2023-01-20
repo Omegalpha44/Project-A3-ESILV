@@ -1,15 +1,20 @@
-﻿namespace Project_A3_ESILV
+﻿using System.Runtime.ExceptionServices;
+
+namespace Project_A3_ESILV
 {
     public delegate void Ui();
     internal class AffichageGraphique
     {
 
         public Manager manager;
-        LireFichier fileExplorer;
-        public AffichageGraphique(string path)
+        public LireFichier fileExplorer; // explorateur de fichier permettant de modifier la sauvegarde des salariés
+        public LireFichier fileExplorerClient; // explorateur de fichier permettant de modifier la sauvegarde des clients
+        bool display = false;
+        public AffichageGraphique(string path,string path2, Manager manager)
         {
-            this.manager = new Manager();
-            this.fileExplorer = new LireFichier(this.manager,path);
+            this.manager = manager;
+            this.fileExplorer = new LireFichier(manager, path);
+            this.fileExplorerClient = new LireFichier(manager, path2);
         }
         #region AffichageGLobale
         void ExceptionManager(Ui func) // permet, si une erreur est détecté, de relancer la méthode
@@ -41,6 +46,7 @@
         }
         public void MainAffichage()
         {
+            fileExplorerClient.ReadFileClient();
             fileExplorer.ReadFile();
             ExceptionManager(Affichage);
         }
@@ -119,7 +125,11 @@
             Console.Write("numero de telephone : ");
             int tel = int.Parse(Console.ReadLine());
             Console.WriteLine();
-            manager.AjouterClient(nom, prenom, birth, adresse, mail, tel);
+            Console.Write("numero de sécurité sociale : ");
+            int secu = int.Parse(Console.ReadLine());
+            Client c = new Client(secu, nom, prenom, birth, adresse, mail, tel);
+            manager.AjouterClient(c);
+            fileExplorerClient.Add(c);
             Console.WriteLine("Client Ajouté !");
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
@@ -145,25 +155,15 @@
                 int r = GoodValue(0, manager.Clients.Count);
                 Client cible = manager.Clients[r];
                 Console.WriteLine("Modification de {0}", cible.Id + "  " + cible.Nom + " " + cible.Prenom);
-                Console.WriteLine("Que souhaitez vous modifier ? \n 1 : nom, 2 : prenom, 3 : date de naissance, 4 : adresse, 5 : adresse mail, 6 : numero de telephone");
+                Console.WriteLine("Que souhaitez vous modifier ? \n 1 : nom, 2 : adresse, 3 : adresse mail, 4 : numero de telephone");
                 Console.WriteLine("  :  ");
                 int l = GoodValue(1, 6);
                 switch (l)
                 {
-                    case 1: Console.WriteLine("Entrez le nouveau nom : "); cible.Nom = Console.ReadLine(); break;
-                    case 2: Console.WriteLine("Entrez le nouveau prenom : "); cible.Prenom = Console.ReadLine(); break;
-                    case 3:
-                        {
-                            Console.WriteLine("Entrez la nouvelle date de naissance  (jour/mois/année) : ");
-                            string date = Console.ReadLine();
-                            string[] dates = date.Split('/');
-                            DateTime birth = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
-                            cible.DateNaissance = birth;
-                            break;
-                        }
-                    case 4: Console.WriteLine("Entrez la nouvelle adresse : "); cible.Adresse = Console.ReadLine(); break;
-                    case 5: Console.WriteLine("Entrez la nouvelle adresse mail : "); cible.AdresseMail = Console.ReadLine(); break;
-                    case 6: Console.WriteLine("Entrez le numéro de téléphone : "); cible.Telephone = int.Parse(Console.ReadLine()); break;
+                    case 1: Console.WriteLine("Entrez le nouveau nom : "); cible.Nom = Console.ReadLine();fileExplorerClient.Modify(cible,0,cible.Nom) ; break;
+                    case 2: Console.WriteLine("Entrez la nouvelle adresse : "); cible.Adresse = Console.ReadLine();fileExplorerClient.Modify(cible,3,cible.Adresse) ; break;
+                    case 3: Console.WriteLine("Entrez la nouvelle adresse mail : "); cible.AdresseMail = Console.ReadLine();fileExplorerClient.Modify(cible, 4, cible.AdresseMail); break;
+                    case 4: Console.WriteLine("Entrez le numéro de téléphone : "); cible.Telephone = int.Parse(Console.ReadLine());fileExplorerClient.Modify(cible, 5, cible.Telephone.ToString()); break;
                 }
 
             }
@@ -172,6 +172,7 @@
             {
                 Console.WriteLine("Pas de client dans la banque de donnée : Veuillez en rajouter avant de procéder à une modification");
             }
+            Console.WriteLine("Modification faite !");
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
             Console.ReadKey();
@@ -197,6 +198,7 @@
                 Client cible = manager.Clients[r];
                 Console.WriteLine("Suppression de {0}", cible.Id + "  " + cible.Nom + " " + cible.Prenom);
                 manager.Clients.Remove(cible);
+                fileExplorerClient.Remove(cible);
                 Console.WriteLine("CLient supprimé");
             }
             else
@@ -243,9 +245,10 @@
         }
         #endregion
         #region Module Salarié
-        void ModuleSalarie() 
+        void ModuleSalarie()
         {
             Console.Clear();
+            AfficherOrganigramme();
             Console.WriteLine("Bienvenue dans le module salarié");
             Console.WriteLine("Choississez votre action");
             Console.WriteLine("================");
@@ -253,23 +256,34 @@
             Console.WriteLine("2. Modifier un salarié");
             Console.WriteLine("3. Supprimer un salarié");
             Console.WriteLine("4. Afficher l'organigramme des salariés");
-            Console.WriteLine("5. Retour");
+            Console.WriteLine("5. Afficher/Desactiver en permanence l'organigramme");
+            Console.WriteLine("6. Retour");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
-            int r = GoodValue(1, 5);
+            int r = GoodValue(1, 6);
             Console.Clear();
-            switch(r)
+            switch (r)
             {
                 case 1: AjouterSalarie(); break;
                 case 2: ModifierSalarie(); break;
                 case 3: SupprimerSalarie(); break;
                 case 4: AfficherSalarie(); break;
-                case 5: Affichage(); break;
+                case 5: display = (display == false) ;ModuleSalarie() ; break;
+                case 6: Affichage(); break;
             }
         }
-        
+        void AfficherOrganigramme(bool foo=false)
+        {
+            foo = display;
+            if(foo)
+            {
+                manager.SalariesHierarchie.Affichage2();
+                Console.WriteLine("===============");
+            }
+        }
         void AjouterSalarie()
         {
+            AfficherOrganigramme();
             Console.WriteLine("Vous avez choisis d'ajouter un salarié");
             Console.WriteLine("===============");
             Console.WriteLine("Entrez le nom du salarié : ");
@@ -293,17 +307,19 @@
             Console.WriteLine("Entrez la date d'embauche du salarié : (jour/mois/année) ");
             string date2 = Console.ReadLine();
             string[] dates2 = date2.Split('/');
+            Console.WriteLine("Entrez le numéro de sécurité social : ");
+            int numSecu = int.Parse(Console.ReadLine());
             DateTime embauche = new DateTime(int.Parse(dates2[2]), int.Parse(dates2[1]), int.Parse(dates2[0]));
             Console.WriteLine("Entrez le nom de l'empoloyeur : ");
             string nomEmployeur = Console.ReadLine();
             Console.WriteLine("Entrez le prénom de l'employeur : ");
             string prenomEmployeur = Console.ReadLine();
             //création du salarie
-            Salarie sal = new Salarie(manager.Salaries.Count, nom, prenom, birth, adresse, mail, tel, embauche, poste,salaire  );
+            Salarie sal = new Salarie(numSecu, nom, prenom, birth, adresse, mail, tel, embauche, poste, salaire);
             // ajout du salarie dans la liste des salariés et dans l'arbre n-aire
             manager.Salaries.Add(sal);
             manager.SalariesHierarchie.AjouterSalarie(sal, nomEmployeur, prenomEmployeur);
-            fileExplorer.Add(sal,nomEmployeur,prenomEmployeur);
+            fileExplorer.Add(sal, nomEmployeur, prenomEmployeur);
             Console.WriteLine("Salarie ajouté");
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
@@ -311,32 +327,121 @@
             Console.Clear();
             ModuleSalarie();
         }
-        void ModifierSalarie() { }
-        void SupprimerSalarie() { }
-        void AfficherSalarie() 
+        void ModifierSalarie()
         {
-            Console.WriteLine("Vous avez choisis d'afficher les salariés de Transconnect");
+            AfficherOrganigramme();
+            Console.WriteLine("Vous avez choisis de modifier un salarié");
             Console.WriteLine("===============");
-            Console.WriteLine("Comment souhaitez-vous afficher les salariés ? \n 1 : arbre n-aire, 2 : liste d'adjacence, 3 : énumération des salariés par ordre d'ajout, 4 : énumération des salariés par relation employé/employeur");
-            int l = GoodValue(1, 4);
-            switch(l)
+            Console.WriteLine("Entrez le nom du salarié : ");
+            string nom = Console.ReadLine();
+            Console.WriteLine("Entrez le prénom du salarié : ");
+            string prenom = Console.ReadLine();
+            Salarie sal = manager.Salaries.Find(x => x.Nom.ToUpper() == nom.ToUpper() && x.Prenom.ToUpper() == prenom.ToUpper());
+            if (sal != null)
             {
-                case 1: manager.SalariesHierarchie.Affichage2(); break;
-                case 2: manager.SalariesHierarchie.GrapheAdjacence(); break;
-                case 3: manager.Salaries.ForEach(x=> Console.WriteLine()); break;
-                case 4: manager.SalariesHierarchie.AfficherArbre(); break;
+                Console.WriteLine("Veuillez indiquer l'attribut à modifier (1 : nom, 2 : adresse, 3 : mail, 4 : télépone, 5 : poste, 6 : salaire) : ");
+                int r = GoodValue(1, 6);
+                switch (r)
+                {
+                    case 1: Console.WriteLine("Entrez le nouveau nom : ");
+                        {
+                            string newNom = Console.ReadLine();
+                            sal.Nom = newNom;
+                            fileExplorer.Modify(sal, 0, newNom);
+                            Console.WriteLine("Nom modifié");
+                            break;
+                        }
+                    case 2: Console.WriteLine("Entrez la nouvelle adresse : "); sal.Adresse = Console.ReadLine();fileExplorer.Modify(sal,3,sal.Adresse) ; break;
+                    case 3: Console.WriteLine("Entrez le nouveau mail : "); sal.AdresseMail = Console.ReadLine();fileExplorer.Modify(sal, 4, sal.AdresseMail); break;
+                    case 4: Console.WriteLine("Entrez le nouveau numéro de téléphone : "); sal.Telephone = int.Parse(Console.ReadLine());fileExplorer.Modify(sal, 5, sal.Telephone.ToString()); break;
+                    case 5: Console.WriteLine("Entrez le nouveau poste : "); sal.Poste = Console.ReadLine();fileExplorer.Modify(sal, 8, sal.Poste); break;
+                    case 6: Console.WriteLine("Entrez le nouveau salaire : "); sal.Salaire = int.Parse(Console.ReadLine());fileExplorer.Modify(sal, 7, sal.Salaire.ToString()); break;
+                }
+                fileExplorer.ReadFile();
+                Console.WriteLine("Modification terminée ...");
+                Console.WriteLine("===============");
+                Console.WriteLine("Appuyez sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+                ModuleSalarie();
             }
-            Console.WriteLine("===============");
-            Console.WriteLine("Appuyez sur une touche ...");
-            Console.ReadKey();
-            Console.Clear();
-            ModuleSalarie();
+            else
+            {
+                Console.WriteLine("Salarie introuvable");
+                Console.WriteLine("===============");
+                Console.WriteLine("Appuyez sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+                ModuleSalarie();
+            }
         }
-        #endregion
-        void ModuleCommande() { }
-        void ModuleStatistique() { }
-        void ModuleAutre() { }
-        void Exit() { }
-    }
-
-}
+            void SupprimerSalarie() 
+        {
+            AfficherOrganigramme();
+            Console.WriteLine("Vous avez choisis de supprimer un salarié");
+            Console.WriteLine("===============");
+            Console.WriteLine("Entrez le nom du salarié : ");
+            string nom = Console.ReadLine();
+            Console.WriteLine("Entrez le prénom du salarié : ");
+            string prenom = Console.ReadLine();
+            Salarie sal = manager.Salaries.Find(x => x.Nom.ToUpper() == nom.ToUpper() && x.Prenom.ToUpper() == prenom.ToUpper());
+            if (sal != null)
+            {
+                fileExplorer.Remove(sal);
+                fileExplorer.ReadFile();
+                Console.WriteLine("Salarie supprimé");
+                Console.WriteLine("===============");
+                Console.WriteLine("Appuyez sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+                ModuleSalarie();
+            }
+            else
+            {
+                Console.WriteLine("Salarie introuvable");
+                Console.WriteLine("===============");
+                Console.WriteLine("Appuyez sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+                ModuleSalarie();
+            }
+        }
+            void AfficherSalarie()
+            {
+                Console.WriteLine("Vous avez choisis d'afficher les salariés de Transconnect");
+                Console.WriteLine("===============");
+                Console.WriteLine("Comment souhaitez-vous afficher les salariés ? \n 1 : arbre n-aire, 2 : liste d'adjacence, 3 : énumération des salariés par ordre d'ajout, 4 : énumération des salariés par relation employé/employeur");
+                int l = GoodValue(1, 4);
+                switch (l)
+                {
+                    case 1: manager.SalariesHierarchie.Affichage2(); break;
+                    case 2:
+                        {
+                            string[,] graphe = manager.SalariesHierarchie.GrapheAdjacence();
+                            for (int i = 0; i < graphe.GetLength(0); i++)
+                            {
+                                for (int j = 0; j < graphe.GetLength(1); j++)
+                                {
+                                    Console.Write(graphe[i, j] + " ");
+                                }
+                                Console.WriteLine();
+                            }
+                            break;
+                        }
+                    case 3: manager.Salaries.ForEach(x => Console.WriteLine(x)); break;
+                    case 4: manager.SalariesHierarchie.AfficherHierarchie(); break;
+                }
+                Console.WriteLine("===============");
+                Console.WriteLine("Appuyez sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+                ModuleSalarie();
+            }
+            #endregion
+            void ModuleCommande() { }
+            void ModuleStatistique() { }
+            void ModuleAutre() { }
+            void Exit() { }
+        }
+    
+    } 

@@ -67,11 +67,11 @@
         }
         public override string ToString()
         {
-            return "Salarié : " + base.ToString() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire;
+            return "Salarié : " + base.ToString() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire +  " Sécurité sociale : " + id;
         }
         public override string ToStringComplete()
         {
-            return "Salarié : " + base.ToStringComplete() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire;
+            return "Salarié : " + base.ToStringComplete() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire + "Sécurité sociale : " + base.Id;
         }
         public static bool Equal(Salarie s1, Salarie s2)
         {

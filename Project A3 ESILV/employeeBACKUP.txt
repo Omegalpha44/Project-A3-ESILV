@@ -1,5 +1,5 @@
 DUPONT, Richard, 01/01/1997, 1 rue de la paix, Dupont@Transconnect.fr, 0102030405, 01/01/2015, 1500, PDG, Employeur :, TransConnect
-PATRICK, Richard, 02/02/1998, 2 rue de la paix, patrick@Transconnect.fr, 0203040506, 02/02/2015, 500, Manager, Employeur :, DUPONT, Richard
+PATRICK, Richard, 02/02/1998, 2 rue de la paix, patrick@Transconnect.fr, 0203040506, 02/02/2015, 500, manager, Employeur :, DUPONT, Richard
 MOURAZ, Augustin, 03/03/1999, 3 rue de la paix, mouraz@Transconnect.fr, 0304050607, 03/03/2015, 1000, chauffeur, Employeur :, DUPONT, Richard
 MARTIN, Jean, 04/04/2000, 4 rue de la paix, martin@transconnect.fr, 0405060708, 04/04/2015, 1000, chauffeur, Employeur :, PATRICK, Richard
 RAMPONT, Martin, 05/05/2001, 5 rue de la paix, rampont@Transconnect.fr, 0506070809, 05/05/2015, 1000, chauffeur, Employeur :, MOURAZ, Augustin

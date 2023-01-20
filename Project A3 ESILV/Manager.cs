@@ -6,7 +6,7 @@
         List<Salarie> salaries;
         List<Client> clients;
         List<Vehicule> vehicules;
-        SalariesArbre salariesHierarchie;
+        public SalariesArbre salariesHierarchie;
         #endregion
 
         #region Constructeur
@@ -63,6 +63,10 @@
         public void AjouterClient(string nom, string prenom, DateTime dateNaissance, string adresse, string adresseMail, int telephone)
         {
             clients.Add(new Client(clients.Count, nom, prenom, dateNaissance, adresse, adresseMail, telephone)); // on génère un nouveau client. Son id est celui qui lui est défini dans la liste
+        }
+        public void AjouterClient(string nom, string prenom, DateTime dateNaissance, string adresse, string adresseMail, int telephone, int id)
+        {
+            clients.Add(new Client(id, nom, prenom, dateNaissance, adresse, adresseMail, telephone)); // on génère un nouveau client. Son id est celui qui lui est défini dans la liste
         }
         public void AjouterSalarie(Salarie salarie)
         {

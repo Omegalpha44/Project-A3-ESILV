@@ -52,7 +52,7 @@
                 salaries.RemoveAt(0);
             }
         }
-        public void AfficherArbre()
+        public void AfficherArbre() // obsolète, préférez AfficherHierarchie
         {
             if (fils != null)
             {
@@ -85,7 +85,10 @@
         #region permet de déterminer les employées ou le manager de la personne indiqué
         bool IsInSalariesList(string prenom, string nom, string poste) // vérifie si l'employée est dans la liste des frères
         {
-            if (s.Prenom == prenom && s.Nom == nom && s.Poste == poste)
+            poste = poste.ToUpper();
+            prenom = prenom.ToUpper();
+            nom = nom.ToUpper();
+            if (s.Prenom.ToUpper() == prenom && s.Nom.ToUpper() == nom && s.Poste.ToUpper() == poste)
             {
                 return true;
             }
@@ -112,7 +115,11 @@
         }
         public void AfficherEmployees(string prenom, string nom, string poste)
         {
-            if (s.Nom == nom && s.Prenom == prenom && s.Poste == poste)
+            nom = nom.ToUpper();
+            prenom = prenom.ToUpper();
+            poste = poste.ToUpper();
+            
+            if (s.Nom.ToUpper() == nom && s.Prenom.ToUpper() == prenom && s.Poste.ToUpper() == poste)
             {
                 Console.WriteLine("les employées de cette personne sont : ");
                 Console.WriteLine(fils);
@@ -127,9 +134,9 @@
         {
             if (manager == null)
             {
-                if (s != null) Console.WriteLine("PDG :" + s.Nom);
+                if (s != null) Console.WriteLine("PDG :" + s.Nom + " " + s.Prenom);
             }
-            else if (s != null) Console.WriteLine("employée de " + manager.Nom + ": " + s.Nom);
+            else if (s != null) Console.WriteLine("employée de " + manager.Nom + ": " + s.Nom + " " + s.Prenom);
             if (frere != null) frere.AfficherHierarchie(manager);
             if (fils != null) fils.AfficherHierarchie(s);
         }
@@ -228,7 +235,7 @@
         #endregion
 
         #region affichage graphique de la hiérarchie
-        public string[] CoupleSalarieEmployeur(string nom, string prenom, string poste, Salarie boss = null) // re"nvoie un couple contenant le patron et l'employée
+        public string[] CoupleSalarieEmployeur(string nom, string prenom, string poste, Salarie boss = null) // renvoie un couple contenant le patron et l'employée
         {
             if (IsInSalariesList(prenom, nom, poste)) // si l'employee est dans la liste des frères
             {
@@ -237,8 +244,8 @@
             }
             else
             {
-                if (fils != null) return fils.CoupleSalarieEmployeur(prenom, nom, poste, s);
-                if (frere != null) return frere.CoupleSalarieEmployeur(prenom, nom, poste, boss);
+                if (fils != null) return fils.CoupleSalarieEmployeur(nom, prenom, poste, s);
+                if (frere != null) return frere.CoupleSalarieEmployeur(nom, prenom, poste, boss);
                 else return new string[2] { "erreur", "erreur" };
             }
         }
@@ -252,6 +259,7 @@
         }
         public string[,] GrapheAdjacence() // renvoie le graphe d'adjacence de l'arbre n-aire
         {
+            // erreur lié à la fonction CoupleSalarieEmployeur ne renvoyant pas le père de l'employé quand call dans la fonction principale
             List<Salarie> temp = ListeDesSalaries();
             List<String> name = new List<string>(); // liste contenant les noms sous la forme nom prenom poste
             foreach (Salarie sal in temp)
@@ -265,10 +273,12 @@
                 graphe[i, 0] = name[i];
                 graphe[i, 1] = ": ";
             }
+            
             for (int i = 0; i < temp.Count; i++) // remplissage du graphe d'adjacence
             {
                 string[] aux = CoupleSalarieEmployeur(temp[i].Nom, temp[i].Prenom, temp[i].Poste);
-                if (aux[0] != "PDG")
+
+                if (aux[0] != "PDG" && aux[0] != "erreur")
                 {
                     int index = name.IndexOf(aux[0]);
                     graphe[index, 1] += " " + aux[1] + ", ";
@@ -277,43 +287,43 @@
             return graphe;
         }
 
-        public void Affichage(int profondeur = 0, int profondeurPere = 0, List<Tuple<int, int>> UnfinishedBranch = null)
-        {
-            if (UnfinishedBranch == null) UnfinishedBranch = new List<Tuple<int, int>>();
-            if (s != null)
-            {
-                if (profondeurPere == 0 && profondeur == 0)
-                {
-                    Console.WriteLine(s.Nom + " " + s.Prenom + " " + s.Poste);
-                    if (fils != null)
-                    {
-                        if (frere != null) UnfinishedBranch.Add(new Tuple<int, int>(profondeur, profondeurPere));
-                        fils.Affichage(profondeur + 2, profondeur + 1, UnfinishedBranch);
-                    }
-                    if (frere != null) frere.Affichage(profondeur, profondeurPere, UnfinishedBranch);
+        //public void Affichage(int profondeur = 0, int profondeurPere = 0, List<Tuple<int, int>> UnfinishedBranch = null)
+        //{
+        //    if (UnfinishedBranch == null) UnfinishedBranch = new List<Tuple<int, int>>();
+        //    if (s != null)
+        //    {
+        //        if (profondeurPere == 0 && profondeur == 0)
+        //        {
+        //            Console.WriteLine(s.Nom + " " + s.Prenom + " " + s.Poste);
+        //            if (fils != null)
+        //            {
+        //                if (frere != null) UnfinishedBranch.Add(new Tuple<int, int>(profondeur, profondeurPere));
+        //                fils.Affichage(profondeur + 2, profondeur + 1, UnfinishedBranch);
+        //            }
+        //            if (frere != null) frere.Affichage(profondeur, profondeurPere, UnfinishedBranch);
 
-                }
-                else
-                {
-                    string temp = "";
-                    for (int i = 0; i < profondeurPere; i++)
-                    {
-                        if (UnfinishedBranch.Contains(new Tuple<int, int>(profondeurPere, i))) temp += "│   ";
-                        else temp += "    ";
-                    }
-                    if (profondeurPere != 0) temp += "├── ";
-                    Console.WriteLine(temp + s.Nom + " " + s.Prenom + " " + s.Poste);
-                    if (fils != null)
-                    {
-                        if (frere != null) UnfinishedBranch.Add(new Tuple<int, int>(profondeur, profondeurPere));
-                        fils.Affichage(profondeur + 1, profondeur, UnfinishedBranch);
-                    }
-                    if (frere != null) frere.Affichage(profondeur, profondeurPere, UnfinishedBranch);
-                }
+        //        }
+        //        else
+        //        {
+        //            string temp = "";
+        //            for (int i = 0; i < profondeurPere; i++)
+        //            {
+        //                if (UnfinishedBranch.Contains(new Tuple<int, int>(profondeurPere, i))) temp += "│   ";
+        //                else temp += "    ";
+        //            }
+        //            if (profondeurPere != 0) temp += "├── ";
+        //            Console.WriteLine(temp + s.Nom + " " + s.Prenom + " " + s.Poste);
+        //            if (fils != null)
+        //            {
+        //                if (frere != null) UnfinishedBranch.Add(new Tuple<int, int>(profondeur, profondeurPere));
+        //                fils.Affichage(profondeur + 1, profondeur, UnfinishedBranch);
+        //            }
+        //            if (frere != null) frere.Affichage(profondeur, profondeurPere, UnfinishedBranch);
+        //        }
 
-            }
+        //    }
 
-        }
+        //}
         public void Affichage2(int profondeur = 0, int profondeurPere = 0, List<int> barreNonFini = null, int pass = 0)
         {
             if (barreNonFini == null) barreNonFini = new List<int>();
