@@ -6,15 +6,17 @@
         List<Salarie> salaries;
         List<Client> clients;
         List<Vehicule> vehicules;
+        List<Commande> commandes;
         SalariesArbre salariesHierarchie;
         #endregion
 
         #region Constructeur
-        public Manager(List<Salarie> salaries, List<Client> clients, List<Vehicule> vehicules)
+        public Manager(List<Salarie> salaries, List<Client> clients, List<Vehicule> vehicules, List<Commande> commandes)
         {
             this.salaries = salaries;
             this.clients = clients;
             this.vehicules = vehicules;
+            this.commandes = commandes;
             this.salariesHierarchie = null;
         }
         public Manager()
@@ -22,6 +24,7 @@
             this.salaries = new List<Salarie>();
             this.clients = new List<Client>();
             this.vehicules = new List<Vehicule>();
+            this.commandes = new List<Commande>();
             this.salariesHierarchie = null;
         }
         #endregion
@@ -38,6 +41,10 @@
         public List<Vehicule> Vehicules
         {
             get { return vehicules; }
+        }
+        public List<Commande> Commandes
+        {
+            get { return commandes; }
         }
         public SalariesArbre SalariesHierarchie
         {
@@ -161,11 +168,11 @@
             }
             return v;
         }
-        public Commande GenerationDeCommande(string depart, string arrive, Client client, int prix, int id) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
+        public Commande GenerationDeCommande(int id, Client client, string depart, string arrive) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
         {
             Salarie s = ChooseDriver();
             Vehicule v = ChooseVehicle();
-            Commande c = new Commande(client, arrive, depart, prix, v, s, id);
+            Commande c = new Commande(id, client, depart, arrive, v, s);
             return c;
         }
         #endregion

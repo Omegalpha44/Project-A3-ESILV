@@ -249,7 +249,7 @@
             Console.WriteLine("Bienvenue dans le module salarié");
             Console.WriteLine("Choississez votre action");
             Console.WriteLine("================");
-            Console.WriteLine("1. Ajouter un salaré");
+            Console.WriteLine("1. Ajouter un salarié");
             Console.WriteLine("2. Modifier un salarié");
             Console.WriteLine("3. Supprimer un salarié");
             Console.WriteLine("4. Afficher l'organigramme des salariés");
@@ -333,7 +333,156 @@
             ModuleSalarie();
         }
         #endregion
-        void ModuleCommande() { }
+        #region Module Commande
+
+        #region Interface Commande
+        void ModuleCommande() 
+        {
+            Console.Clear();
+            Console.WriteLine("Bienvenue dans le module commande");
+            Console.WriteLine("Choississez votre action");
+            Console.WriteLine("================");
+            Console.WriteLine("1. Créer une commande");
+            Console.WriteLine("2. Modifier une commande");
+            Console.WriteLine("3. Supprimer une commande");
+            Console.WriteLine("4. Afficher une commande");
+            Console.WriteLine("5. Gérer la flotte de véhicules");
+            Console.WriteLine("6. Retour");
+            Console.WriteLine("===============");
+            Console.WriteLine("Votre choix : ");
+            int r = GoodValue(1, 5);
+            Console.Clear();
+            switch (r)
+            {
+                //case 1: ExceptionManager(AjouterCommande); break;
+                //case 2: ExceptionManager(ModifierCommande); break;
+                //case 3: ExceptionManager(SupprimerCommande); break;
+                //case 4: ExceptionManager(AfficherCommande); break;
+                //case 5: ExceptionManager(ModuleVehicule); break;
+                case 6: ExceptionManager(Affichage); break;
+            }
+        }
+        /*
+        void AjouterCommande()
+        {
+            Console.WriteLine("Vous avez choisis de ajouter un nouveau client");
+            Console.WriteLine("===============");
+            Console.Write("nom : ");
+            string nom = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("prenom : ");
+            string prenom = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("date de Naissance (jour/mois/année): ");
+            string date = Console.ReadLine();
+            string[] dates = date.Split('/');
+            DateTime birth = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
+            Console.WriteLine();
+            Console.Write("adresse : ");
+            string adresse = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("adresse mail : ");
+            string mail = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("numero de telephone : ");
+            int tel = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+            manager.AjouterClient(nom, prenom, birth, adresse, mail, tel);
+            Console.WriteLine("Client Ajouté !");
+            Console.WriteLine("===============");
+            Console.WriteLine("Appuyez sur une touche ...");
+            Console.ReadKey();
+            Console.Clear();
+            ModuleClient();
+        }
+        void ModifierCommande()
+        {
+            Console.WriteLine("Vous avez choisis de modifier un client");
+            Console.WriteLine("===============");
+            if (manager.Clients.Count > 0)
+            {
+                Console.WriteLine("Voici la liste des clients :");
+                int i = 0;
+                foreach (Client c in manager.Clients)
+                {
+                    Console.Write(i + ": ");
+                    Console.WriteLine(c.Id + " : " + c.Nom + " " + c.Prenom);
+                    i++;
+                }
+                Console.WriteLine("Quel client voulez vous modifier ? :");
+                int r = GoodValue(0, manager.Clients.Count);
+                Client cible = manager.Clients[r];
+                Console.WriteLine("Modification de {0}", cible.Id + "  " + cible.Nom + " " + cible.Prenom);
+                Console.WriteLine("Que souhaitez vous modifier ? \n 1 : nom, 2 : prenom, 3 : date de naissance, 4 : adresse, 5 : adresse mail, 6 : numero de telephone");
+                Console.WriteLine("  :  ");
+                int l = GoodValue(1, 6);
+                switch (l)
+                {
+                    case 1: Console.WriteLine("Entrez le nouveau nom : "); cible.Nom = Console.ReadLine(); break;
+                    case 2: Console.WriteLine("Entrez le nouveau prenom : "); cible.Prenom = Console.ReadLine(); break;
+                    case 3:
+                        {
+                            Console.WriteLine("Entrez la nouvelle date de naissance  (jour/mois/année) : ");
+                            string date = Console.ReadLine();
+                            string[] dates = date.Split('/');
+                            DateTime birth = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
+                            cible.DateNaissance = birth;
+                            break;
+                        }
+                    case 4: Console.WriteLine("Entrez la nouvelle adresse : "); cible.Adresse = Console.ReadLine(); break;
+                    case 5: Console.WriteLine("Entrez la nouvelle adresse mail : "); cible.AdresseMail = Console.ReadLine(); break;
+                    case 6: Console.WriteLine("Entrez le numéro de téléphone : "); cible.Telephone = int.Parse(Console.ReadLine()); break;
+                }
+
+            }
+            else
+
+            {
+                Console.WriteLine("Pas de client dans la banque de donnée : Veuillez en rajouter avant de procéder à une modification");
+            }
+            Console.WriteLine("===============");
+            Console.WriteLine("Appuyez sur une touche ...");
+            Console.ReadKey();
+            Console.Clear();
+            ModuleClient();
+        }
+        void SupprimerCommande()
+        {
+            Console.WriteLine("Vous avez choisis de supprimer un client");
+            Console.WriteLine("===============");
+            if (manager.Clients.Count > 0)
+            {
+                Console.WriteLine("Voici la liste des clients :");
+                int i = 0;
+                foreach (Client c in manager.Clients)
+                {
+                    Console.Write(i + ": ");
+                    Console.WriteLine(c.Id + " : " + c.Nom + " " + c.Prenom);
+                    i++;
+                }
+                Console.WriteLine("Quel client voulez vous supprimer ? :");
+                int r = GoodValue(0, manager.Clients.Count);
+                Client cible = manager.Clients[r];
+                Console.WriteLine("Suppression de {0}", cible.Id + "  " + cible.Nom + " " + cible.Prenom);
+                manager.Clients.Remove(cible);
+                Console.WriteLine("CLient supprimé");
+            }
+            else
+            {
+                Console.WriteLine("Pas de client dans la banque de donnée : Veuillez en rajouter avant de procéder à une suppression");
+            }
+            Console.WriteLine("===============");
+            Console.WriteLine("Appuyez sur une touche ...");
+            Console.ReadKey();
+            Console.Clear();
+            ModuleClient();
+        }
+        void AfficherCommande() { }
+        void ModuleVehicule() { }
+        */
+        #endregion
+
+        #endregion
         void ModuleStatistique() { }
         void ModuleAutre() { }
         void Exit() { }

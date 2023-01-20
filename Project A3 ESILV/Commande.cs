@@ -3,25 +3,25 @@
     internal class Commande : IPrix, IId
     {
         #region Champs
+        int id;
         Client client;
         string arrivee;
         string depart;
         int prix;
         Vehicule vehicule;
         Salarie chauffeur;
-        int id;
         #endregion
 
         #region Constructeurs
-        public Commande(Client client, string arrivee, string depart, int prix, Vehicule vehicule, Salarie chauffeur, int id)
+        public Commande(int id, Client client, string depart, string arrivee, Vehicule vehicule, Salarie chauffeur)
         {
+            this.id = id;
             this.client = client;
-            this.arrivee = arrivee;
             this.depart = depart;
-            this.prix = prix;
+            this.arrivee = arrivee;
+            this.prix = 0;
             this.vehicule = vehicule;
             this.chauffeur = chauffeur;
-            this.id = id;
 
         }
         #endregion
