@@ -7,7 +7,7 @@
         List<Client> clients;
         List<Vehicule> vehicules;
         public SalariesArbre salariesHierarchie;
-        List<Commande> commande;
+        List<Commande> commandes;
         #endregion
 
         #region Constructeur
