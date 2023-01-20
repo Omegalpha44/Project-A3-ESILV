@@ -252,7 +252,7 @@ namespace Project_A3_ESILV
             Console.WriteLine("Bienvenue dans le module salarié");
             Console.WriteLine("Choississez votre action");
             Console.WriteLine("================");
-            Console.WriteLine("1. Ajouter un salaré");
+            Console.WriteLine("1. Ajouter un salarié");
             Console.WriteLine("2. Modifier un salarié");
             Console.WriteLine("3. Supprimer un salarié");
             Console.WriteLine("4. Afficher l'organigramme des salariés");
