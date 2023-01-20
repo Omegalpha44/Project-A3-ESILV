@@ -46,9 +46,24 @@ namespace Project_A3_ESILV
         }
         public void MainAffichage()
         {
-            fileExplorerClient.ReadFileClient();
-            fileExplorer.ReadFile();
-            ExceptionManager(Affichage);
+            bool error = false;
+            try
+            {
+                fileExplorerClient.ReadFileClient();
+                fileExplorer.ReadFile();
+            }
+            catch(Exception e)
+            {
+                error = true;
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Une erreur est survenue dans la lecture des fichiers csv de sauvegarde, veuillez vérifier que vos entrées respectent le bon format");
+                Console.WriteLine("================");
+                Console.WriteLine("Veuillez appuyer sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+
+            }
+            if(!error) ExceptionManager(Affichage);
         }
         void Affichage()
         {
