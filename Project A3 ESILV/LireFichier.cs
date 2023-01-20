@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Sockets;
 
 namespace Project_A3_ESILV
 {
@@ -46,10 +47,18 @@ namespace Project_A3_ESILV
             // Dupont, Jean, 01/01/1990, 1 rue de la paix, dupont@gmail.com, 0719203, 01/01/2002, 10000, chauffeur, id
 
             //on ouvre le fichier
+            if(!File.Exists(path))
+            {
+                //on créé le fichier s'il n'existe pas
+                StreamWriter writer = new StreamWriter(path);
+                writer.WriteLine("nom" + sep + "prenom" + sep + "date de naissance" + sep + "adresse" + sep + "adresse mail" + sep + "téléphone" + sep + "date d'embauche" + sep + "salaire" + sep + "poste" + sep + "Employeur :" + sep + "Nom" + sep + "Prenom" + sep + "id");
+                writer.Close();
+            }
             manager.Salaries.Clear();
             manager.SalariesHierarchie = null;
             StreamReader sr = new StreamReader(path);
             string line = sr.ReadLine();
+            line = sr.ReadLine();
 
             //on lit le fichier ligne par ligne
             while (line != null)
@@ -80,9 +89,17 @@ namespace Project_A3_ESILV
         }
         public void ReadFileClient()
         {
+            if(!File.Exists(path))
+            {
+                //on créé le fichier si il n'existe pas
+                StreamWriter writer = new StreamWriter(path);
+                writer.WriteLine("nom" + sep + "prenom" + sep + "date de naissance" + sep + "adresse" + sep + "adresse mail" + sep + "téléphone" + sep + "id");
+                writer.Close();
+            }
             manager.Clients.Clear();
             TextReader sr = new StreamReader(path);
             string line = sr.ReadLine();
+            line = sr.ReadLine();
             while (line != null)
                 {
                 string[] mots = line.Split(sep);

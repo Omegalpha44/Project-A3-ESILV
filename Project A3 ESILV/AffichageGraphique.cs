@@ -275,9 +275,9 @@ namespace Project_A3_ESILV
         void AfficherOrganigramme(bool foo=false)
         {
             foo = display;
-            if(foo)
+            if (foo)
             {
-                manager.SalariesHierarchie.Affichage2();
+                if(manager.SalariesHierarchie != null) manager.SalariesHierarchie.Affichage2();
                 Console.WriteLine("===============");
             }
         }
@@ -310,16 +310,24 @@ namespace Project_A3_ESILV
             Console.WriteLine("Entrez le numéro de sécurité social : ");
             int numSecu = int.Parse(Console.ReadLine());
             DateTime embauche = new DateTime(int.Parse(dates2[2]), int.Parse(dates2[1]), int.Parse(dates2[0]));
-            Console.WriteLine("Entrez le nom de l'empoloyeur : ");
-            string nomEmployeur = Console.ReadLine();
-            Console.WriteLine("Entrez le prénom de l'employeur : ");
-            string prenomEmployeur = Console.ReadLine();
             //création du salarie
             Salarie sal = new Salarie(numSecu, nom, prenom, birth, adresse, mail, tel, embauche, poste, salaire);
             // ajout du salarie dans la liste des salariés et dans l'arbre n-aire
             manager.Salaries.Add(sal);
-            manager.SalariesHierarchie.AjouterSalarie(sal, nomEmployeur, prenomEmployeur);
-            fileExplorer.Add(sal, nomEmployeur, prenomEmployeur);
+            if (manager.SalariesHierarchie == null)
+            {
+                manager.SalariesHierarchie = new SalariesArbre(sal);
+                fileExplorer.Add(sal, "TransConnect", "");
+            }
+            else
+            {
+                Console.WriteLine("Entrez le nom de l'empoloyeur : ");
+                string nomEmployeur = Console.ReadLine();
+                Console.WriteLine("Entrez le prénom de l'employeur : ");
+                string prenomEmployeur = Console.ReadLine();
+                manager.SalariesHierarchie.AjouterSalarie(sal, nomEmployeur, prenomEmployeur);
+                fileExplorer.Add(sal, nomEmployeur, prenomEmployeur);
+            }
             Console.WriteLine("Salarie ajouté");
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
@@ -332,6 +340,15 @@ namespace Project_A3_ESILV
             AfficherOrganigramme();
             Console.WriteLine("Vous avez choisis de modifier un salarié");
             Console.WriteLine("===============");
+            if (manager.SalariesHierarchie == null)
+            {
+                Console.WriteLine("Aucun salarié n'est listé dans la base de données");
+                Console.WriteLine("===============");
+                Console.WriteLine("Appuyez sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+                ModuleSalarie();
+            }
             Console.WriteLine("Entrez le nom du salarié : ");
             string nom = Console.ReadLine();
             Console.WriteLine("Entrez le prénom du salarié : ");
@@ -380,6 +397,15 @@ namespace Project_A3_ESILV
             AfficherOrganigramme();
             Console.WriteLine("Vous avez choisis de supprimer un salarié");
             Console.WriteLine("===============");
+            if (manager.SalariesHierarchie == null)
+            {
+                Console.WriteLine("Aucun salarié n'est listé dans la base de données");
+                Console.WriteLine("===============");
+                Console.WriteLine("Appuyez sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+                ModuleSalarie();
+            }
             Console.WriteLine("Entrez le nom du salarié : ");
             string nom = Console.ReadLine();
             Console.WriteLine("Entrez le prénom du salarié : ");
@@ -410,6 +436,15 @@ namespace Project_A3_ESILV
             {
                 Console.WriteLine("Vous avez choisis d'afficher les salariés de Transconnect");
                 Console.WriteLine("===============");
+            if (manager.SalariesHierarchie == null)
+            {
+                Console.WriteLine("Aucun salarié n'est listé dans la base de données");
+                Console.WriteLine("===============");
+                Console.WriteLine("Appuyez sur une touche ...");
+                Console.ReadKey();
+                Console.Clear();
+                ModuleSalarie();
+            }
                 Console.WriteLine("Comment souhaitez-vous afficher les salariés ? \n 1 : arbre n-aire, 2 : liste d'adjacence, 3 : énumération des salariés par ordre d'ajout, 4 : énumération des salariés par relation employé/employeur");
                 int l = GoodValue(1, 4);
                 switch (l)

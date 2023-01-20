@@ -332,7 +332,7 @@
                 if (profondeurPere == 0 && profondeur == 0) // il s'agit nécessairement du PDG
                 {
                     Console.WriteLine(s.Nom + " " + s.Prenom + " " + s.Poste);
-                    pass = fils.NombreFreres();
+                    if(fils!= null)pass = fils.NombreFreres();
                     if (fils != null)
                     {
                         if (frere != null) barreNonFini.Add(profondeurPere);
