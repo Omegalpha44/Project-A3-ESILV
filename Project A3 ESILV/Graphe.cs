@@ -18,6 +18,12 @@
             this.sommets = sommets;
             this.aretes = aretes;
         }
+
+        public Graphe()
+        {
+            this.sommets = new List<string>();
+            this.aretes = new List<Arete>();
+        }
         #endregion
 
         #region Propriétés

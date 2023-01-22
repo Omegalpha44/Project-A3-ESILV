@@ -7,18 +7,22 @@
         Client client;
         string arrivee;
         string depart;
+        DateTime dateLivraison;
+        List<Arete> itineraire;
         int prix;
         Vehicule vehicule;
         Salarie chauffeur;
         #endregion
 
         #region Constructeurs
-        public Commande(int id, Client client, string depart, string arrivee, Vehicule vehicule, Salarie chauffeur)
+        public Commande(int id, Client client, string depart, string arrivee, DateTime dateLivraison, Vehicule vehicule, Salarie chauffeur)
         {
             this.id = id;
             this.client = client;
             this.depart = depart;
             this.arrivee = arrivee;
+            this.dateLivraison= dateLivraison;
+            this.itineraire = new List<Arete>();
             this.prix = 0;
             this.vehicule = vehicule;
             this.chauffeur = chauffeur;
@@ -56,7 +60,26 @@
         #region Méthodes
         public override string ToString()
         {
+            return "Commande n° : " + id + ", Client : " + client.Nom + " " + client.Prenom + ", Route : " + depart + "-->" + arrivee + ", Date de livraison : " + dateLivraison;
+        }
+
+        public string DescriptionComplete()
+        {
             return "Commande n°" + id + " : " + client.Nom + " " + client.Prenom + " a commandé un " + vehicule.Immatriculation + " pour aller de " + depart + " à " + arrivee + " pour un prix de " + prix + "€." + " Le chauffeur est " + chauffeur.Nom + " " + chauffeur.Prenom + " " + chauffeur.Nom;
+        }
+
+        public void AfficherItineraire()
+        {
+            itineraire.ForEach(arete =>
+            {
+                Console.WriteLine(arete.Depart);
+                Console.WriteLine("| |");
+                for (int i = 0; i < arete.Distance / 25; i++) //Affichage proportionnel à la distance
+                {
+                    Console.WriteLine("| |");
+                }
+            });
+            Console.WriteLine(arrivee);
         }
         #endregion
     }

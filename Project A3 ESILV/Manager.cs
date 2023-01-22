@@ -8,16 +8,18 @@
         List<Vehicule> vehicules;
         public SalariesArbre salariesHierarchie;
         List<Commande> commandes;
+        Graphe graphe;
         #endregion
 
         #region Constructeur
-        public Manager(List<Salarie> salaries, List<Client> clients, List<Vehicule> vehicules, List<Commande> commandes)
+        public Manager(List<Salarie> salaries, List<Client> clients, List<Vehicule> vehicules, List<Commande> commandes, Graphe graphe)
         {
             this.salaries = salaries;
             this.clients = clients;
             this.vehicules = vehicules;
             this.commandes = commandes;
             this.salariesHierarchie = null;
+            this.graphe = graphe;
         }
         public Manager()
         {
@@ -26,6 +28,7 @@
             this.vehicules = new List<Vehicule>();
             this.commandes = new List<Commande>();
             this.salariesHierarchie = null;
+            this.graphe = new Graphe();
         }
         #endregion
 
@@ -50,6 +53,11 @@
         {
             get { return salariesHierarchie; }
             set { salariesHierarchie = value; }
+        }
+        public Graphe Graphe 
+        { 
+            get { return graphe; } 
+            set { graphe = value; }
         }
         #endregion
 
@@ -140,6 +148,39 @@
                 this.vehicules.Remove(vehicule);
             }
         }
+        public void AjouterCommande(Commande commande)
+        {
+            commandes.Add(commande);
+        }
+        public void AjouterCommande(Commande[] commandes)
+        {
+            foreach (Commande commande in commandes)
+            {
+                this.commandes.Add(commande);
+            }
+        }
+        public void RetirerCommande(Commande commande)
+        {
+            commandes.Remove(commande);
+        }
+        public void RetirerCommande(Commande[] commandes)
+        {
+            foreach (Commande commande in commandes)
+            {
+                this.commandes.Remove(commande);
+            }
+        }
+        public void RetirerCommande(int idCommande)
+        {
+            foreach (Commande commande in commandes)
+            {
+                if (commande.Id == idCommande)
+                {
+                    commandes.Remove(commande);
+                }
+            }
+        }
+
         #endregion
 
         #region Génération de commandes
@@ -172,11 +213,11 @@
             }
             return v;
         }
-        public Commande GenerationDeCommande(int id, Client client, string depart, string arrive) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
+        public Commande GenerationDeCommande(int id, Client client, string depart, string arrive, DateTime dateLivraison) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
         {
             Salarie s = ChooseDriver();
             Vehicule v = ChooseVehicle();
-            Commande c = new Commande(id, client, depart, arrive, v, s);
+            Commande c = new Commande(id, client, depart, arrive, dateLivraison, v, s);
             return c;
         }
         #endregion

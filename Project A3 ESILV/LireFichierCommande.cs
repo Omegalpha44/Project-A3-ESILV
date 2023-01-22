@@ -61,7 +61,7 @@ namespace Project_A3_ESILV
                 if (cl == null) Console.WriteLine("Votre client n°{0} n'a pas été trouvé dans la BDD, veuillez d'abord l'ajouter via le Module Client",idClient);
                 else
                 {
-                    Commande commande = manager.GenerationDeCommande(manager.Commandes.Count, cl, mots[2], mots[3]);
+                    Commande commande = manager.GenerationDeCommande(manager.Commandes.Count, cl, mots[2], mots[3],dateLivraison);
                     Console.WriteLine(commande);
                     //on ajoute la commande à la liste des commandes
                     manager.Commandes.Add(commande);

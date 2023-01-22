@@ -5,17 +5,26 @@ namespace Project_A3_ESILV
     public delegate void Ui();
     internal class AffichageGraphique
     {
-
+        #region Champs
         public Manager manager;
         public LireFichier fileExplorer; // explorateur de fichier permettant de modifier la sauvegarde des salariés
         public LireFichier fileExplorerClient; // explorateur de fichier permettant de modifier la sauvegarde des clients
+        public LireFichier fileExplorerDistances; // esplorateur de fichier permettant de lire distances.csv
         bool display = false;
-        public AffichageGraphique(string path,string path2, Manager manager)
+        #endregion
+
+        #region Constructeurs
+        public AffichageGraphique(string pathSalaries,string pathClients, string pathDistances, Manager manager)
         {
             this.manager = manager;
-            this.fileExplorer = new LireFichier(manager, path);
-            this.fileExplorerClient = new LireFichier(manager, path2);
+            this.fileExplorer = new LireFichier(manager, pathSalaries);
+            this.fileExplorerClient = new LireFichier(manager, pathClients);
+            this.fileExplorerDistances = new LireFichier(manager, pathDistances);
         }
+        #endregion
+
+        #region Méthodes
+
         #region AffichageGLobale
         void ExceptionManager(Ui func) // permet, si une erreur est détecté, de relancer la méthode
         {
@@ -407,7 +416,7 @@ namespace Project_A3_ESILV
                 ModuleSalarie();
             }
         }
-            void SupprimerSalarie() 
+        void SupprimerSalarie() 
         {
             AfficherOrganigramme();
             Console.WriteLine("Vous avez choisis de supprimer un salarié");
@@ -447,7 +456,7 @@ namespace Project_A3_ESILV
                 ModuleSalarie();
             }
         }
-            void AfficherSalarie()
+        void AfficherSalarie()
             {
                 Console.WriteLine("Vous avez choisis d'afficher les salariés de Transconnect");
                 Console.WriteLine("===============");
@@ -497,59 +506,88 @@ namespace Project_A3_ESILV
             Console.WriteLine("Bienvenue dans le module commande");
             Console.WriteLine("Choississez votre action");
             Console.WriteLine("================");
-            Console.WriteLine("1. Créer une commande");
+            Console.WriteLine("1. Ajouter une commande");
             Console.WriteLine("2. Modifier une commande");
             Console.WriteLine("3. Supprimer une commande");
             Console.WriteLine("4. Afficher une commande");
-            Console.WriteLine("5. Gérer la flotte de véhicules");
-            Console.WriteLine("6. Retour");
+            Console.WriteLine("5. Valider la livraison d'une commande"); //La commande de la BDD commandes est alors archivées dans la liste de commandes propre au client
+            Console.WriteLine("6. Gérer la flotte de véhicules");
+            Console.WriteLine("7. Retour");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
             int r = GoodValue(1, 5);
             Console.Clear();
             switch (r)
             {
-                //case 1: ExceptionManager(AjouterCommande); break;
-                //case 2: ExceptionManager(ModifierCommande); break;
-                //case 3: ExceptionManager(SupprimerCommande); break;
-                //case 4: ExceptionManager(AfficherCommande); break;
-                //case 5: ExceptionManager(ModuleVehicule); break;
-                case 6: ExceptionManager(Affichage); break;
+                case 1: AjouterCommande(); break;
+                //case 2: ModifierCommande(); break;
+                //case 3: SupprimerCommande(); break;
+                //case 4: AfficherCommande(); break;
+                //case 5: ArchiverCommande(); break;
+                //case 6: ModuleVehicule(); break;
+                case 7: Affichage(); break;
             }
         }
-        /*
+
         void AjouterCommande()
         {
-            Console.WriteLine("Vous avez choisis de ajouter un nouveau client");
+            Console.WriteLine("Vous avez choisi d'ajouter une nouvelle commande");
             Console.WriteLine("===============");
-            Console.Write("nom : ");
-            string nom = Console.ReadLine();
+            Console.Write("n° de commande (idCommande) : ");
+            int idCommande = int.Parse(Console.ReadLine());
             Console.WriteLine();
-            Console.Write("prenom : ");
-            string prenom = Console.ReadLine();
+            Console.Write("n° de client (idClient) : ");
+            int idClient = int.Parse(Console.ReadLine());
             Console.WriteLine();
-            Console.Write("date de Naissance (jour/mois/année): ");
+            Console.Write("ville de départ : ");
+            string depart = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("ville d'arrivée : ");
+            string arrivee = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("date de livraison (jour/mois/année): ");
             string date = Console.ReadLine();
             string[] dates = date.Split('/');
-            DateTime birth = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
+            DateTime dateLivraison = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
             Console.WriteLine();
-            Console.Write("adresse : ");
-            string adresse = Console.ReadLine();
-            Console.WriteLine();
-            Console.Write("adresse mail : ");
-            string mail = Console.ReadLine();
-            Console.WriteLine();
-            Console.Write("numero de telephone : ");
-            int tel = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            manager.AjouterClient(nom, prenom, birth, adresse, mail, tel);
-            Console.WriteLine("Client Ajouté !");
-            Console.WriteLine("===============");
-            Console.WriteLine("Appuyez sur une touche ...");
+
+            // On vérifie l'existence du client à livrer dans la BDD
+            Client clientCommande = manager.Clients.Find(x => x.Id == idClient);
+            //exception à ajouter 
+            if (clientCommande == null) //le client n'a pas été trouvé dans la BDD
+            {
+                Console.WriteLine("Votre client n°{0} n'a pas été trouvé dans la BDD, veuillez d'abord l'ajouter via le Module Client", idClient);
+            }
+            else //le client à été trouvé
+            {
+                //On génère une commande et le prix suivant le parcours déterminé par Dijkstra
+                Commande offreCommande = manager.GenerationDeCommande(idCommande, clientCommande, depart, arrivee, dateLivraison);
+                //offreCommande.Itinéraire = Dijkstra(graphe, depart, arrivee);
+                Console.WriteLine("Commande générée : ");
+                Console.WriteLine("===============");
+                Console.WriteLine(offreCommande);
+                Console.WriteLine("Itinéraire le plus court proposé : ");
+                offreCommande.AfficherItineraire();
+                Console.WriteLine("===============");
+                Console.WriteLine("Cette commande vous convient-elle ? (1=oui 2=non) : ");
+                int r = GoodValue(1, 2);
+                switch(r)
+                {
+                    case 1: 
+                        manager.AjouterCommande(offreCommande); 
+                        Console.WriteLine("Commande ajoutée avec succès"); 
+                        break;
+                    case 2: 
+                        Console.WriteLine("Commande annulée");
+                        break;
+                }
+            }
+            Console.WriteLine("Appuyez sur une touche...");
             Console.ReadKey();
             Console.Clear();
-            ModuleClient();
+            ModuleCommande();
         }
+        /*
         void ModifierCommande()
         {
             Console.WriteLine("Vous avez choisis de modifier un client");
@@ -641,6 +679,8 @@ namespace Project_A3_ESILV
         void ModuleStatistique() { }
         void ModuleAutre() { }
         void Exit() { }
+
+        #endregion
     }
     
-    } 
+} 

@@ -10,9 +10,13 @@ namespace Project_A3_ESILV
 {
     internal class LireFichier // permet de lire un fichier contenant les employés de TransConnect
     {
+        #region Champs
         public Manager manager;
         string path;
         static string sep = ";";
+        #endregion
+
+        #region Constructeurs
         public LireFichier(Manager manager,string path)
         {
             this.manager = manager;
@@ -23,6 +27,15 @@ namespace Project_A3_ESILV
             this.manager = new Manager();
             this.path = path;
         }
+        #endregion
+
+        #region Propriétés
+        public Manager Manager { get; }
+        #endregion
+
+        #region Methodes
+
+        #region BDD Clients / Salariés
         // pos = 0 : nom
         // pos = 1 : prenom
         // pos = 2 : date de naissance
@@ -36,7 +49,7 @@ namespace Project_A3_ESILV
         // pos = 10 : Nom employeur (salarie only)
         // pos = 11 : Prenom employeur (salarie only)
         // pos = 12 : id (salarie only)
-        public Manager Manager { get; }
+
         #region Modification et lecture du fichier de sauvegarde
         public void ReadFile()
         {
@@ -346,6 +359,58 @@ namespace Project_A3_ESILV
             tr.Close();
             tw.Close();
         }
+        #endregion
+
+        #endregion
+
+        #region BDD Distances
+        // pos = 0 : Départ
+        // pos = 1 : Arrivée
+        // pos = 2 : Distance
+        // pos = 3 : Durée
+
+        
+        public void InitialisationGraphe()
+        {
+            // Initialise le graphe en fonction des données de distances.csv
+            // Il faut relancer InitialisationGraphe si le fichier distances.csv est modifié
+            // Le fichier doit être de la forme suivante:
+            // Départ, Arrivée, Distance, Durée
+            //exemple:
+            // Paris Rouen 133 1h45
+
+            //on ouvre le fichier
+            if (!File.Exists(path))
+            {
+                //on créé le fichier s'il n'existe pas
+                StreamWriter writer = new StreamWriter(path);
+                writer.WriteLine("depart" + sep + "arrivee" + sep + "distance" + sep + "duree");
+                writer.Close();
+            }
+            manager.Graphe.Sommets.Clear();
+            manager.Graphe.Aretes.Clear();
+            StreamReader sr = new StreamReader(path);
+            string line = sr.ReadLine();
+            line = sr.ReadLine();
+
+            //on lit le fichier ligne par ligne
+            while (line != null)
+            {
+                //on découpe la ligne en fonction des virgules
+                string[] mots = line.Split(sep);
+                //on crée un objet de type Arete avec les informations de la ligne
+                Arete arete = new Arete(mots[0], mots[1], float.Parse(mots[2])); //départ, arrivée, distance
+                //on ajoute l'arête à la liste des arêtes du graphe
+                if(!manager.Graphe.Aretes.Contains(arete)) manager.Graphe.Aretes.Add(arete);
+                if(!manager.Graphe.Sommets.Contains(arete.Depart)) manager.Graphe.Sommets.Add(arete.Depart);
+                if (!manager.Graphe.Sommets.Contains(arete.Arrivee)) manager.Graphe.Sommets.Add(arete.Arrivee);
+                //on lit la ligne suivante
+                line = sr.ReadLine();
+            }
+            sr.Close();
+        }
+        #endregion
+
         #endregion
     }
 }
