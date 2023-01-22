@@ -42,7 +42,7 @@ namespace Project_A3_ESILV
         // pos = 3 : adresse
         // pos = 4 : adresse mail
         // pos = 5 : téléphone
-        // pos = 6 : date d'embauche / commandes
+        // pos = 6 : date d'embauche (salarie only)
         // pos = 7 : salaire (salarie only)
         // pos = 8 : poste (salarie only)
         // pos = 9 : Employeur : (salarie only)
@@ -60,7 +60,7 @@ namespace Project_A3_ESILV
             // Dupont, Jean, 01/01/1990, 1 rue de la paix, dupont@gmail.com, 0719203, 01/01/2002, 10000, chauffeur, id
 
             //on ouvre le fichier
-            if(!File.Exists(path))
+            if (!File.Exists(path))
             {
                 //on créé le fichier s'il n'existe pas
                 StreamWriter writer = new StreamWriter(path);
@@ -78,6 +78,11 @@ namespace Project_A3_ESILV
             {
                 //on découpe la ligne en fonction des virgules
                 string[] mots = line.Split(sep);
+                mots[0] = mots[0].ToUpper();
+                mots[1] = mots[1].ToUpper();
+                mots[10] = mots[10].ToUpper();
+                mots[11] = mots[11].ToUpper();
+                mots[8] = mots[8].ToUpper();
                 //on crée un objet de type Salarie avec les informations de la ligne
                 string[] birth = mots[2].Split("/");
                 DateTime X = new DateTime(int.Parse(birth[2]), int.Parse(birth[1]), int.Parse(birth[0]));
@@ -86,7 +91,7 @@ namespace Project_A3_ESILV
                 Salarie salarie = new Salarie(int.Parse(mots[12]), mots[0], mots[1], X, mots[3], mots[4], int.Parse(mots[5]), Y, mots[8], int.Parse(mots[7]));
                 //on ajoute le salarié à la liste des salariés
                 manager.Salaries.Add(salarie);
-                if (mots[10] == "" || mots[10] == "TransConnect")
+                if (mots[10] == "" || mots[10] == "TRANSCONNECT")
                 {
                     if(manager.SalariesHierarchie != null) manager.SalariesHierarchie.AjouterBoss(salarie);
                     else manager.SalariesHierarchie = new SalariesArbre(salarie);
@@ -102,7 +107,7 @@ namespace Project_A3_ESILV
         }
         public void ReadFileClient()
         {
-            if(!File.Exists(path))
+            if (!File.Exists(path))
             {
                 //on créé le fichier si il n'existe pas
                 StreamWriter writer = new StreamWriter(path);
@@ -343,7 +348,9 @@ namespace Project_A3_ESILV
             File.Move("temp.txt", path);
         }
         #endregion
+        #endregion
         #region utilitaire de transformation du fichier de sauvegarde
+        static string alpha = "abcdefghijklmnopqrstuvwxyz"; // les permutations dépendront toute de l'alphabet
         public static void FromTxt2Csv(string path1, string path2)
         {// transforme le fichier txt en une sauvegarde csv
             string spe2 = ";";
@@ -359,18 +366,82 @@ namespace Project_A3_ESILV
             tr.Close();
             tw.Close();
         }
-        #endregion
+        // chiffrage par substitution du fichier
+        public static void ChiffrageSub(string path, string path2, string permu)
+    { // chiffre le fichier situé au path dans le path2
+        TextReader tr = new StreamReader(path);
+        TextWriter tw = new StreamWriter(path2, false);
+        string ligne = tr.ReadLine();
+        while (ligne != null)
+        {
+            tw.WriteLine(Chiffrer(ligne, permu));
+            ligne = tr.ReadLine();
+        }
+        tr.Close();
+        tw.Close();
+    }
+        static string Chiffrer(string line, string permu)
+    {
+        string res = "";
+        foreach (char c in line)
+        {
+            if (alpha.Contains(c)) // si il s'agit d'une minuscule
+            {
+                res += permu[alpha.IndexOf(c)];
+            }
+            else if(alpha.ToUpper().Contains(c)) // gérer le cas si il s'agit d'une majuscule
+                {
+                    res += permu.ToUpper()[alpha.ToUpper().IndexOf(c)];
+                }
+            else
+                {
+                res += c;
+                }
+        }
+        return res;
+    }
+        static string Dechiffrer(string line, string permu)
+    {
+        string res = "";
+        foreach (char c in line)
+        {
+            if (permu.Contains(c))
+            {
+                res += alpha[permu.IndexOf(c)];
+            }
+            else if (permu.ToUpper().Contains(c))
+                {
+                    res += alpha.ToUpper()[permu.ToUpper().IndexOf(c)];
+                }
+            else
+            {
+                res += c;
+            }
+        }
+        return res;
+    }
+        public static void DechiffrageSub(string path, string path2, string permu)
+    { // déchiffre le fichier situé au path dans le path2
+        TextReader tr = new StreamReader(path);
+        TextWriter tw = new StreamWriter(path2, false);
+        string ligne = tr.ReadLine();
+        while (ligne != null)
+        {
+            tw.WriteLine(Dechiffrer(ligne, permu));
+            ligne = tr.ReadLine();
+        }
+        tr.Close();
+        tw.Close();
+    }
+    #endregion
+    #region BDD Distances
+    // pos = 0 : Départ
+    // pos = 1 : Arrivée
+    // pos = 2 : Distance
+    // pos = 3 : Durée
 
-        #endregion
 
-        #region BDD Distances
-        // pos = 0 : Départ
-        // pos = 1 : Arrivée
-        // pos = 2 : Distance
-        // pos = 3 : Durée
-
-        
-        public void InitialisationGraphe()
+    public void InitialisationGraphe()
         {
             // Initialise le graphe en fonction des données de distances.csv
             // Il faut relancer InitialisationGraphe si le fichier distances.csv est modifié

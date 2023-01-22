@@ -58,6 +58,17 @@ namespace Project_A3_ESILV
             bool error = false;
             try
             {
+                if (File.Exists("key.txt"))
+                {
+                    TextReader tr = new StreamReader("key.txt");
+                    string permu = tr.ReadLine();
+                    tr.Close();
+                    if (permu != null)
+                    {
+                        LireFichier.DechiffrageSub("employeeCipher.csv", "employee.csv", permu);
+                        LireFichier.DechiffrageSub("clientCipher.csv", "client.csv", permu);
+                    }
+                }
                 fileExplorerClient.ReadFileClient();
                 fileExplorer.ReadFile();
             }
@@ -72,6 +83,7 @@ namespace Project_A3_ESILV
                 Console.Clear();
 
             }
+            
             if(!error) ExceptionManager(Affichage);
         }
         void Affichage()
@@ -311,23 +323,23 @@ namespace Project_A3_ESILV
             Console.WriteLine("Vous avez choisis d'ajouter un salarié");
             Console.WriteLine("===============");
             Console.WriteLine("Entrez le nom du salarié : ");
-            string nom = Console.ReadLine();
+            string nom = Console.ReadLine().ToUpper();
             Console.WriteLine("Entrez le prénom du salarié : ");
-            string prenom = Console.ReadLine();
+            string prenom = Console.ReadLine().ToUpper();
             Console.WriteLine("Entrez la date de naissance du salarié (jour/mois/année) : ");
             string date = Console.ReadLine();
             string[] dates = date.Split('/');
             DateTime birth = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
             Console.WriteLine("Entrez l'adresse du salarié : ");
-            string adresse = Console.ReadLine();
+            string adresse = Console.ReadLine().ToUpper();
             Console.WriteLine("Entrez l'adresse mail du salarié : ");
-            string mail = Console.ReadLine();
+            string mail = Console.ReadLine().ToUpper();
             Console.WriteLine("Entrez le numéro de téléphone du salarié : ");
             int tel = int.Parse(Console.ReadLine());
             Console.WriteLine("Entrez le salaire du salarié : ");
             int salaire = int.Parse(Console.ReadLine());
             Console.WriteLine("Entrez le poste du salarié : ");
-            string poste = Console.ReadLine();
+            string poste = Console.ReadLine().ToUpper();
             Console.WriteLine("Entrez la date d'embauche du salarié : (jour/mois/année) ");
             string date2 = Console.ReadLine();
             string[] dates2 = date2.Split('/');
@@ -346,9 +358,9 @@ namespace Project_A3_ESILV
             else
             {
                 Console.WriteLine("Entrez le nom de l'empoloyeur : ");
-                string nomEmployeur = Console.ReadLine();
+                string nomEmployeur = Console.ReadLine().ToUpper();
                 Console.WriteLine("Entrez le prénom de l'employeur : ");
-                string prenomEmployeur = Console.ReadLine();
+                string prenomEmployeur = Console.ReadLine().ToUpper();
                 manager.SalariesHierarchie.AjouterSalarie(sal, nomEmployeur, prenomEmployeur);
                 fileExplorer.Add(sal, nomEmployeur, prenomEmployeur);
             }
@@ -677,8 +689,163 @@ namespace Project_A3_ESILV
 
         #endregion
         void ModuleStatistique() { }
-        void ModuleAutre() { }
-        void Exit() { }
+        void ModuleAutre() 
+        {
+            Console.Clear();
+            Console.WriteLine("Vous avez choisis le module Autre :");
+            Console.WriteLine("===============");
+            Console.WriteLine("Que souhaitez vous faire ? :");
+            Console.WriteLine("1 : Chiffer les données de sauvegarde");
+            Console.WriteLine("2 : Déchiffer les données de sauvegarde");
+            int r = GoodValue(1, 2);
+            
+            switch(r)
+            {
+                case 1:
+                    {
+                        Console.Clear();
+                        Console.WriteLine("===============");
+                        if(File.Exists("key.txt"))
+                        {
+                            Console.WriteLine("Les fichiers de sauvegardes sont déjà chiffrés. Un second chiffrage est impossible. Veuillez les déchiffrer avant de procéder");
+                        }
+                        else { 
+                        Console.WriteLine("Vous vous apprêtez à chiffrer les données de sauvegarde");
+                        Console.WriteLine("Une fois cela fait, il ne sera plus possible de modifier à même le fichier les données des clients et des salariés");
+                        Console.WriteLine("êtes vous sûr de vouloir procéder au chiffrage ? (O/N) :");
+                        string s = Console.ReadLine();
+                            if (s.ToUpper() == "O" || s == "0")
+                            {
+                                string permu = GoodPermu();
+                                if (permu != "error")
+                                {
+                                    Console.WriteLine("Permutation valide");
+                                    Console.WriteLine("Veuillez noter quelques part votre permutation. Si celle ci est perdue, nous ne serons pas reponsable de pertes de données.");
+                                    Console.WriteLine("Chiffrage en cours. Veuillez ne pas modifier les set de donnée ...");
+                                    LireFichier.ChiffrageSub("client.csv", "clientCipher.csv", permu);
+                                    LireFichier.ChiffrageSub("employee.csv", "employeeCipher.csv", permu);
+                                    //chiffrage commandes
+                                    Console.WriteLine("Chiffrage terminée avec succès");
+                                    TextWriter tw = new StreamWriter("key.txt", false); // on suppose que le fichier est protégé par le système d'exploitation (W11 pro uniquement)
+                                    tw.Write(permu);
+                                    tw.Close();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Une erreur s'est produite, veuillez réessayer ultérieurement ...");
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case 2:
+                    {
+                        if(File.Exists("key.txt"))
+                        {
+                            Console.WriteLine("Êtes vous sûr de vouloir déchiffrer les données de sauvegarde ? (O/N) :");
+                            string l = Console.ReadLine();
+                            if (l == "O" || l == "o")
+                            {
+                                TextReader tr = new StreamReader("key.txt");
+                                string permu = tr.ReadLine();
+                                tr.Close();
+                                if (permu != null)
+                                {
+                                    LireFichier.DechiffrageSub("employeeCipher.csv", "employee.csv", permu);
+                                    LireFichier.DechiffrageSub("clientCipher.csv", "client.csv", permu);
+                                    File.Delete("key.txt");
+                                    File.Delete("employeeCipher.csv");
+                                    File.Delete("clientCipher.csv");
+                                }
+                                Console.WriteLine("Déchiffrage fini");
+                            }
+                            else Console.WriteLine("les données n'ont pas été déchiffré.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Les données ne sont pas chiffrés. Veuillez les chiffrer avant de procéder à un quelconques déchiffrement");
+                        }
+                        break;
+                    }
+            }
+            Console.WriteLine("===============");
+            Console.WriteLine("Appuyez sur une touche ...");
+            Console.ReadKey();
+            Console.Clear();
+            ModuleAutre();
+        }
+        string GoodPermu()
+        {
+            string alpha = "abcdefghijklmnopqrstuvwxyz";
+            Console.WriteLine("Veuillez entrer une permutation à appliquer au jeu de donnée. Elle doit contenir toutes les lettres de l'alphabet et ne pas avoir de répétition.");
+            Console.WriteLine("Exemple : " + alpha);
+            Console.WriteLine("Votre permutation : ");
+            string permu = Console.ReadLine();
+            permu = permu.ToLower();
+            bool foo = true;
+            if (permu.Length != 26)
+            {
+                Console.WriteLine("La permutation ne dispose pas d'une taille suffisante. Veuillez vérifier la taille fournie :");
+                Console.WriteLine("Voulez vous retenter ? (0/N):");
+                string s = Console.ReadLine();
+                if (s.ToUpper() == "O" || s == "0")
+                {
+                    return GoodPermu();
+                }
+                else
+                {
+                    return "error";
+                }
+                    
+
+            }
+            else
+            {
+                foreach (char c in alpha)
+                {
+                    if (!permu.Contains(c))
+                    {
+                        foo = false;
+                    }
+                }
+                if(!foo)
+                {
+                    Console.WriteLine("Vous n'avez pas fourni toutes les lettres de l'alphabet dans votre permutation.");
+                    Console.WriteLine("Voulez vous retenter ? (0/N):");
+                    string s = Console.ReadLine();
+                    if (s.ToUpper() == "O" || s == "0")
+                    {
+                        return GoodPermu();
+                    }
+                    else
+                    {
+                        return "error";
+                    }
+                }
+                else
+                {
+                    return permu;
+                }
+            }
+            
+
+        }
+        void Exit() 
+        {
+            if(File.Exists("key.txt"))
+            {
+                TextReader tr = new StreamReader("key.txt");
+                string permu = tr.ReadLine();
+                tr.Close();
+                if (permu != null)
+                {
+                    LireFichier.ChiffrageSub("client.csv", "clientCipher.csv", permu);
+                    LireFichier.ChiffrageSub("employee.csv", "employeeCipher.csv", permu);
+                }
+                File.Delete("employee.csv");
+                File.Delete("client.csv");
+            }
+        }
 
         #endregion
     }
