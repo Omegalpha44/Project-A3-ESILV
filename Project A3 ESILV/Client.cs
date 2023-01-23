@@ -11,6 +11,11 @@
         {
             this.commandes = new List<Commande>();
         }
+
+        public Client() : base()
+        {
+            this.commandes = new List<Commande>();
+        }
         #endregion
 
         #region getter-setter

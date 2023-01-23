@@ -1,4 +1,6 @@
-﻿using System.Runtime.ExceptionServices;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Runtime.ExceptionServices;
 
 namespace Project_A3_ESILV
 {
@@ -509,9 +511,8 @@ namespace Project_A3_ESILV
                 ModuleSalarie();
             }
         #endregion
-        #region Module Commande
+        #region Module Commandes
 
-        #region Interface Commande
         void ModuleCommande()
         {
             Console.Clear();
@@ -527,15 +528,15 @@ namespace Project_A3_ESILV
             Console.WriteLine("7. Retour");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
-            int r = GoodValue(1, 5);
+            int r = GoodValue(1, 7);
             Console.Clear();
             switch (r)
             {
                 case 1: AjouterCommande(); break;
                 //case 2: ModifierCommande(); break;
-                //case 3: SupprimerCommande(); break;
-                //case 4: AfficherCommande(); break;
-                //case 5: ArchiverCommande(); break;
+                case 3: SupprimerCommande(); break;
+                case 4: AfficherCommande(); break;
+                case 5: ArchiverCommande(); break;
                 //case 6: ModuleVehicule(); break;
                 case 7: Affichage(); break;
             }
@@ -545,8 +546,17 @@ namespace Project_A3_ESILV
         {
             Console.WriteLine("Vous avez choisi d'ajouter une nouvelle commande");
             Console.WriteLine("===============");
+
             Console.Write("n° de commande (idCommande) : ");
             int idCommande = int.Parse(Console.ReadLine());
+            while (manager.Commandes.Exists(x => x.Id == idCommande)) //évite d'avoir 2 commandes avec même id
+            {
+                Console.WriteLine("Une commande avec cet id existe déjà dans la BDD, veuillez en saisir un nouveau");
+                Console.Write("n° de commande (idCommande) : ");
+                idCommande = int.Parse(Console.ReadLine());
+            } 
+
+            
             Console.WriteLine();
             Console.Write("n° de client (idClient) : ");
             int idClient = int.Parse(Console.ReadLine());
@@ -574,24 +584,26 @@ namespace Project_A3_ESILV
             {
                 //On génère une commande et le prix suivant le parcours déterminé par Dijkstra
                 Commande offreCommande = manager.GenerationDeCommande(idCommande, clientCommande, depart, arrivee, dateLivraison);
-                //offreCommande.Itinéraire = Dijkstra(graphe, depart, arrivee);
-                Console.WriteLine("Commande générée : ");
-                Console.WriteLine("===============");
-                Console.WriteLine(offreCommande);
-                Console.WriteLine("Itinéraire le plus court proposé : ");
-                offreCommande.AfficherItineraire();
-                Console.WriteLine("===============");
-                Console.WriteLine("Cette commande vous convient-elle ? (1=oui 2=non) : ");
-                int r = GoodValue(1, 2);
-                switch(r)
+                if(offreCommande.Itineraire.Count!=0)
                 {
-                    case 1: 
-                        manager.AjouterCommande(offreCommande); 
-                        Console.WriteLine("Commande ajoutée avec succès"); 
-                        break;
-                    case 2: 
-                        Console.WriteLine("Commande annulée");
-                        break;
+                    Console.WriteLine("Commande générée : ");
+                    Console.WriteLine("===============");
+                    Console.WriteLine(offreCommande);
+                    Console.WriteLine("Itinéraire le plus court proposé : ");
+                    offreCommande.AfficherItineraire();
+                    Console.WriteLine("===============");
+                    Console.WriteLine("Cette commande vous convient-elle ? (1=oui 2=non) : ");
+                    int r = GoodValue(1, 2);
+                    switch (r)
+                    {
+                        case 1:
+                            manager.AjouterCommande(offreCommande);
+                            Console.WriteLine("Commande ajoutée avec succès");
+                            break;
+                        case 2:
+                            Console.WriteLine("Commande annulée");
+                            break;
+                    }
                 }
             }
             Console.WriteLine("Appuyez sur une touche...");
@@ -599,51 +611,63 @@ namespace Project_A3_ESILV
             Console.Clear();
             ModuleCommande();
         }
-        /*
+
         void ModifierCommande()
         {
-            Console.WriteLine("Vous avez choisis de modifier un client");
+            Console.WriteLine("Vous avez choisi de modifier une commande");
             Console.WriteLine("===============");
-            if (manager.Clients.Count > 0)
+            if (manager.Commandes.Count > 0)
             {
-                Console.WriteLine("Voici la liste des clients :");
+                Console.WriteLine("Voici la liste des commandes :");
                 int i = 0;
-                foreach (Client c in manager.Clients)
+                foreach (Commande c in manager.Commandes)
                 {
-                    Console.Write(i + ": ");
-                    Console.WriteLine(c.Id + " : " + c.Nom + " " + c.Prenom);
+                    Console.WriteLine(c);
                     i++;
                 }
-                Console.WriteLine("Quel client voulez vous modifier ? :");
-                int r = GoodValue(0, manager.Clients.Count);
-                Client cible = manager.Clients[r];
-                Console.WriteLine("Modification de {0}", cible.Id + "  " + cible.Nom + " " + cible.Prenom);
-                Console.WriteLine("Que souhaitez vous modifier ? \n 1 : nom, 2 : prenom, 3 : date de naissance, 4 : adresse, 5 : adresse mail, 6 : numero de telephone");
-                Console.WriteLine("  :  ");
-                int l = GoodValue(1, 6);
-                switch (l)
+                Console.WriteLine("Quelle commande voulez vous modifier ? (n° de commande):");
+                int r = int.Parse(Console.ReadLine());
+                if (manager.Commandes.Exists(x => x.Id == r))
                 {
-                    case 1: Console.WriteLine("Entrez le nouveau nom : "); cible.Nom = Console.ReadLine(); break;
-                    case 2: Console.WriteLine("Entrez le nouveau prenom : "); cible.Prenom = Console.ReadLine(); break;
-                    case 3:
-                        {
-                            Console.WriteLine("Entrez la nouvelle date de naissance  (jour/mois/année) : ");
-                            string date = Console.ReadLine();
-                            string[] dates = date.Split('/');
-                            DateTime birth = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
-                            cible.DateNaissance = birth;
-                            break;
-                        }
-                    case 4: Console.WriteLine("Entrez la nouvelle adresse : "); cible.Adresse = Console.ReadLine(); break;
-                    case 5: Console.WriteLine("Entrez la nouvelle adresse mail : "); cible.AdresseMail = Console.ReadLine(); break;
-                    case 6: Console.WriteLine("Entrez le numéro de téléphone : "); cible.Telephone = int.Parse(Console.ReadLine()); break;
-                }
+                    Commande cible = manager.Commandes.Find(x => x.Id == r);
+                    Console.WriteLine("Modification de {0}", cible.Id + "  " + cible.Depart + " " + cible.Arrivee + " " + cible.DateLivraison);
+                    Console.WriteLine("Que souhaitez vous modifier ? \n 1 : Départ, 2 : Arrivée, 3 : Date de livraison");
+                    Console.WriteLine("  :  ");
+                    int l = GoodValue(1, 3);
+                    switch (l)
+                    {
+                        case 1: Console.WriteLine("Entrez le nouveau départ : "); cible.Depart = Console.ReadLine(); break;
+                        case 2: Console.WriteLine("Entrez la nouvelle arrivée : "); cible.Arrivee = Console.ReadLine(); break;
+                        case 3:
+                            {
+                                Console.WriteLine("Entrez la nouvelle date de livraison  (jour/mois/année) : ");
+                                string date = Console.ReadLine();
+                                string[] dates = date.Split('/');
+                                DateTime dateLivraison = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
+                                cible.DateLivraison = dateLivraison;
+                                break;
+                            }
+                    }
 
+                    List<Arete> nouvelItineraire = manager.Graphe.Dijkstra(cible.Depart, cible.Arrivee);
+                    if (nouvelItineraire.Count == 0) 
+                    {
+                        Console.WriteLine("Impossible de changer l'itinéraire, nouvel itinéraire incompatible");
+                    }
+                    else
+                    {
+                        Commande temp = new Commande();
+                        temp.Itineraire = nouvelItineraire;
+                        temp.AfficherItineraire();
+                        Console.WriteLine("===============");
+                        Console.WriteLine("Ce nouvel itinéraire vous convient-il ? (1=oui 2=non) : ");
+                    }
+                }
             }
             else
 
             {
-                Console.WriteLine("Pas de client dans la banque de donnée : Veuillez en rajouter avant de procéder à une modification");
+                Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à une modification");
             }
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
@@ -651,43 +675,135 @@ namespace Project_A3_ESILV
             Console.Clear();
             ModuleClient();
         }
+
         void SupprimerCommande()
         {
-            Console.WriteLine("Vous avez choisis de supprimer un client");
+            Console.WriteLine("Vous avez choisis de supprimer une commande");
             Console.WriteLine("===============");
-            if (manager.Clients.Count > 0)
+            if (manager.Commandes.Count > 0)
             {
-                Console.WriteLine("Voici la liste des clients :");
+                Console.WriteLine("Voici la liste des commandes :");
                 int i = 0;
-                foreach (Client c in manager.Clients)
+                foreach (Commande c in manager.Commandes)
                 {
-                    Console.Write(i + ": ");
-                    Console.WriteLine(c.Id + " : " + c.Nom + " " + c.Prenom);
+                    Console.WriteLine(c);
                     i++;
                 }
-                Console.WriteLine("Quel client voulez vous supprimer ? :");
-                int r = GoodValue(0, manager.Clients.Count);
-                Client cible = manager.Clients[r];
-                Console.WriteLine("Suppression de {0}", cible.Id + "  " + cible.Nom + " " + cible.Prenom);
-                manager.Clients.Remove(cible);
-                Console.WriteLine("CLient supprimé");
+                Console.WriteLine("Quelle commande voulez vous supprimer ? (n° de commande):");
+                int r = int.Parse(Console.ReadLine());
+                if (manager.Commandes.Exists(x => x.Id == r))
+                {
+                    Commande cible = manager.Commandes.Find(x => x.Id == r);
+                    Console.WriteLine("Suppression de {0}", cible.Id + "  " + cible.Depart + " " + cible.Arrivee + " " + cible.DateLivraison);
+                    manager.Commandes.Remove(cible);
+                    Console.WriteLine("Commande supprimée");
+                }
+                else
+                {
+                    Console.WriteLine("La commande n'a pas été trouvée dans la BDD");
+                }
+                    
             }
             else
             {
-                Console.WriteLine("Pas de client dans la banque de donnée : Veuillez en rajouter avant de procéder à une suppression");
+                Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à une suppression");
             }
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
             Console.ReadKey();
             Console.Clear();
-            ModuleClient();
+            ModuleCommande();
         }
-        void AfficherCommande() { }
-        void ModuleVehicule() { }
-        */
-        #endregion
+        void AfficherCommande() 
+        {
+            Console.WriteLine("Vous avez choisis d'afficher une commande");
+            Console.WriteLine("===============");
+            if (manager.Commandes.Count > 0)
+            {
+                Console.WriteLine("Voici la liste des commandes :");
+                int i = 0;
+                foreach (Commande c in manager.Commandes)
+                {
+                    Console.WriteLine(c);
+                    i++;
+                }
+                Console.WriteLine("Quelle commande voulez vous afficher ? (n° de commande):");
+                int r = int.Parse(Console.ReadLine());
+                if (manager.Commandes.Exists(x => x.Id == r))
+                {
+                    Commande cible = manager.Commandes.Find(x => x.Id == r);
+                    Console.WriteLine("Itinéraire pour la commande : " + cible);
+                    cible.AfficherItineraire();
+                }
+                else
+                {
+                    Console.WriteLine("La commande n'a pas été trouvée dans la BDD");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à une suppression");
+            }
+            Console.WriteLine("===============");
+            Console.WriteLine("Appuyez sur une touche ...");
+            Console.ReadKey();
+            Console.Clear();
+            ModuleCommande();
+        }
+        void ArchiverCommande()
+        {
+            Console.WriteLine("Vous avez choisis d'archiver une commande");
+            Console.WriteLine("===============");
+            if (manager.Commandes.Count > 0)
+            {
+                Console.WriteLine("Voici la liste des commandes :");
+                int i = 0;
+                foreach (Commande c in manager.Commandes)
+                {
+                    Console.WriteLine(c);
+                    i++;
+                }
+                Console.WriteLine("Quelle commande voulez vous archiver ? (n° de commande):");
+                int r = int.Parse(Console.ReadLine());
+                if (manager.Commandes.Exists(x => x.Id == r))
+                {
+                    Commande cible = manager.Commandes.Find(x => x.Id == r);
+                    Console.WriteLine("Archivage de {0}", cible.Id + "  " + cible.Depart + " " + cible.Arrivee + " " + cible.DateLivraison);
+
+                    //on déplace la commande dans les archives du client
+                    cible.Client.AjouteCommande(cible);
+                    Console.WriteLine("Commande archivée dans le dossier client de : "+cible.Client.Nom+" "+cible.Client.Prenom);
+                    //on supprime la commande de la BDD
+                    manager.Commandes.Remove(cible);
+                }
+                else
+                {
+                    Console.WriteLine("La commande n'a pas été trouvée dans la BDD");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à un archivage");
+            }
+            Console.WriteLine("===============");
+            Console.WriteLine("Appuyez sur une touche ...");
+            Console.ReadKey();
+            Console.Clear();
+            ModuleCommande();
+        }
 
         #endregion
+        #region Module Vehicules
+
+        void ModuleVehicule()
+        {
+            
+        }
+
+        #endregion
+
         void ModuleStatistique() { }
         void ModuleAutre() 
         {
