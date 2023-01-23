@@ -74,7 +74,7 @@ namespace Project_A3_ESILV
             line = sr.ReadLine();
 
             //on lit le fichier ligne par ligne
-            while (line != null)
+            while (line != null && line != ";;;;;;;;;;;;") // le deuxième cas correspond à une ligne fantôme, créé par excel
             {
                 //on découpe la ligne en fonction des virgules
                 string[] mots = line.Split(sep);

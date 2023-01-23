@@ -162,16 +162,41 @@ namespace Project_A3_ESILV
             int tel = int.Parse(Console.ReadLine());
             Console.WriteLine();
             Console.Write("numero de sécurité sociale : ");
-            int secu = int.Parse(Console.ReadLine());
-            Client c = new Client(secu, nom, prenom, birth, adresse, mail, tel);
-            manager.AjouterClient(c);
-            fileExplorerClient.Add(c);
-            Console.WriteLine("Client Ajouté !");
+            int GoodSecu()
+            {
+                int secu = int.Parse(Console.ReadLine());
+                if (manager.Clients.FindAll(x => x.Id == secu).Count != 0)
+                {
+                    Console.WriteLine("Ce numéro d'identification sociale existe déjà.");
+                    Console.WriteLine("===============");
+                    Console.WriteLine("Voulez vous ressaisir le numéro sociale du client ? (o/n)");
+                    string l = Console.ReadLine();
+                    if (l == "o" || l == "O")
+                    {
+                        return GoodSecu();
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else return secu;
+            }
+            int secu = GoodSecu();
+            if (secu != -1)
+            {
+                Client c = new Client(secu, nom, prenom, birth, adresse, mail, tel);
+                manager.AjouterClient(c);
+                fileExplorerClient.Add(c);
+                Console.WriteLine("Client Ajouté !");
+            }
+            else Console.WriteLine("Client non ajouté");
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
             Console.ReadKey();
             Console.Clear();
             ModuleClient();
+            
         }
         void ModifierClient()
         {
@@ -344,27 +369,51 @@ namespace Project_A3_ESILV
             string date2 = Console.ReadLine();
             string[] dates2 = date2.Split('/');
             Console.WriteLine("Entrez le numéro de sécurité social : ");
-            int numSecu = int.Parse(Console.ReadLine());
-            DateTime embauche = new DateTime(int.Parse(dates2[2]), int.Parse(dates2[1]), int.Parse(dates2[0]));
-            //création du salarie
-            Salarie sal = new Salarie(numSecu, nom, prenom, birth, adresse, mail, tel, embauche, poste, salaire);
-            // ajout du salarie dans la liste des salariés et dans l'arbre n-aire
-            manager.Salaries.Add(sal);
-            if (manager.SalariesHierarchie == null)
+            int GoodSecu()
             {
-                manager.SalariesHierarchie = new SalariesArbre(sal);
-                fileExplorer.Add(sal, "TransConnect", "");
+                int secu = int.Parse(Console.ReadLine());
+                if (manager.Salaries.FindAll(x => x.Id == secu).Count != 0)
+                {
+                    Console.WriteLine("Ce numéro d'identification sociale existe déjà.");
+                    Console.WriteLine("===============");
+                    Console.WriteLine("Voulez vous ressaisir le numéro sociale du salarié ? (o/n)");
+                    string l = Console.ReadLine();
+                    if (l == "o" || l == "O")
+                    {
+                        return GoodSecu();
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else return secu;
             }
-            else
+            int numSecu = GoodSecu();
+            if (numSecu != -1)
             {
-                Console.WriteLine("Entrez le nom de l'empoloyeur : ");
-                string nomEmployeur = Console.ReadLine().ToUpper();
-                Console.WriteLine("Entrez le prénom de l'employeur : ");
-                string prenomEmployeur = Console.ReadLine().ToUpper();
-                manager.SalariesHierarchie.AjouterSalarie(sal, nomEmployeur, prenomEmployeur);
-                fileExplorer.Add(sal, nomEmployeur, prenomEmployeur);
+                DateTime embauche = new DateTime(int.Parse(dates2[2]), int.Parse(dates2[1]), int.Parse(dates2[0]));
+                //création du salarie
+                Salarie sal = new Salarie(numSecu, nom, prenom, birth, adresse, mail, tel, embauche, poste, salaire);
+                // ajout du salarie dans la liste des salariés et dans l'arbre n-aire
+                manager.Salaries.Add(sal);
+                if (manager.SalariesHierarchie == null)
+                {
+                    manager.SalariesHierarchie = new SalariesArbre(sal);
+                    fileExplorer.Add(sal, "TransConnect", "");
+                }
+                else
+                {
+                    Console.WriteLine("Entrez le nom de l'empoloyeur : ");
+                    string nomEmployeur = Console.ReadLine().ToUpper();
+                    Console.WriteLine("Entrez le prénom de l'employeur : ");
+                    string prenomEmployeur = Console.ReadLine().ToUpper();
+                    manager.SalariesHierarchie.AjouterSalarie(sal, nomEmployeur, prenomEmployeur);
+                    fileExplorer.Add(sal, nomEmployeur, prenomEmployeur);
+                }
+                Console.WriteLine("Salarie ajouté");
             }
-            Console.WriteLine("Salarie ajouté");
+            else Console.WriteLine("Le salarie n'a pas été ajouté");
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
             Console.ReadKey();
