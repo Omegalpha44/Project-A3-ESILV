@@ -23,6 +23,17 @@
             this.adresseMail = adresseMail;
             this.telephone = telephone;
         }
+
+        public Personne()
+        {
+            this.id = 0;
+            this.nom = "";
+            this.prenom = "";
+            this.dateNaissance = new DateTime();
+            this.adresse = "";
+            this.adresseMail = "";
+            this.telephone = 0;
+        }
         #endregion
 
         #region getter-setter

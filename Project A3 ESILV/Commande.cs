@@ -28,6 +28,21 @@
             this.chauffeur = chauffeur;
 
         }
+
+        public Commande()
+        {
+            this.id = 0;
+            this.client = new Client();
+            this.depart = "";
+            this.arrivee = "";
+            this.dateLivraison = new DateTime();
+            this.itineraire = new List<Arete>();
+            this.prix = 0;
+            this.vehicule = null;
+            this.chauffeur = null;
+
+        }
+
         #endregion
 
         #region Propriétés
@@ -45,6 +60,11 @@
             get { return depart; }
             set { depart = value; }
         }
+        public DateTime DateLivraison 
+        { 
+            get { return dateLivraison; }
+            set { dateLivraison = value;}
+        }
         public int Prix
         {
             get { return prix; }
@@ -55,12 +75,17 @@
             get { return id; }
             set { id = value; }
         }
+        public List<Arete> Itineraire
+        { 
+            get { return itineraire; }
+            set { itineraire = value; }
+        }
         #endregion
 
         #region Méthodes
         public override string ToString()
         {
-            return "Commande n° : " + id + ", Client : " + client.Nom + " " + client.Prenom + ", Route : " + depart + "-->" + arrivee + ", Date de livraison : " + dateLivraison;
+            return "Commande n° : " + id + ", Client : " + client.Nom + " " + client.Prenom + ", Route : " + depart + "-->" + arrivee + ", Date de livraison : " + dateLivraison.Date;
         }
 
         public string DescriptionComplete()
@@ -70,16 +95,18 @@
 
         public void AfficherItineraire()
         {
+            float km = 0;
             itineraire.ForEach(arete =>
             {
-                Console.WriteLine(arete.Depart);
+                Console.WriteLine("{0} (km : {1})",arete.Depart,km);
                 Console.WriteLine("| |");
-                for (int i = 0; i < arete.Distance / 25; i++) //Affichage proportionnel à la distance
+                for (int i = 0; i < arete.Distance / 50; i++) //Affichage proportionnel à la distance
                 {
                     Console.WriteLine("| |");
                 }
+                km += arete.Distance;
             });
-            Console.WriteLine(arrivee);
+            Console.WriteLine("{0} (km : {1})", arrivee, km);
         }
         #endregion
     }

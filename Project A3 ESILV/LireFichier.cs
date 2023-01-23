@@ -434,14 +434,14 @@ namespace Project_A3_ESILV
         tw.Close();
     }
     #endregion
-    #region BDD Distances
-    // pos = 0 : Départ
-    // pos = 1 : Arrivée
-    // pos = 2 : Distance
-    // pos = 3 : Durée
+        #region BDD Distances
+        // pos = 0 : Départ
+        // pos = 1 : Arrivée
+        // pos = 2 : Distance
+        // pos = 3 : Durée
 
 
-    public void InitialisationGraphe()
+        public void InitialisationGraphe()
         {
             // Initialise le graphe en fonction des données de distances.csv
             // Il faut relancer InitialisationGraphe si le fichier distances.csv est modifié

@@ -213,11 +213,12 @@
             }
             return v;
         }
-        public Commande GenerationDeCommande(int id, Client client, string depart, string arrive, DateTime dateLivraison) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
+        public Commande GenerationDeCommande(int id, Client client, string depart, string arrivee, DateTime dateLivraison) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
         {
             Salarie s = ChooseDriver();
             Vehicule v = ChooseVehicle();
-            Commande c = new Commande(id, client, depart, arrive, dateLivraison, v, s);
+            Commande c = new Commande(id, client, depart, arrivee, dateLivraison, v, s);
+            c.Itineraire = graphe.Dijkstra(depart,arrivee);
             return c;
         }
         #endregion
