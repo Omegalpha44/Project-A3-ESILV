@@ -8,7 +8,7 @@
         int salaire;
         bool hasDrivenToday; // vérifie si le conducteur a conduit aujourd'hui (false si non, true si oui) NE S'APPLIQUE QUE SI CHAUFFEUR
         int livraison; // nombre de livraison effectuées par le conducteur NE S'APPLIQUE QUE SI CHAUFFEUR
-        bool isFree; //false si le conducteur est occupé, true si il est libre NE S'APPLIQUE QUE SI CHAUFFEUR
+        List<DateTime> isFree; //false si le conducteur est occupé, true si il est libre NE S'APPLIQUE QUE SI CHAUFFEUR
         #endregion
 
         #region Constructeur
@@ -19,7 +19,7 @@
             this.salaire = salaire;
             this.hasDrivenToday = false;
             this.livraison = 0;
-            this.isFree = true;
+            this.isFree = new List<DateTime>();
         }
         #endregion
 
@@ -53,9 +53,9 @@
             get { if (poste == "chauffeur") return livraison; else return -1; }
             set { livraison = value; }
         }
-        public bool IsFree // renvoie si le salarié est libre ou non
+        public List<DateTime> IsFree // renvoie si le salarié est libre ou non
         {
-            get { if (poste == "chauffeur") return isFree; else return false; }
+            get { if (poste == "chauffeur") return isFree; else return null; }
             set { isFree = value; }
         }
         #endregion

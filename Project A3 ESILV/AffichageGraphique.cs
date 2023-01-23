@@ -99,7 +99,7 @@ namespace Project_A3_ESILV
             Console.WriteLine("3. Gestion des commandes");
             Console.WriteLine("4. Statistiques");
             Console.WriteLine("5. Autres fonctions");
-            Console.WriteLine("6.Quitter");
+            Console.WriteLine("6. Quitter");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
             int r = GoodValue(1, 6);
@@ -163,9 +163,9 @@ namespace Project_A3_ESILV
             Console.Write("numero de telephone : ");
             int tel = int.Parse(Console.ReadLine());
             Console.WriteLine();
-            Console.Write("numero de sécurité sociale : ");
             int GoodSecu()
             {
+                Console.Write("numero de sécurité sociale : ");
                 int secu = int.Parse(Console.ReadLine());
                 if (manager.Clients.FindAll(x => x.Id == secu).Count != 0)
                 {
@@ -173,7 +173,7 @@ namespace Project_A3_ESILV
                     Console.WriteLine("===============");
                     Console.WriteLine("Voulez vous ressaisir le numéro sociale du client ? (o/n)");
                     string l = Console.ReadLine();
-                    if (l == "o" || l == "O")
+                    if (l == "o" || l == "O" || l == "0")
                     {
                         return GoodSecu();
                     }
@@ -370,9 +370,9 @@ namespace Project_A3_ESILV
             Console.WriteLine("Entrez la date d'embauche du salarié : (jour/mois/année) ");
             string date2 = Console.ReadLine();
             string[] dates2 = date2.Split('/');
-            Console.WriteLine("Entrez le numéro de sécurité social : ");
             int GoodSecu()
             {
+                Console.WriteLine("Entrez le numéro de sécurité social : ");
                 int secu = int.Parse(Console.ReadLine());
                 if (manager.Salaries.FindAll(x => x.Id == secu).Count != 0)
                 {
@@ -380,7 +380,7 @@ namespace Project_A3_ESILV
                     Console.WriteLine("===============");
                     Console.WriteLine("Voulez vous ressaisir le numéro sociale du salarié ? (o/n)");
                     string l = Console.ReadLine();
-                    if (l == "o" || l == "O")
+                    if (l == "o" || l == "O" || l == "0")
                     {
                         return GoodSecu();
                     }

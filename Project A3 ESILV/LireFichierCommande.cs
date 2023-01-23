@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project_A3_ESILV
 {
-    internal class LireFichierCommande
+    internal class LireFichierCommande // obsolète
     {
         Manager manager;
         string path;

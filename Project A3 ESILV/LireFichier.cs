@@ -349,91 +349,6 @@ namespace Project_A3_ESILV
         }
         #endregion
         #endregion
-        #region utilitaire de transformation du fichier de sauvegarde
-        static string alpha = "abcdefghijklmnopqrstuvwxyz"; // les permutations dépendront toute de l'alphabet
-        public static void FromTxt2Csv(string path1, string path2)
-        {// transforme le fichier txt en une sauvegarde csv
-            string spe2 = ";";
-            TextReader tr = new StreamReader(path1);
-            TextWriter tw = new StreamWriter(path2, false);
-            string line = tr.ReadLine();
-            while (line != null)
-            {
-                string[] mots = line.Split(sep);
-                tw.Write(mots[0] + spe2 + mots[1] + spe2 + mots[2] + spe2 + mots[3] + spe2 + mots[4] + spe2 + mots[5] + spe2 + mots[6] + spe2 + mots[7] + spe2 + mots[8] + spe2 + mots[9] + spe2 + mots[10] + spe2 + mots[11] + spe2 + mots[12] + "\n");
-                line = tr.ReadLine();
-            }
-            tr.Close();
-            tw.Close();
-        }
-        // chiffrage par substitution du fichier
-        public static void ChiffrageSub(string path, string path2, string permu)
-    { // chiffre le fichier situé au path dans le path2
-        TextReader tr = new StreamReader(path);
-        TextWriter tw = new StreamWriter(path2, false);
-        string ligne = tr.ReadLine();
-        while (ligne != null)
-        {
-            tw.WriteLine(Chiffrer(ligne, permu));
-            ligne = tr.ReadLine();
-        }
-        tr.Close();
-        tw.Close();
-    }
-        static string Chiffrer(string line, string permu)
-    {
-        string res = "";
-        foreach (char c in line)
-        {
-            if (alpha.Contains(c)) // si il s'agit d'une minuscule
-            {
-                res += permu[alpha.IndexOf(c)];
-            }
-            else if(alpha.ToUpper().Contains(c)) // gérer le cas si il s'agit d'une majuscule
-                {
-                    res += permu.ToUpper()[alpha.ToUpper().IndexOf(c)];
-                }
-            else
-                {
-                res += c;
-                }
-        }
-        return res;
-    }
-        static string Dechiffrer(string line, string permu)
-    {
-        string res = "";
-        foreach (char c in line)
-        {
-            if (permu.Contains(c))
-            {
-                res += alpha[permu.IndexOf(c)];
-            }
-            else if (permu.ToUpper().Contains(c))
-                {
-                    res += alpha.ToUpper()[permu.ToUpper().IndexOf(c)];
-                }
-            else
-            {
-                res += c;
-            }
-        }
-        return res;
-    }
-        public static void DechiffrageSub(string path, string path2, string permu)
-    { // déchiffre le fichier situé au path dans le path2
-        TextReader tr = new StreamReader(path);
-        TextWriter tw = new StreamWriter(path2, false);
-        string ligne = tr.ReadLine();
-        while (ligne != null)
-        {
-            tw.WriteLine(Dechiffrer(ligne, permu));
-            ligne = tr.ReadLine();
-        }
-        tr.Close();
-        tw.Close();
-    }
-    #endregion
         #region BDD Distances
         // pos = 0 : Départ
         // pos = 1 : Arrivée
@@ -481,7 +396,91 @@ namespace Project_A3_ESILV
             sr.Close();
         }
         #endregion
-
+        #region utilitaire de transformation du fichier de sauvegarde
+        static string alpha = "abcdefghijklmnopqrstuvwxyz"; // les permutations dépendront toute de l'alphabet
+        public static void FromTxt2Csv(string path1, string path2)
+        {// transforme le fichier txt en une sauvegarde csv
+            string spe2 = ";";
+            TextReader tr = new StreamReader(path1);
+            TextWriter tw = new StreamWriter(path2, false);
+            string line = tr.ReadLine();
+            while (line != null)
+            {
+                string[] mots = line.Split(sep);
+                tw.Write(mots[0] + spe2 + mots[1] + spe2 + mots[2] + spe2 + mots[3] + spe2 + mots[4] + spe2 + mots[5] + spe2 + mots[6] + spe2 + mots[7] + spe2 + mots[8] + spe2 + mots[9] + spe2 + mots[10] + spe2 + mots[11] + spe2 + mots[12] + "\n");
+                line = tr.ReadLine();
+            }
+            tr.Close();
+            tw.Close();
+        }
+        // chiffrage par substitution du fichier
+        public static void ChiffrageSub(string path, string path2, string permu)
+        { // chiffre le fichier situé au path dans le path2
+            TextReader tr = new StreamReader(path);
+            TextWriter tw = new StreamWriter(path2, false);
+            string ligne = tr.ReadLine();
+            while (ligne != null)
+            {
+                tw.WriteLine(Chiffrer(ligne, permu));
+                ligne = tr.ReadLine();
+            }
+            tr.Close();
+            tw.Close();
+        }
+        static string Chiffrer(string line, string permu)
+        {
+            string res = "";
+            foreach (char c in line)
+            {
+                if (alpha.Contains(c)) // si il s'agit d'une minuscule
+                {
+                    res += permu[alpha.IndexOf(c)];
+                }
+                else if (alpha.ToUpper().Contains(c)) // gérer le cas si il s'agit d'une majuscule
+                {
+                    res += permu.ToUpper()[alpha.ToUpper().IndexOf(c)];
+                }
+                else
+                {
+                    res += c;
+                }
+            }
+            return res;
+        }
+        static string Dechiffrer(string line, string permu)
+        {
+            string res = "";
+            foreach (char c in line)
+            {
+                if (permu.Contains(c))
+                {
+                    res += alpha[permu.IndexOf(c)];
+                }
+                else if (permu.ToUpper().Contains(c))
+                {
+                    res += alpha.ToUpper()[permu.ToUpper().IndexOf(c)];
+                }
+                else
+                {
+                    res += c;
+                }
+            }
+            return res;
+        }
+        public static void DechiffrageSub(string path, string path2, string permu)
+        { // déchiffre le fichier situé au path dans le path2
+            TextReader tr = new StreamReader(path);
+            TextWriter tw = new StreamWriter(path2, false);
+            string ligne = tr.ReadLine();
+            while (ligne != null)
+            {
+                tw.WriteLine(Dechiffrer(ligne, permu));
+                ligne = tr.ReadLine();
+            }
+            tr.Close();
+            tw.Close();
+        }
+        #endregion
         #endregion
     }
 }

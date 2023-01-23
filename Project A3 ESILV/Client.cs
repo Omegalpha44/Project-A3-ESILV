@@ -3,7 +3,7 @@
     internal class Client : Personne
     {
         #region Champs
-        List<Commande> commandes;
+        List<Commande> commandes; // les commandes archivées
         #endregion
 
         #region Constructeur

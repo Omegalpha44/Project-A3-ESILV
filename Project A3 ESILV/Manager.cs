@@ -189,10 +189,9 @@
             Salarie s = null;
             foreach (Salarie salarie in salaries)
             {
-                if (salarie.Poste == "chauffeur" && salarie.IsFree && salarie.HasDrivenToday == false)
+                if (salarie.Poste == "chauffeur" && salarie.HasDrivenToday == false)
                 {
                     s = salarie;
-                    salarie.IsFree = false;
                     salarie.HasDrivenToday = true;
                     break;
                 }
@@ -242,7 +241,7 @@
         {
             clients.Sort((x, y) => x.Adresse.CompareTo(y.Adresse));
         }
-        public void TriClientParPrix() // tri les clients en fonction de la somme dépensée par le client
+        public void TriClientParPrix() // tri les clients en fonction de la somme dépensée par le client. UNIQUEMENT LES COMMANDES ARCHIVEES
         {
             clients.Sort((x, y) => x.PrixCommandes().CompareTo(y.PrixCommandes()));
         }
