@@ -114,6 +114,7 @@ namespace Project_A3_ESILV
             }
         }
         #endregion
+
         #region Module Client
         void ModuleClient()
         {
@@ -416,10 +417,7 @@ namespace Project_A3_ESILV
                 Console.WriteLine("Salarie ajouté");
             }
             else Console.WriteLine("Le salarie n'a pas été ajouté");
-            Console.WriteLine("===============");
-            Console.WriteLine("Appuyez sur une touche ...");
-            Console.ReadKey();
-            Console.Clear();
+            FooterMenu();
             ModuleSalarie();
         }
         void ModifierSalarie()
@@ -430,10 +428,7 @@ namespace Project_A3_ESILV
             if (manager.SalariesHierarchie == null)
             {
                 Console.WriteLine("Aucun salarié n'est listé dans la base de données");
-                Console.WriteLine("===============");
-                Console.WriteLine("Appuyez sur une touche ...");
-                Console.ReadKey();
-                Console.Clear();
+                FooterMenu();
                 ModuleSalarie();
             }
             Console.WriteLine("Entrez le nom du salarié : ");
@@ -463,21 +458,10 @@ namespace Project_A3_ESILV
                 }
                 fileExplorer.ReadFile();
                 Console.WriteLine("Modification terminée ...");
-                Console.WriteLine("===============");
-                Console.WriteLine("Appuyez sur une touche ...");
-                Console.ReadKey();
-                Console.Clear();
-                ModuleSalarie();
             }
-            else
-            {
-                Console.WriteLine("Salarie introuvable");
-                Console.WriteLine("===============");
-                Console.WriteLine("Appuyez sur une touche ...");
-                Console.ReadKey();
-                Console.Clear();
-                ModuleSalarie();
-            }
+            else Console.WriteLine("Salarie introuvable");
+            FooterMenu();
+            ModuleSalarie();
         }
         void SupprimerSalarie() 
         {
@@ -503,21 +487,10 @@ namespace Project_A3_ESILV
                 fileExplorer.Remove(sal);
                 fileExplorer.ReadFile();
                 Console.WriteLine("Salarie supprimé");
-                Console.WriteLine("===============");
-                Console.WriteLine("Appuyez sur une touche ...");
-                Console.ReadKey();
-                Console.Clear();
-                ModuleSalarie();
             }
-            else
-            {
-                Console.WriteLine("Salarie introuvable");
-                Console.WriteLine("===============");
-                Console.WriteLine("Appuyez sur une touche ...");
-                Console.ReadKey();
-                Console.Clear();
-                ModuleSalarie();
-            }
+            else Console.WriteLine("Salarie introuvable");    
+            FooterMenu();
+            ModuleSalarie();
         }
         void AfficherSalarie()
             {
@@ -655,25 +628,16 @@ namespace Project_A3_ESILV
                     }
                 }
             }
-            Console.WriteLine("Appuyez sur une touche...");
-            Console.ReadKey();
-            Console.Clear();
+            FooterMenu();
             ModuleCommande();
         }
-
         void ModifierCommande()
         {
             Console.WriteLine("Vous avez choisi de modifier une commande");
             Console.WriteLine("===============");
+            AffichageListe<Commande>(manager.Commandes, "commande");
             if (manager.Commandes.Count > 0)
             {
-                Console.WriteLine("Voici la liste des commandes :");
-                int i = 0;
-                foreach (Commande c in manager.Commandes)
-                {
-                    Console.WriteLine(c);
-                    i++;
-                }
                 Console.WriteLine("Quelle commande voulez vous modifier ? (n° de commande):");
                 int r = int.Parse(Console.ReadLine());
                 if (manager.Commandes.Exists(x => x.Id == r))
@@ -713,31 +677,16 @@ namespace Project_A3_ESILV
                     }
                 }
             }
-            else
-
-            {
-                Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à une modification");
-            }
-            Console.WriteLine("===============");
-            Console.WriteLine("Appuyez sur une touche ...");
-            Console.ReadKey();
-            Console.Clear();
+            FooterMenu();
             ModuleClient();
         }
-
         void SupprimerCommande()
         {
             Console.WriteLine("Vous avez choisis de supprimer une commande");
             Console.WriteLine("===============");
+            AffichageListe<Commande>(manager.Commandes, "commande");
             if (manager.Commandes.Count > 0)
             {
-                Console.WriteLine("Voici la liste des commandes :");
-                int i = 0;
-                foreach (Commande c in manager.Commandes)
-                {
-                    Console.WriteLine(c);
-                    i++;
-                }
                 Console.WriteLine("Quelle commande voulez vous supprimer ? (n° de commande):");
                 int r = int.Parse(Console.ReadLine());
                 if (manager.Commandes.Exists(x => x.Id == r))
@@ -753,29 +702,16 @@ namespace Project_A3_ESILV
                 }
                     
             }
-            else
-            {
-                Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à une suppression");
-            }
-            Console.WriteLine("===============");
-            Console.WriteLine("Appuyez sur une touche ...");
-            Console.ReadKey();
-            Console.Clear();
+            FooterMenu();
             ModuleCommande();
         }
         void AfficherCommande() 
         {
             Console.WriteLine("Vous avez choisis d'afficher une commande");
             Console.WriteLine("===============");
+            AffichageListe<Commande>(manager.Commandes, "commande");
             if (manager.Commandes.Count > 0)
             {
-                Console.WriteLine("Voici la liste des commandes :");
-                int i = 0;
-                foreach (Commande c in manager.Commandes)
-                {
-                    Console.WriteLine(c);
-                    i++;
-                }
                 Console.WriteLine("Quelle commande voulez vous afficher ? (n° de commande):");
                 int r = int.Parse(Console.ReadLine());
                 if (manager.Commandes.Exists(x => x.Id == r))
@@ -790,29 +726,16 @@ namespace Project_A3_ESILV
                 }
 
             }
-            else
-            {
-                Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à une suppression");
-            }
-            Console.WriteLine("===============");
-            Console.WriteLine("Appuyez sur une touche ...");
-            Console.ReadKey();
-            Console.Clear();
+            FooterMenu();
             ModuleCommande();
         }
         void ArchiverCommande()
         {
             Console.WriteLine("Vous avez choisis d'archiver une commande");
             Console.WriteLine("===============");
+            AffichageListe<Commande>(manager.Commandes, "commande");
             if (manager.Commandes.Count > 0)
             {
-                Console.WriteLine("Voici la liste des commandes :");
-                int i = 0;
-                foreach (Commande c in manager.Commandes)
-                {
-                    Console.WriteLine(c);
-                    i++;
-                }
                 Console.WriteLine("Quelle commande voulez vous archiver ? (n° de commande):");
                 int r = int.Parse(Console.ReadLine());
                 if (manager.Commandes.Exists(x => x.Id == r))
@@ -832,14 +755,7 @@ namespace Project_A3_ESILV
                 }
 
             }
-            else
-            {
-                Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à un archivage");
-            }
-            Console.WriteLine("===============");
-            Console.WriteLine("Appuyez sur une touche ...");
-            Console.ReadKey();
-            Console.Clear();
+            FooterMenu(); ;
             ModuleCommande();
         }
 
@@ -848,23 +764,221 @@ namespace Project_A3_ESILV
 
         void ModuleVehicule()
         {
-            
+            Console.Clear();
+            Console.WriteLine("Bienvenue dans le module véhicule");
+            Console.WriteLine("Choississez votre action");
+            Console.WriteLine("================");
+            Console.WriteLine("1. Ajouter un véhicule");
+            Console.WriteLine("2. Supprimer un véhicule");
+            Console.WriteLine("3. Afficher un véhicule");
+            Console.WriteLine("4. Retour");
+            Console.WriteLine("===============");
+            Console.WriteLine("Votre choix : ");
+            int r = GoodValue(1, 4);
+            Console.Clear();
+            switch (r)
+            {
+                case 1: AjouterVehicule(); break;
+                case 2: SupprimerVehicule(); break;
+                case 3: AfficherVehicule(); break;
+                case 4: Affichage(); break;
+            }
+        }
+
+        List<string> ChoixMatieres()
+        {
+            List<string> matieres = new List<string>();
+            Console.WriteLine("Quelles sont les matières transportées? (1=ajouter matière, 2=terminé)");
+            int m = GoodValue(1, 2);
+            while (m != 2)
+            {
+                Console.Write("Indiquez le nom d'une matière à transporter : ");
+                matieres.Add(Console.ReadLine());
+                Console.WriteLine("Quelles sont les matières transportées? (1=ajouter matière, 2=terminé)");
+                m = GoodValue(1, 2);
+            }
+            return matieres;
+        }
+
+        List<string> ChoixEquipements()
+        {
+            List<string> equipements = new List<string>();
+            Console.WriteLine("Quelles sont les équipements du véhicules? (1=ajouter équipement, 2=terminé)");
+            int m = GoodValue(1, 2);
+            while (m != 2)
+            {
+                Console.Write("Indiquez le nom d'un équipement à ajouter au véhicule : ");
+                equipements.Add(Console.ReadLine());
+                Console.WriteLine("Quelles sont les équipements du véhicules? (1=ajouter équipement, 2=terminé)");
+                m = GoodValue(1, 2);
+            }
+            return equipements;
+        }
+
+        void AjouterVehicule()
+        {
+            Console.WriteLine("Vous avez choisi d'ajouter un nouveau véhicule");
+            Console.WriteLine("===============");
+
+            Console.Write("Immatriculation (idVehicule) : ");
+            string idVehicule = Console.ReadLine();
+            while (manager.Vehicules.Exists(x => x.Immatriculation == idVehicule)) //évite d'avoir 2 commandes avec même id
+            {
+                Console.WriteLine("Un véhicule avec cet immatriculation existe déjà dans la BDD, veuillez en saisir un nouveau");
+                Console.Write("Immatriculation (idVéhicule) : ");
+                idVehicule = Console.ReadLine();
+            }
+            Console.WriteLine();
+
+            List<string> matieres = new List<string>();
+            List<string> equipements = new List<string>();
+            int capacite = 0;
+            Vehicule v=null;
+
+            Console.WriteLine("Quel type de véhicule souhaitez-vous ajouter : (1=voiture, 2=camion citerne, 3=camion benne, 4 = camion frigorifique");
+            int r = GoodValue(1, 4);
+            switch (r)
+            {
+                case 1: //voiture
+                    Console.Write("Nombre de places : ");
+                    int nbPlaces = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    v = new Voiture(idVehicule, nbPlaces);
+                    break;
+                case 2: //camion citerne
+                    Console.Write("Type de cuve : (1=liquide, 2=gaz) ");
+                    int l= GoodValue(1, 2);
+                    string typeCuve="";
+                    Console.WriteLine();
+                    switch (l)
+                    {
+                        case 1: typeCuve = "liquide"; break;
+                        case 2: typeCuve = "gaz"; break;
+                    }
+                    matieres = ChoixMatieres();
+                    Console.Write("Capacité du véhicule (en L ou kg) : ");
+                    capacite = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    v = new Camion_citerne(idVehicule, capacite, matieres, typeCuve);
+                    break;
+
+                case 3: //camion benne
+                    matieres= ChoixMatieres();
+                    equipements = ChoixEquipements();
+                    Console.Write("Capacité du véhicule (en L ou kg) : ");
+                    capacite = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    v = new Camion_benne(idVehicule, capacite, matieres, equipements);
+                    break;
+                case 4://camion frigorifique
+                    matieres = ChoixMatieres();
+                    Console.Write("Nombre de groupes électrogène du véhicule : ");
+                    int nbGroupeElectrogene = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("Capacité du véhicule (en L ou kg) : ");
+                    capacite = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    v = new Camion_frigorifique(idVehicule, capacite, matieres, nbGroupeElectrogene);
+                    break;
+            }
+
+            manager.Vehicules.Add(v);
+            Console.WriteLine("Véhicule ajouté");
+            FooterMenu();
+            ModuleVehicule();
+        }
+        void SupprimerVehicule()
+        {
+            Console.WriteLine("Vous avez choisis de supprimer un véhicule");
+            Console.WriteLine("===============");
+            AffichageListe<Vehicule>(manager.Vehicules, "vehicule");
+            if (manager.Vehicules.Count > 0)
+            {
+                Console.WriteLine("Quel véhicule voulez vous supprimer ? (immatriculation):");
+                string idVehicule = Console.ReadLine();
+                if (manager.Vehicules.Exists(x => x.Immatriculation == idVehicule))
+                {
+                    Vehicule cible = manager.Vehicules.Find(x => x.Immatriculation == idVehicule);
+                    Console.WriteLine("Suppression de {0}", cible);
+                    manager.Vehicules.Remove(cible);
+                    Console.WriteLine("Vehicule supprimée");
+                }
+                else Console.WriteLine("Le véhicule n'a pas été trouvée dans la BDD");
+            }
+            FooterMenu();
+            ModuleVehicule();
+        }
+        void AfficherVehicule()
+        {
+            Console.WriteLine("Vous avez choisi d'afficher un véhicule");
+            Console.WriteLine("===============");
+            AffichageListe<Vehicule>(manager.Vehicules, "vehicule");
+            if (manager.Vehicules.Count > 0)
+            {
+         
+                Console.WriteLine("Quelle véhicule voulez-vous afficher ? (immatriculation):");
+                string idVehicule = Console.ReadLine();
+                if (manager.Vehicules.Exists(x => x.Immatriculation == idVehicule))
+                {
+                    Vehicule cible = manager.Vehicules.Find(x => x.Immatriculation == idVehicule);
+                    Console.WriteLine(cible);
+                }
+                else Console.WriteLine("La commande n'a pas été trouvée dans la BDD");
+
+            }
+            FooterMenu();
+            ModuleVehicule();
         }
 
         #endregion
+        #region Module Statistiques
 
-        void ModuleStatistique() { }
+        //les commandes à venir étant susceptibles d'être modifiées, seules les commandes archivées = effectuées sont utilisées pour ce module
+        void ModuleStatistique() 
+        {
+            Console.Clear();
+            Console.WriteLine("Vous avez choisi le module Autre :");
+            Console.WriteLine("Disclaimer : Les commandes à venir étant susceptibles d'être modifiées, seules les commandes archivées = effectuées sont utilisées pour ce module");
+            Console.WriteLine("Choisissez votre action :");
+            Console.WriteLine("===============");
+            Console.WriteLine("1 : Afficher nb livraisons / chauffeur");
+            Console.WriteLine("2 : Afficher commandes / période de temps");
+            Console.WriteLine("3 : Afficher moyenne des prix des commandes");
+            Console.WriteLine("4 : Afficher moyenne des prix / client");
+            Console.WriteLine("5 : Afficher liste commandes pour un client");
+            Console.WriteLine("===============");
+            Console.WriteLine("Votre choix : ");
+            int r = GoodValue(1, 5);
+            Console.Clear();
+            switch (r)
+            {
+                case 1: break;
+                case 2: break;
+                case 3: break;
+                case 4: break;
+                case 5: break;
+                  
+            }
+            FooterMenu();
+            ModuleStatistique();
+        }
+        #endregion
+        #region Module Autre
         void ModuleAutre() 
         {
             Console.Clear();
             Console.WriteLine("Vous avez choisis le module Autre :");
+            Console.WriteLine("Choisissez votre action :");
             Console.WriteLine("===============");
-            Console.WriteLine("Que souhaitez vous faire ? :");
             Console.WriteLine("1 : Chiffer les données de sauvegarde");
             Console.WriteLine("2 : Déchiffer les données de sauvegarde");
-            int r = GoodValue(1, 2);
-            
-            switch(r)
+            Console.WriteLine("3 : Module Véhicule");
+            Console.WriteLine("===============");
+            Console.WriteLine("Votre choix : ");
+            int r = GoodValue(1, 3);
+            Console.Clear();
+
+            switch (r)
             {
                 case 1:
                     {
@@ -932,12 +1046,34 @@ namespace Project_A3_ESILV
                         }
                         break;
                     }
+                case 3:
+                    ModuleVehicule();
+                    break;
             }
+            FooterMenu();
+            ModuleAutre();
+        }
+        #endregion
+
+        #region Méthodes utilitaires
+        static void AffichageListe<T>(List<T> list, string label)
+        {
+            if (list.Count > 0)
+            {
+                Console.WriteLine("Voici la liste des {0} :", label + "s");
+                foreach (T obj in list)
+                {
+                    Console.WriteLine(obj);
+                }
+            }
+            else Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à une suppression");
+        }
+        static void FooterMenu()
+        {
             Console.WriteLine("===============");
             Console.WriteLine("Appuyez sur une touche ...");
             Console.ReadKey();
             Console.Clear();
-            ModuleAutre();
         }
         string GoodPermu()
         {
@@ -1011,6 +1147,7 @@ namespace Project_A3_ESILV
                 File.Delete("client.csv");
             }
         }
+        #endregion
 
         #endregion
     }

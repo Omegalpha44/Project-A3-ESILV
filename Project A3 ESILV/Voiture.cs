@@ -23,7 +23,7 @@
         #region Méthodes
         public override string ToString()
         {
-            return base.ToString() + " NbPlaces : " + nbPlaces;
+            return "Voiture : "+base.ToString() + " NbPlaces : " + nbPlaces;
         }
         #endregion
     }
