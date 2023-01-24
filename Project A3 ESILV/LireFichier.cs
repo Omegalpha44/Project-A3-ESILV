@@ -149,7 +149,6 @@ namespace Project_A3_ESILV
             TextReader tr = new StreamReader(path);
             TextWriter temp = new StreamWriter("temp.txt");
             bool haveWeRemovedThePdg = false;
-            bool newPdgFound = false;
             string prenom ="";
             string nom="";
             string bossNom = "";

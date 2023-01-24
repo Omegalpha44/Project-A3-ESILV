@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.ExceptionServices;
@@ -14,6 +15,7 @@ namespace Project_A3_ESILV
         public LireFichier fileExplorerClient; // explorateur de fichier permettant de modifier la sauvegarde des clients
         public LireFichier fileExplorerDistances; // esplorateur de fichier permettant de lire distances.csv
         bool display = false;
+        bool main = true;
         #endregion
 
         #region Constructeurs
@@ -34,6 +36,7 @@ namespace Project_A3_ESILV
             try { func(); }
             catch (Exception e)
             {
+                main = false;
                 Console.WriteLine(e.Message);
                 Console.WriteLine("Une erreur est survenue, veuillez vérifier vos réponses");
                 Console.WriteLine("===============");
@@ -89,10 +92,38 @@ namespace Project_A3_ESILV
             
             if(!error) ExceptionManager(Affichage);
         }
+        void TransconnectStylised()
+        {
+            string DecallageTexte(string text)
+            {
+                string res = "";
+                for(int i =1;i<text.Length;i++)
+                {
+                    res += text[i];
+                }
+                res +=text[0];
+                return res;
+            }
+            string text = "Bienvenue chez TransConnect  ";
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (main)
+                {
+                    (int left,int position) = Console.GetCursorPosition();
+                    Console.SetCursorPosition(0, 0);
+                    Console.Write(text);
+                    Console.SetCursorPosition(left, position);
+                    text = DecallageTexte(text);
+                    Thread.Sleep(100);
+                }
+                
+            }
+            if(main) TransconnectStylised();
+        }
         void Affichage()
         {
             Console.Clear();
-            Console.WriteLine("Bienvenue chez TransConnect");
+            Console.WriteLine();
             Console.WriteLine("Choississez votre module");
             Console.WriteLine("================");
             Console.WriteLine("1. Gestion des clients");
@@ -103,7 +134,15 @@ namespace Project_A3_ESILV
             Console.WriteLine("6. Quitter");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
+            Task Style = new Task(() => TransconnectStylised());
+            main = true;
+            Style.Start();
             int r = GoodValue(1, 6);
+            main = false;
+            
+            Style.Wait();
+            //end task Style
+
             switch (r)
             {
                 case 1: ModuleClient(); break;
@@ -112,6 +151,7 @@ namespace Project_A3_ESILV
                 case 4: ModuleStatistique(); break;
                 case 5: ModuleAutre(); break;
                 case 6: Exit(); break;
+                    
             }
         }
         #endregion
