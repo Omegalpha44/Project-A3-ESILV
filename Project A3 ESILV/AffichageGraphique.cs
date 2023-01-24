@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.ExceptionServices;
 
@@ -746,6 +747,7 @@ namespace Project_A3_ESILV
                     //on déplace la commande dans les archives du client
                     cible.Client.AjouteCommande(cible);
                     Console.WriteLine("Commande archivée dans le dossier client de : "+cible.Client.Nom+" "+cible.Client.Prenom);
+                    cible.Chauffeur.NbLivraisons++;
                     //on supprime la commande de la BDD
                     manager.Commandes.Remove(cible);
                 }
@@ -938,6 +940,7 @@ namespace Project_A3_ESILV
         {
             Console.Clear();
             Console.WriteLine("Vous avez choisi le module Autre :");
+            Console.WriteLine("===============");
             Console.WriteLine("Disclaimer : Les commandes à venir étant susceptibles d'être modifiées, seules les commandes archivées = effectuées sont utilisées pour ce module");
             Console.WriteLine("Choisissez votre action :");
             Console.WriteLine("===============");
@@ -950,13 +953,86 @@ namespace Project_A3_ESILV
             Console.WriteLine("Votre choix : ");
             int r = GoodValue(1, 5);
             Console.Clear();
+            List<Commande> commandes = new List<Commande>();
+            float moy = 0;
+            int nbCommandesArchivees = 0;
+            int nbCommandesBDD=0;
             switch (r)
             {
-                case 1: break;
-                case 2: break;
-                case 3: break;
-                case 4: break;
-                case 5: break;
+                case 1:
+                    Console.WriteLine("Nombre de livraisons / chauffeurs (parmi les livraisons archivées) :");
+                    Console.WriteLine("===============");
+                    List<Salarie> listeChauffeurs = manager.Salaries.FindAll(x => x.Poste == "Chauffeur");
+                    listeChauffeurs.ForEach(x=> Console.WriteLine(x.Nom+" "+x.Prenom+" : "+x.NbLivraisons+" livraisons effectuées"));
+                    break;
+                case 2:
+                    Console.WriteLine("Commandes / période de temps (parmi les livraisons archivées) :");
+                    Console.WriteLine("Veuillez saisir une date de début (jour/mois/année)");
+                    DateTime dateDebut = DateTime.Parse(Console.ReadLine());
+                    Console.WriteLine("Veuillez saisir une date de fin (jour/mois/année)");
+                    DateTime dateFin = DateTime.Parse(Console.ReadLine());
+                    foreach (Client c in manager.Clients)
+                    {
+                        commandes.Concat<Commande>(c.Commandes.FindAll(x=>x.DateLivraison>=dateDebut && x.DateLivraison<=dateFin));
+                    }
+                    Console.Clear();
+                    Console.WriteLine("Commandes entre {0} et {1} (archivées) :", dateDebut.Date,dateFin.Date);
+                    Console.WriteLine("===============");
+                    commandes.ForEach(x => Console.WriteLine(x));
+                    break;
+                case 3:
+                    Console.WriteLine("Moyenne des prix des commandes");
+                    Console.WriteLine("===============");
+                    foreach (Client client in manager.Clients)
+                    {
+                        foreach (Commande commande in client.Commandes) 
+                        {
+                            moy += commande.Prix;
+                            nbCommandesArchivees++;
+                        }
+                    }
+                    moy /= (float)nbCommandesArchivees;
+                    Console.WriteLine("Moyenne des prix des commandes archivées : "+moy);
+                    moy = 0;
+                    foreach(Commande commande in manager.Commandes)
+                    {
+                        moy += commande.Prix;
+                        nbCommandesBDD++;
+                    }
+                    moy /= (float)nbCommandesBDD;
+                    Console.WriteLine("Moyenne des prix des commandes à venir (=dans la BDD) : " + moy);
+                    break;
+                case 4:
+                    Console.WriteLine("Moyenne des prix des commandes / client : ");
+                    Console.WriteLine("===============");
+                    foreach (Client client in manager.Clients)
+                    {
+                        moy = 0;
+                        foreach (Commande commande in client.Commandes)
+                        {
+                            moy += commande.Prix;
+                        }
+                        moy/=(float) client.Commandes.Count;
+                        Console.WriteLine(client.Nom+" "+client.Prenom+" : "+moy+"€ / commande");
+                    }
+                    break;
+                case 5:
+                    Console.WriteLine("Liste des commandes pour un client : ");
+                    Console.WriteLine("===============");
+                    Console.Write("Identifiant client :");
+                    int idClient=int.Parse(Console.ReadLine());
+                    if (manager.Clients.Exists(x => x.Id == idClient))
+                    {
+                        Client cible = manager.Clients.Find(x => x.Id == idClient);
+                        if (cible.Commandes.Count != 0)
+                        {
+                            Console.WriteLine("Liste des commandes de " + cible.Nom + " " + cible.Prenom + " :");
+                            cible.Commandes.ForEach(x => Console.WriteLine(x));
+                        }
+                        else Console.WriteLine("Le client ne possède pas de commandes archivées");
+                    }
+                    else Console.WriteLine("Le client n'a pas été trouvé dans la BDD");
+                    break;
                   
             }
             FooterMenu();
@@ -973,9 +1049,11 @@ namespace Project_A3_ESILV
             Console.WriteLine("1 : Chiffer les données de sauvegarde");
             Console.WriteLine("2 : Déchiffer les données de sauvegarde");
             Console.WriteLine("3 : Module Véhicule");
+            Console.WriteLine("4 : ");
+            Console.WriteLine("5 : Retour");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
-            int r = GoodValue(1, 3);
+            int r = GoodValue(1, 5);
             Console.Clear();
 
             switch (r)
@@ -1048,6 +1126,10 @@ namespace Project_A3_ESILV
                     }
                 case 3:
                     ModuleVehicule();
+                    break;
+                case 4: break;
+                case 5:
+                    Affichage();
                     break;
             }
             FooterMenu();

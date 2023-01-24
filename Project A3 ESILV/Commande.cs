@@ -80,6 +80,11 @@
             get { return itineraire; }
             set { itineraire = value; }
         }
+        public Salarie Chauffeur
+        {
+            get { return chauffeur; }
+            set { chauffeur = value; }
+        }
         #endregion
 
         #region Méthodes
