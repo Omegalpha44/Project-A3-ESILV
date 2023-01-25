@@ -101,17 +101,63 @@
         public void AfficherItineraire()
         {
             float km = 0;
+            TimeSpan duree= TimeSpan.Zero;
             itineraire.ForEach(arete =>
             {
-                Console.WriteLine("{0} (km : {1})",arete.Depart,km);
+                Console.WriteLine("{0} (km : {1}, duree : {2})",arete.Depart,km,duree);
                 Console.WriteLine("| |");
                 for (int i = 0; i < arete.Distance / 50; i++) //Affichage proportionnel à la distance
                 {
                     Console.WriteLine("| |");
                 }
                 km += arete.Distance;
+                duree+=arete.Duree;
             });
-            Console.WriteLine("{0} (km : {1})", arrivee, km);
+            Console.WriteLine("{0} (km : {1}, duree : {2})", arrivee, km, duree);
+        }
+
+        public float getDistanceTotale()
+        {
+            float res = 0;
+            foreach(Arete arete in itineraire)
+            {
+                res += arete.Distance;
+            }
+            return res;
+        }
+
+        public TimeSpan getDureeTotale()
+        {
+            TimeSpan res = TimeSpan.Zero; ;
+            foreach (Arete arete in itineraire)
+            {
+                res += arete.Duree;
+            }
+            return res;
+        }
+
+        public float getPrix()
+        {
+            float res = 5; // montant minimal pour les livraisons au sein d'une même ville
+            //res += getDureeTotale().TotalHours * chauffeur.TarifHoraire;
+            string typeVehicule = vehicule.GetType().Name;
+            switch (typeVehicule)
+            {
+                case "Voiture": res += getDistanceTotale() * 0.2f;
+                    break;
+                case "Camion_benne":
+                    res += getDistanceTotale() * 0.3f+((Camion_benne)vehicule).Equipements.Count*0.05f;
+                    break;
+                case "Camion_citerne":
+                    res += getDistanceTotale() * 0.4f+((Camion_frigorifique)vehicule).Capacite*0.02f;
+                    break;
+                case "Camion_frigorifique":
+                    res += getDistanceTotale() * 0.2f+((Camion_frigorifique)vehicule).NbGroupeElectrogene*0.05f;
+                    break;
+
+            }
+            this.Prix = (int)res;
+            return res;
         }
         #endregion
     }

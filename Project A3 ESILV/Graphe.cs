@@ -174,7 +174,7 @@
             //cas livraisons dans une même ville. exemple : Paris-->Paris
             if (sommetDepart == arrivee)
             {
-                res.Add(new Arete(sommetDepart, arrivee, 0));
+                res.Add(new Arete(sommetDepart, arrivee, 0, new TimeSpan(0)));
             }
 
             //cas où le trajet n'est pas possible avec les arêtes de distances.csv 
@@ -189,16 +189,19 @@
                 int indexVille = sommets.IndexOf(ville);
                 int indexParent = sommets.IndexOf(parent);
                 int nMax = 0; //gère le cas de graphe non connexe où le chemin ville départ --> ville arrivée n'existe pas
+                TimeSpan duree = new TimeSpan(0);
                 while (parent != sommetDepart && nMax < sommets.Count)
                 {
-                    res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille]));
+                    duree = aretes.Find(x => x.Depart == parent && x.Arrivee == ville).Duree;
+                    res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille],duree));
                     ville = parent;
                     parent = parents[sommets.IndexOf(ville)];
                     indexVille = sommets.IndexOf(ville);
                     indexParent = sommets.IndexOf(parent);
                     nMax++;
                 }
-                res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille]));
+                duree = aretes.Find(x => x.Depart == parent && x.Arrivee == ville).Duree;
+                res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille], duree));
                 //foreach (Arete arete in res) Console.WriteLine(arete.ToString());
             }
             return res;

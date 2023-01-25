@@ -16,6 +16,11 @@
         #endregion
 
         #region getter-setter
+        public int Capacite
+        {
+            get { return capacite; }
+        }
+
         public List<string> MatieresTransportees
         {
             get { return matiereTransportees; }

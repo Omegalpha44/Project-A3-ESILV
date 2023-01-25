@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Globalization;
 
 namespace Project_A3_ESILV
 {
@@ -383,8 +384,19 @@ namespace Project_A3_ESILV
             {
                 //on découpe la ligne en fonction des virgules
                 string[] mots = line.Split(sep);
+
+                //récupération de la durée
+                string[] formats = { "h\\hm","h\\h","h\\hmm", "mm\\m\\n" };
+
+                //version avec erreur si le format nest pas reconnu (Parse)
+                //TimeSpan duree = TimeSpan.ParseExact(mots[3], formats, CultureInfo.InvariantCulture, TimeSpanStyles.None);
+
+                //version sans erreur si le format nest pas reconnu (TryParse)
+                TimeSpan duree = TimeSpan.Zero;
+                TimeSpan.TryParseExact(mots[3], formats, CultureInfo.InvariantCulture, TimeSpanStyles.None, out duree);
+                
                 //on crée un objet de type Arete avec les informations de la ligne
-                Arete arete = new Arete(mots[0], mots[1], float.Parse(mots[2])); //départ, arrivée, distance
+                Arete arete = new Arete(mots[0], mots[1], float.Parse(mots[2]), duree); //départ, arrivée, distance, durée
                 //on ajoute l'arête à la liste des arêtes du graphe
                 if(!manager.Graphe.Aretes.Contains(arete)) manager.Graphe.Aretes.Add(arete);
                 if(!manager.Graphe.Sommets.Contains(arete.Depart)) manager.Graphe.Sommets.Add(arete.Depart);

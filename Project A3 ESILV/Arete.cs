@@ -13,6 +13,7 @@ namespace Project_A3_ESILV
         string depart;
         string arrivee;
         float distance;
+        TimeSpan duree; 
 
         #endregion
 
@@ -33,15 +34,22 @@ namespace Project_A3_ESILV
             set => arrivee = value; 
         }
 
+        public TimeSpan Duree
+        {
+            get => duree;
+            set => duree = value;
+        }
+
         #endregion
 
         #region Constructeurs
 
-        public Arete(string depart, string arrivee, float distance)
+        public Arete(string depart, string arrivee, float distance, TimeSpan duree)
         {
             this.depart = depart;
             this.arrivee = arrivee;
             this.distance = distance;
+            this.duree = duree;
         }
 
         #endregion
