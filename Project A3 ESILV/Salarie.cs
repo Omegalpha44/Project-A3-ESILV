@@ -58,6 +58,10 @@
             get { if (poste == "chauffeur") return isFree; else return null; }
             set { isFree = value; }
         }
+        public float TarifHoraire
+        {
+            get { if (poste == "chauffeur") return (float)salaire / 140f; else return -1; } // 140 correspond au nombre d'heure de travail dans un mois en considérant que le chauffeur conduit 35h par semaine
+        }
         #endregion
 
         #region méthodes

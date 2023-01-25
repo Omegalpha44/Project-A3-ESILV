@@ -139,7 +139,7 @@
         public float getPrix()
         {
             float res = 5; // montant minimal pour les livraisons au sein d'une même ville
-            //res += getDureeTotale().TotalHours * chauffeur.TarifHoraire;
+            res += (float)getDureeTotale().TotalHours * chauffeur.TarifHoraire;
             string typeVehicule = vehicule.GetType().Name;
             switch (typeVehicule)
             {
