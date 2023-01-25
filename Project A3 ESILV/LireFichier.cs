@@ -138,6 +138,59 @@ namespace Project_A3_ESILV
             sr.Write(s.Nom + sep + s.Prenom + sep + birth + sep + s.Adresse + sep + s.AdresseMail + sep + s.Telephone + sep + embauche + sep + s.Salaire + sep + s.Poste + sep + "Employeur :" + sep + nom + sep + prenom + sep + s.Id+"\n");
             sr.Close();
         }
+        public void AddFile(Salarie s, string nom, string prenom,string path2)
+        {
+            TextWriter sr = new StreamWriter(path2, true);
+            string birth = s.DateNaissance.Day.ToString() + "/" + s.DateNaissance.Month.ToString() + "/" + s.DateNaissance.Year.ToString();
+            string embauche = s.DateEmbauche.Day.ToString() + "/" + s.DateEmbauche.Month.ToString() + "/" + s.DateEmbauche.Year.ToString();
+            sr.Write(s.Nom + sep + s.Prenom + sep + birth + sep + s.Adresse + sep + s.AdresseMail + sep + s.Telephone + sep + embauche + sep + s.Salaire + sep + s.Poste + sep + "Employeur :" + sep + nom + sep + prenom + sep + s.Id + "\n");
+            sr.Close();
+        }
+        public void AddFileFirst(Salarie s, string nom,string prenom,string path2)
+        {
+            TextWriter tr = new StreamWriter("temp2.csv", false);
+            TextReader sr = new StreamReader(path2);
+            string line = sr.ReadLine();
+            tr.WriteLine(line); // ligne de guarde
+            string birth = s.DateNaissance.Day.ToString() + "/" + s.DateNaissance.Month.ToString() + "/" + s.DateNaissance.Year.ToString();
+            string embauche = s.DateEmbauche.Day.ToString() + "/" + s.DateEmbauche.Month.ToString() + "/" + s.DateEmbauche.Year.ToString();
+            tr.Write(s.Nom + sep + s.Prenom + sep + birth + sep + s.Adresse + sep + s.AdresseMail + sep + s.Telephone + sep + embauche + sep + s.Salaire + sep + s.Poste + sep + "Employeur :" + sep + nom + sep + prenom + sep + s.Id + "\n");
+            line = sr.ReadLine();
+            while (line != null)
+            {
+                tr.Write(line + "\n");
+                line = sr.ReadLine();
+            }
+            tr.Close();
+            sr.Close();
+            File.Delete(path2);
+            File.Move("temp2.csv", path2);
+        }
+        public void AddFileInd(Salarie s, string nom, string prenom, string path2,int i )
+        {
+            TextWriter tr = new StreamWriter("temp2.csv", false);
+            TextReader sr = new StreamReader(path2);
+            string line = sr.ReadLine();
+            tr.WriteLine(line); // ligne de guarde
+            string birth = s.DateNaissance.Day.ToString() + "/" + s.DateNaissance.Month.ToString() + "/" + s.DateNaissance.Year.ToString();
+            string embauche = s.DateEmbauche.Day.ToString() + "/" + s.DateEmbauche.Month.ToString() + "/" + s.DateEmbauche.Year.ToString();
+            line = sr.ReadLine();
+            int counter = 1;
+            while (line != null)
+            {
+                if(counter ==i)
+                {
+                    tr.Write(s.Nom + sep + s.Prenom + sep + birth + sep + s.Adresse + sep + s.AdresseMail + sep + s.Telephone + sep + embauche + sep + s.Salaire + sep + s.Poste + sep + "Employeur :" + sep + nom + sep + prenom + sep + s.Id + "\n");
+                }
+                tr.Write(line + "\n");
+                line = sr.ReadLine();
+                counter++;
+            }
+            tr.Close();
+            sr.Close();
+            File.Delete(path2);
+            File.Move("temp2.csv", path2);
+        }
         public void Add(Client c)
         {
             TextWriter sr = new StreamWriter(path, true);
@@ -155,37 +208,40 @@ namespace Project_A3_ESILV
             string bossNom = "";
             string bossPrenom = "";
             string line = tr.ReadLine();
+            string[] mots = line.Split(sep);
+            temp.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + mots[10] + sep + mots[11] + sep + mots[12] + "\n");
+            line = tr.ReadLine();
             while (line != null)
             {
-                string[] mots = line.Split(sep);
+                mots = line.Split(sep);
                 if (int.Parse(mots[12]) == s.Id && mots[10].ToUpper() == "TRANSCONNECT")
                 {
                     haveWeRemovedThePdg = true;
-                    prenom = s.Prenom;
-                    nom = s.Nom;
+                    prenom = s.Prenom.ToUpper();
+                    nom = s.Nom.ToUpper();
 
                 }
                 else if (int.Parse(mots[12]) == s.Id)
                 {
-                    prenom = s.Prenom;
-                    nom = s.Nom;
-                    bossNom = mots[10];
-                    bossPrenom = mots[11];
+                    prenom = s.Prenom.ToUpper();
+                    nom = s.Nom.ToUpper();
+                    bossNom = mots[10].ToUpper();
+                    bossPrenom = mots[11].ToUpper();
                 }
                 if (int.Parse(mots[12]) != s.Id)
                 {
-                   if (haveWeRemovedThePdg && mots[10]==nom && mots[11] == prenom)
+                   if (haveWeRemovedThePdg && mots[10].ToUpper() == nom.ToUpper() && mots[11].ToUpper() == prenom.ToUpper())
                     {
                         mots[11] = "";
                         mots[10] = "TransConnect";
                         haveWeRemovedThePdg = false;
-                        bossNom = mots[0];
-                        bossPrenom = mots[1];
+                        bossNom = mots[0].ToUpper();
+                        bossPrenom = mots[1].ToUpper();
                     }
-                   else if (mots[10] == nom && mots[11] == prenom)
+                   else if (mots[10].ToUpper() == nom.ToUpper() && mots[11].ToUpper() == prenom.ToUpper())
                     {
-                        mots[10] = bossNom;
-                        mots[11] = bossPrenom;
+                        mots[10] = bossNom.ToUpper();
+                        mots[11] = bossPrenom.ToUpper();
                     }
                    temp.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + mots[10] + sep + mots[11] + sep + mots[12] + "\n");
                 }
@@ -201,9 +257,12 @@ namespace Project_A3_ESILV
             TextReader tr = new StreamReader(path);
             TextWriter temp = new StreamWriter("temp.txt");
             string line = tr.ReadLine();
+            string[] mots = line.Split(sep);
+            temp.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6]+"\n");
+            line = tr.ReadLine();
             while (line != null)
             {
-                string[] mots = line.Split(sep);
+                mots = line.Split(sep);
                 if (int.Parse(mots[6]) != c.Id)
                 {
                     temp.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + "\n");
@@ -221,11 +280,14 @@ namespace Project_A3_ESILV
             TextReader tr = new StreamReader(path);
             TextWriter temp = new StreamWriter("temp.txt",false);
             string line = tr.ReadLine();
+            string[] mots = line.Split(sep);
+            temp.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + mots[10] + sep + mots[11] + sep + mots[12] + "\n");
+            line = tr.ReadLine();
             string nom = "";
             string prenom = "";
             while (line != null)
             {
-                string[] mots = line.Split(sep);
+                 mots = line.Split(sep);
                 if (int.Parse(mots[12]) == s.Id)
                 {
                     nom = mots[0];
@@ -305,9 +367,12 @@ namespace Project_A3_ESILV
             TextReader tr = new StreamReader(path);
             TextWriter temp = new StreamWriter("temp.txt", false);
             string line = tr.ReadLine();
+            string[] mots = line.Split(sep);
+            temp.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + "\n");
+            line = tr.ReadLine();
             while (line != null)
             {
-                string[] mots = line.Split(sep);
+                mots = line.Split(sep);
                 if (int.Parse(mots[6]) == c.Id)
                 {
                     switch (pos)
@@ -346,6 +411,63 @@ namespace Project_A3_ESILV
             temp.Close();
             File.Delete(path);
             File.Move("temp.txt", path);
+        }
+        public void Promote(Salarie s, Salarie employeur, Salarie employee,string NewPoste)
+        {//permet de promouvoir un salarié dans l'arbre hiérarchique (changement de poste)
+            Remove(s);
+            if (employeur == null) // dans le cadre où on voudrait que le salarié devienne PDG
+            {
+                TextReader tr = new StreamReader(path);
+                TextWriter tw = new StreamWriter("temp.csv");
+                string line = tr.ReadLine();
+                while (line != null)
+                {
+                    string[] mots = line.Split(sep);
+                    if (mots[0] == employee.Nom && mots[1] == employee.Prenom) // on a trouvé le nouvel employé 
+                    {
+                        tw.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + s.Nom + sep + s.Prenom + sep + mots[12] + "\n");
+                    }
+                    else
+                    {
+                        tw.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + mots[10] + sep + mots[11] + sep + mots[12] + "\n");
+                    }
+                    line = tr.ReadLine();
+                }
+                Salarie newS = new Salarie(s.Id, s.Nom, s.Prenom, s.DateNaissance, s.Adresse, s.AdresseMail, s.Telephone, s.DateEmbauche, NewPoste, s.Salaire);
+                tr.Close();
+                tw.Close();
+                AddFileFirst(newS, "TRANSCONNECT", "","temp.csv");
+            }
+            else // on ne promeut pas un PDG
+            {
+                int i = 0;
+                int j = 0;
+                TextReader tr = new StreamReader(path);
+                TextWriter tw = new StreamWriter("temp.csv");
+                string line = tr.ReadLine();
+                while (line != null)
+                {
+                    string[] mots = line.Split(sep);
+                    if (mots[10] == employeur.Nom && mots[11] == employeur.Prenom && mots[0] == employee.Nom && mots[1] == employee.Prenom) // on a trouvé le nouvel employé 
+                    {
+                        tw.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + s.Nom + sep + s.Prenom + sep + mots[12] + "\n");
+                        j = i;
+                    }
+                    else
+                    {
+                        tw.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + mots[10] + sep + mots[11] + sep + mots[12] + "\n");
+                        i++;
+                    }
+                    line = tr.ReadLine();
+                }
+                Salarie newS = new Salarie(s.Id, s.Nom, s.Prenom, s.DateNaissance, s.Adresse, s.AdresseMail, s.Telephone, s.DateEmbauche, NewPoste, s.Salaire);
+                tr.Close();
+                tw.Close();
+                AddFileInd(newS, employeur.Nom, employeur.Prenom,"temp.csv",j);
+                
+            }
+            File.Delete(path);
+            File.Move("temp.csv", path);
         }
         #endregion
         #endregion

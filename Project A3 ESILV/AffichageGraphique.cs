@@ -1089,7 +1089,7 @@ namespace Project_A3_ESILV
             Console.WriteLine("1 : Chiffer les données de sauvegarde");
             Console.WriteLine("2 : Déchiffer les données de sauvegarde");
             Console.WriteLine("3 : Module Véhicule");
-            Console.WriteLine("4 : ");
+            Console.WriteLine("4 : Promouvoir un Salarié");
             Console.WriteLine("5 : Retour");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
@@ -1167,10 +1167,45 @@ namespace Project_A3_ESILV
                 case 3:
                     ModuleVehicule();
                     break;
-                case 4: break;
-                case 5:
-                    Affichage();
-                    break;
+                case 4:PromotionSalarie(); break;
+                case 5:Affichage();break;
+            }
+        }
+        
+        public void PromotionSalarie()
+        {
+            Console.WriteLine("Vous avez choisis de promouvoir un salarié :");
+            Console.WriteLine("===============");
+            display = true;
+            AfficherOrganigramme();
+            display = false;
+            Console.WriteLine("===============");
+            Console.WriteLine("Veuillez entrer le nom du salarié :");
+            string nom = Console.ReadLine().ToUpper();
+            Console.WriteLine("Veuillez entrer le prénom du salarié :");
+            string prenom = Console.ReadLine().ToUpper();
+            Console.WriteLine("Veuillez entrer le nom du nouvel l'employeur (ne rien indiquer si le salarié est promu PDG) :");
+            string nomEmployeur = Console.ReadLine().ToUpper();
+            Console.WriteLine("Veuillez entrer le prénom du nouvel l'employeur (ne rien indiquer si le salarié est promu PDG):");
+            string prenomEmployeur = Console.ReadLine().ToUpper();
+            Console.WriteLine("Veuillez entrer le nom de son nouvel employé direct :");
+            string nomEmployeDirect = Console.ReadLine().ToUpper();
+            Console.WriteLine("Veuillez entrer le prénom de son nouvel employé direct :");
+            string prenomEmployeDirect = Console.ReadLine().ToUpper();
+            Console.WriteLine("Veuillez entrer son nouveau poste (par exemple : PDG ):");
+            string newPoste = Console.ReadLine().ToUpper();
+            Salarie s = manager.Salaries.Find(x => x.Nom.ToUpper() == nom && x.Prenom.ToUpper() == prenom);
+            Salarie employeur = manager.Salaries.Find(x => x.Nom.ToUpper() == nomEmployeur && x.Prenom.ToUpper() == prenomEmployeur);
+            Salarie employee = manager.Salaries.Find(x => x.Nom.ToUpper() == nomEmployeDirect && x.Prenom.ToUpper() == prenomEmployeDirect);
+            if (s != null && employee != null) // employeur peut être null
+            {
+                fileExplorer.Promote(s, employeur, employee, newPoste);
+                fileExplorer.ReadFile();
+                Console.WriteLine("salarié promu !");
+            }
+            else
+            {
+                Console.WriteLine("les relations indiqués n'existent pas, veuillez vérifier l'orthographe des noms et prénoms");
             }
             FooterMenu();
             ModuleAutre();
