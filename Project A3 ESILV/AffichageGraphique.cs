@@ -1150,7 +1150,7 @@ namespace Project_A3_ESILV
                                     TextWriter tw = new StreamWriter("key.txt", false); // on suppose que le fichier est protégé par le système d'exploitation (W11 pro uniquement)
                                     tw.Write(permu);
                                     tw.Close();
-                                    //File.Encrypt("key.txt"); //UNIQUEMENT SUR WINDOWS PRO
+                                    File.Encrypt("key.txt"); //UNIQUEMENT SUR WINDOWS PRO
                                 }
                                 else
                                 {
@@ -1158,6 +1158,8 @@ namespace Project_A3_ESILV
                                 }
                             }
                         }
+                        FooterMenu();
+                        ModuleAutre();
                         break;
                     }
                 case 2: // déchiffrement des données des dataset
@@ -1187,6 +1189,8 @@ namespace Project_A3_ESILV
                         {
                             Console.WriteLine("Les données ne sont pas chiffrés. Veuillez les chiffrer avant de procéder à un quelconques déchiffrement");
                         }
+                        FooterMenu();
+                        ModuleAutre();
                         break;
                     }
                 case 3:
