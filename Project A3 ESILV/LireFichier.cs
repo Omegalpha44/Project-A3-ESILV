@@ -552,8 +552,7 @@ namespace Project_A3_ESILV
                 int idChauffeur = int.Parse(mots[5]);
                 DateTime dateLivraison = DateTime.Parse(mots[6]);
                 int prix = int.Parse(mots[7]);
-                //on parse l'itinéraire
-                List<Arete> itineraire= new List<Arete>();                
+                //List<Arete> itineraire= new List<Arete>();                 
                 Client cl = manager.Clients.Find(x => x.Id == idClient);
                 Salarie s = manager.Salaries.Find(x => x.Id == idChauffeur);
                 //Vehicule v = manager.Vehicules.Find(x=> x.Immatriculation == immatriculation);

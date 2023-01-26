@@ -794,7 +794,6 @@ namespace Project_A3_ESILV
                     cible.Client.AjouteCommande(cible);
                     fileExplorerCommandes.Add(cible); // on ajoute la commande aux archives
                     Console.WriteLine("Commande archivée dans le dossier client de : "+cible.Client.Nom+" "+cible.Client.Prenom);
-                    cible.Chauffeur.NbLivraisons++;
                     //on supprime la commande de la BDD
                     manager.Commandes.Remove(cible);
                 }
@@ -1009,8 +1008,8 @@ namespace Project_A3_ESILV
                 case 1:
                     Console.WriteLine("Nombre de livraisons / chauffeurs (parmi les livraisons archivées) :");
                     Console.WriteLine("===============");
-                    List<Salarie> listeChauffeurs = manager.Salaries.FindAll(x => x.Poste == "Chauffeur");
-                    listeChauffeurs.ForEach(x=> Console.WriteLine(x.Nom+" "+x.Prenom+" : "+x.NbLivraisons+" livraisons effectuées"));
+                    List<Salarie> listeChauffeurs = manager.Salaries.FindAll(x => x.IsDriver());
+                    listeChauffeurs.ForEach(x=> Console.WriteLine(x.Nom+" "+x.Prenom+" : "+NbLivraisons(x)+" livraisons effectuées"));
                     break;
                 case 2:
                     Console.WriteLine("Commandes / période de temps (parmi les livraisons archivées) :");
@@ -1341,6 +1340,21 @@ namespace Project_A3_ESILV
                 File.Delete("employee.csv");
                 File.Delete("client.csv");
             }
+        }
+        int NbLivraisons(Salarie chauffeur)
+        {
+            int i = 0;
+            foreach(Client client in manager.Clients)
+            {
+                foreach(Commande commande in client.Commandes)
+                {
+                    if(Salarie.Equal(commande.Chauffeur,chauffeur))
+                    {
+                        i++;
+                    }
+                }
+            }
+            return i;
         }
         #endregion
 

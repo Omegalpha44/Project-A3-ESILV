@@ -7,7 +7,6 @@
         string poste;
         int salaire;
         bool hasDrivenToday;//useless
-        int nbLivraisons; // nombre de livraisons effectuées par le conducteur NE S'APPLIQUE QUE SI CHAUFFEUR
         List<DateTime> planning; //liste des dates où le conducteur n'est plus libre A RENOMMER
         #endregion
 
@@ -18,7 +17,7 @@
             this.poste = poste;
             this.salaire = salaire;
             this.hasDrivenToday = false; // useless
-            this.nbLivraisons = 0; 
+
             this.planning = new List<DateTime>();
         }
 
@@ -28,7 +27,6 @@
             this.poste = poste = "";
             this.salaire = 0 ;
             this.hasDrivenToday = false; // useless
-            this.nbLivraisons = 0;
             this.planning = new List<DateTime>();
         }
         #endregion
@@ -62,11 +60,6 @@
             get { if (IsDriver()) return hasDrivenToday; else return false; }
             set { hasDrivenToday = value; }
         }
-        public int NbLivraisons // renvoie le nombre de livraisons du salarié
-        {
-            get { if (IsDriver()) return nbLivraisons; else return -1; }
-            set { nbLivraisons = value; }
-        }
         public List<DateTime> Planning // renvoie si le salarié est libre ou non
         {
             get { if (IsDriver()) return planning; else return null; }
@@ -80,10 +73,6 @@
         #endregion
 
         #region méthodes
-        public void AjoutLivraison()  // ajoute une livraison au conducteur
-        {
-            if (IsDriver()) nbLivraisons++;
-        }
         public override string ToString()
         {
             return "Salarié : " + base.ToString() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire +  " Sécurité sociale : " + id;
