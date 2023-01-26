@@ -517,13 +517,12 @@ namespace Project_A3_ESILV
         // pos = 1 : idClient
         // pos = 2 : villeDepart
         // pos = 3 : villeArrivee
-        // pos = 4 : itineraire
-        // pos = 5 : idVehicule
-        // pos = 6 : idChauffeur
-        // pos = 7 : dateLivraison
-        // pos = 8 : prix
+        // pos = 4 : immatriculation
+        // pos = 5 : idChauffeur
+        // pos = 6 : dateLivraison
+        // pos = 7 : prix
 
-        public void ReadFileCommande()
+        public void ReadFileCommandeArchived() // lis dans le .csv les commandes ayant déjà été passé par les clients, et leur associe
         {
             /*-------------------------------------------------------------------------------------------------------
             lis un fichier CSV et en tire les informations pour créer des objets de type Commande
@@ -533,56 +532,48 @@ namespace Project_A3_ESILV
             02345,6578,Paris,Nancy,(Paris-->Lyon,256,3h15)|(Lyon-->Nancy,323,4h15),324,879,01/01/2023
             -------------------------------------------------------------------------------------------------------*/
 
-            string[] champsCSV = { "idCommande", "idClient", "villeDepart", "villeArrivee", "itineraire", "idVehicule", "idChauffeur", "dateLivraison", "prix" };
+            string[] champsCSV = { "idCommande", "idClient", "villeDepart", "villeArrivee", "idVehicule", "idChauffeur", "dateLivraison", "prix" };
             StreamReader sr = OuvertureSecurisee(champsCSV);
             
             string line = sr.ReadLine();
-
+            line = sr.ReadLine();
             //on lit le fichier ligne par ligne
             while (line != null)
             {
                 //on découpe la ligne en fonction des virgules
-                string[] mots = line.Split(", ");
+                string[] mots = line.Split(sep);
 
                 //on crée un objet de type Commande avec les informations de la ligne
                 int idCommande = int.Parse(mots[0]);
                 int idClient = int.Parse(mots[1]);
                 string villeDepart = mots[2];
                 string villeArrivee = mots[3];
-
+                string immatriculation = mots[4];
+                int idChauffeur = int.Parse(mots[5]);
+                DateTime dateLivraison = DateTime.Parse(mots[6]);
+                int prix = int.Parse(mots[7]);
                 //on parse l'itinéraire
-                List<Arete> itineraire= new List<Arete>();
-                foreach (string motArete in mots[4].Split('|'))
+                List<Arete> itineraire= new List<Arete>();                
+                Client cl = manager.Clients.Find(x => x.Id == idClient);
+                Salarie s = manager.Salaries.Find(x => x.Id == idChauffeur);
+                //Vehicule v = manager.Vehicules.Find(x=> x.Immatriculation == immatriculation);
+                if (cl == null) Console.WriteLine("Votre client n°{0} n'a pas été trouvé dans la BDD, veuillez d'abord l'ajouter via le Module Client", idClient);
+                else
                 {
-                    itineraire.Add(StringToArete(motArete));
+                    Commande commande = new Commande(idCommande, cl, villeDepart, villeArrivee, dateLivraison, s, prix/*,v*/);
+                    cl.Commandes.Add(commande); // on ajoute la commande dans la liste des commandes archivées du client
                 }
-                int idVehicule = int.Parse(mots[4]);
-
-                DateTime dateLivraison = DateTime.Parse(mots[7]);
-
-                
-                //Client cl = manager.Clients.Find(x => x.Id == idClient);
-                //if (cl == null) Console.WriteLine("Votre client n°{0} n'a pas été trouvé dans la BDD, veuillez d'abord l'ajouter via le Module Client", idClient);
-                //else
-                //{
-                //    Commande commande = manager.GenerationDeCommande(manager.Commandes.Count, cl, mots[2], mots[3], dateLivraison);
-                //    Console.WriteLine(commande);
-                //    //on ajoute la commande à la liste des commandes
-                //    manager.Commandes.Add(commande);
-                //}
                 //on lit la ligne suivante
                 line = sr.ReadLine();
             }
             sr.Close();
         }
 
-        public void Add(Commande c, string nom, string prenom)
+        public void Add(Commande c) // on ajoute la commande à la liste d'archivage
         {
-
-        }
-        public void Remove(int idCommande)
-        {
-
+            TextWriter tr = new StreamWriter(path, true);
+            tr.WriteLine(c.Id + ", " + c.Client.Id + ", " + c.Depart + ", " + c.Arrivee + ", " + c.Vehicule.Immatriculation + ", " + c.Chauffeur.Id + ", " + c.DateLivraison + ", " + c.Prix);
+            tr.Close();
         }
         #endregion
 

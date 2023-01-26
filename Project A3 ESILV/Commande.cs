@@ -43,6 +43,31 @@
 
         }
 
+        public Commande(int id, Client client, string depart, string arrivee, DateTime dateLivraison, Salarie chauffeur,int prix) // utilisé à des fins d'archivage dans un fichier
+        {
+            this.id = id;
+            this.client = client;
+            this.depart = depart;
+            this.arrivee = arrivee;
+            this.dateLivraison = dateLivraison;
+            this.itineraire = new List<Arete>();
+            this.prix = prix;
+            this.vehicule = null;
+            this.chauffeur = chauffeur;
+        }
+
+        public Commande(int id, Client client, string depart, string arrivee, DateTime dateLivraison, Salarie chauffeur, int prix,Vehicule v) // utilisé à des fins d'archivage dans un fichier
+        {
+            this.id = id;
+            this.client = client;
+            this.depart = depart;
+            this.arrivee = arrivee;
+            this.dateLivraison = dateLivraison;
+            this.itineraire = new List<Arete>();
+            this.prix = prix;
+            this.vehicule = v;
+            this.chauffeur = chauffeur;
+        }
         #endregion
 
         #region Propriétés
@@ -96,7 +121,7 @@
         #region Méthodes
         public override string ToString()
         {
-            return "Commande n° : " + id + ", Client : " + client.Nom + " " + client.Prenom + ", Route : " + depart + "-->" + arrivee + ", Date de livraison : " + dateLivraison.Date;
+            return "Commande n° : " + id + ", Client : " + client.Nom + " " + client.Prenom + ", Route : " + depart + "-->" + arrivee + ", Date de livraison : " + dateLivraison.Date + ", chauffeur : "+ chauffeur.Nom + " " + chauffeur.Prenom+", prix : "+prix+"€";
         }
 
         public string DescriptionComplete()

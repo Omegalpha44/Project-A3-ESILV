@@ -80,6 +80,7 @@ namespace Project_A3_ESILV
                 }
                 fileExplorerClient.ReadFileClient();
                 fileExplorer.ReadFile();
+                fileExplorerCommandes.ReadFileCommandeArchived();
             }
             catch(Exception e)
             {
@@ -210,13 +211,13 @@ namespace Project_A3_ESILV
             Console.WriteLine();
             int GoodSecu()
             {
-                Console.Write("numero de sécurité sociale : ");
+                Console.Write("numero d'identification : ");
                 int secu = int.Parse(Console.ReadLine());
                 if (manager.Clients.FindAll(x => x.Id == secu).Count != 0)
                 {
-                    Console.WriteLine("Ce numéro d'identification sociale existe déjà.");
+                    Console.WriteLine("Ce numéro d'identification existe déjà.");
                     Console.WriteLine("===============");
-                    Console.WriteLine("Voulez vous ressaisir le numéro sociale du client ? (o/n)");
+                    Console.WriteLine("Voulez vous ressaisir le numéro d'identification du client ? (o/n)");
                     string l = Console.ReadLine();
                     if (l == "o" || l == "O" || l == "0")
                     {
@@ -451,7 +452,7 @@ namespace Project_A3_ESILV
                 }
                 else
                 {
-                    Console.WriteLine("Entrez le nom de l'empoloyeur : ");
+                    Console.WriteLine("Entrez le nom de l'employeur : ");
                     string nomEmployeur = Console.ReadLine().ToUpper();
                     Console.WriteLine("Entrez le prénom de l'employeur : ");
                     string prenomEmployeur = Console.ReadLine().ToUpper();
@@ -590,8 +591,7 @@ namespace Project_A3_ESILV
             Console.WriteLine("3. Supprimer une commande");
             Console.WriteLine("4. Afficher une commande");
             Console.WriteLine("5. Valider la livraison d'une commande"); //La commande de la BDD commandes est alors archivées dans la liste de commandes propre au client
-            Console.WriteLine("6. Gérer la flotte de véhicules");
-            Console.WriteLine("7. Retour");
+            Console.WriteLine("6. Retour");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
             int r = GoodValue(1, 7);
@@ -603,8 +603,7 @@ namespace Project_A3_ESILV
                 case 3: SupprimerCommande(); break;
                 case 4: AfficherCommande(); break;
                 case 5: ArchiverCommande(); break;
-                //case 6: ModuleVehicule(); break;
-                case 7: Affichage(); break;
+                case 6: Affichage(); break;
             }
         }
 
@@ -793,6 +792,7 @@ namespace Project_A3_ESILV
 
                     //on déplace la commande dans les archives du client
                     cible.Client.AjouteCommande(cible);
+                    fileExplorerCommandes.Add(cible); // on ajoute la commande aux archives
                     Console.WriteLine("Commande archivée dans le dossier client de : "+cible.Client.Nom+" "+cible.Client.Prenom);
                     cible.Chauffeur.NbLivraisons++;
                     //on supprime la commande de la BDD
