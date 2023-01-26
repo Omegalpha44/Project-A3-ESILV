@@ -129,7 +129,7 @@
             return "Commande n°" + id + " : " + client.Nom + " " + client.Prenom + " a commandé un " + vehicule.Immatriculation + " pour aller de " + depart + " à " + arrivee + " pour un prix de " + prix + "€." + " Le chauffeur est " + chauffeur.Nom + " " + chauffeur.Prenom + " " + chauffeur.Nom;
         }
 
-        public void AfficherItineraire()
+        public void AfficherItineraire() //Affichage des itinéraires dans la console
         {
             float km = 0;
             TimeSpan duree= TimeSpan.Zero;
@@ -147,7 +147,7 @@
             Console.WriteLine("{0} (km : {1}, duree : {2})", arrivee, km, duree);
         }
 
-        public float getDistanceTotale()
+        public float getDistanceTotale() //récupère la distance de la livraison
         {
             float res = 0;
             foreach(Arete arete in itineraire)
@@ -155,9 +155,9 @@
                 res += arete.Distance;
             }
             return res;
-        }
+        } 
 
-        public TimeSpan getDureeTotale()
+        public TimeSpan getDureeTotale() //récupère la durée de la livraison
         {
             TimeSpan res = TimeSpan.Zero; ;
             foreach (Arete arete in itineraire)
@@ -165,9 +165,9 @@
                 res += arete.Duree;
             }
             return res;
-        }
+        } 
 
-        public void getPrix()
+        public void getPrix() // calcul et met à jour le champ prix de la commande
         {
             float res = 5; // montant minimal pour les livraisons au sein d'une même ville
             res += (float)getDureeTotale().TotalHours * chauffeur.TarifHoraire;

@@ -39,8 +39,8 @@
         #endregion
 
         #region Méthodes
-
-        public float[,] GraphToMatr()
+        
+        public float[,] GraphToMatr() //convertit la liste d'arêtes en matrice d'adjacence
         {
             int n = sommets.Count();
             float[,] matr = new float[n, n];
@@ -76,7 +76,7 @@
             }
         }
 
-        private int MinDistance(float[] distances, List<string> sommetsRestants)
+        private int MinDistance(float[] distances, List<string> sommetsRestants) //trouve le sommet avec la plus petite distance
         {
             int minIndex = 0;
             float minValue = int.MaxValue;
@@ -95,7 +95,7 @@
         // Méthode RemoveSommet à utiliser si on ne souhaite pas utiliser la méthode Remove déjà implémentée sur les listes C#
         // /!\ RemoveSommet ~ O(n) et Remove ~ O(n) aussi mais + optimisée
 
-        private List<string> Removesommet(List<string> sommetsrestants, string sommet)
+        private List<string> Removesommet(List<string> sommetsrestants, string sommet) //retire un sommet de la liste sommetsestant
         {
             List<string> temp = new List<string>();
             for (int i = 0; i < sommetsrestants.Count(); i++)
@@ -106,7 +106,7 @@
                 }
             }
             return temp;
-        }
+        } 
 
         public void Relachement(float[] distances, float[,] matrAdj, string[] parent, string ville1, string ville2)
         {
@@ -161,12 +161,7 @@
                 
             }
 
-            //Console.WriteLine("distances : ");
-            //for (int i = 0; i < sommets.Count; i++)
-            //{
-            //    Console.WriteLine(sommets[i] + " : " + "distance=" + distances[i] + ", parent = " + parents[i]);
-            //}
-
+            #region Construction de l'itinéraire
             //A partir de distances et parents on construit l'itinéraire
             string ville = arrivee;
             string parent = parents[sommets.IndexOf(ville)];
@@ -204,10 +199,11 @@
                 res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille], duree));
                 //foreach (Arete arete in res) Console.WriteLine(arete.ToString());
             }
+            #endregion
             return res;
         }
 
-        #region autre implémentation de Dijkstra (avec dictionnaire, tuples...)
+        #region autre implémentation de Dijkstra (avec dictionnaire, tuples...) (pour justifier le choix de notre implémentation)
         //public static string Dijkstra(string deb, string fin, List<Tuple<string, string, int>> arretes) // algorithme de Dijkstra
         //                                                                                                // deb = ville de départ, fin = ville d'arrivée, arretes = liste des arretes du graphe
         //{

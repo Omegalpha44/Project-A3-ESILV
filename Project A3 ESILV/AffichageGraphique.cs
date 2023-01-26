@@ -981,7 +981,6 @@ namespace Project_A3_ESILV
         #endregion
         #region Module Statistiques
 
-        
         void ModuleStatistique() 
         {
             Console.Clear();
@@ -1102,6 +1101,7 @@ namespace Project_A3_ESILV
             }
             
         }
+
         #endregion
         #region Module Autre
         void ModuleAutre() 
