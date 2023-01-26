@@ -719,6 +719,7 @@ namespace Project_A3_ESILV
                         Commande temp = new Commande();
                         temp.Itineraire = nouvelItineraire;
                         temp.AfficherItineraire();
+                        temp.getPrix();
                         Console.WriteLine("===============");
                         Console.WriteLine("Ce nouvel itinéraire vous convient-il ? (1=oui 2=non) : ");
                     }
