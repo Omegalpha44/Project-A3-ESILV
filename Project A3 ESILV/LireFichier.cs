@@ -54,12 +54,7 @@ namespace Project_A3_ESILV
         #region Modification et lecture du fichier de sauvegarde
         public void ReadFile()
         {
-            //lis un fichier texte et en tire les informations pour créer des objets de type Salarie
-            //le fichier doit être de la forme suivante:
-            // nom, prenom, date de naissance, adresse, adresse mail, téléphone, date d'embauche, salaire, poste, Employeur :, Nom, Prenom, id
-            //exemple:
-            // Dupont, Jean, 01/01/1990, 1 rue de la paix, dupont@gmail.com, 0719203, 01/01/2002, 10000, chauffeur, id
-
+            //lis un fichier respectant la posologie indiqué dans le commentaire précédent
             string[] champsCSV = { "nom", "prenom", "date de naissance", "adresse", "adresse mail", "téléphone", "date d'embauche", "salaire", "poste", "Employeur :", "Nom", "Prenom", "id" };
             StreamReader sr = OuvertureSecurisee(champsCSV);
             manager.Salaries.Clear();
@@ -102,6 +97,7 @@ namespace Project_A3_ESILV
         }
         public void ReadFileClient()
         {
+            //fonctionnement similaire à la méthode précédente mais avec des clients
             string[] champsCSV = { "nom", "prenom", "date de naissance", "adresse", "adresse mail", "téléphone", "id" };
             TextReader sr = OuvertureSecurisee(champsCSV);
             manager.Clients.Clear();
@@ -128,7 +124,7 @@ namespace Project_A3_ESILV
             sr.Close();
         }
         public void AddFile(Salarie s, string nom, string prenom,string path2)
-        {
+        {//ajoute dans un fichier autre que path
             TextWriter sr = new StreamWriter(path2, true);
             string birth = s.DateNaissance.Day.ToString() + "/" + s.DateNaissance.Month.ToString() + "/" + s.DateNaissance.Year.ToString();
             string embauche = s.DateEmbauche.Day.ToString() + "/" + s.DateEmbauche.Month.ToString() + "/" + s.DateEmbauche.Year.ToString();
@@ -136,7 +132,7 @@ namespace Project_A3_ESILV
             sr.Close();
         }
         public void AddFileFirst(Salarie s, string nom,string prenom,string path2)
-        {
+        {//ajoute à la première ligne
             TextWriter tr = new StreamWriter("temp2.csv", false);
             TextReader sr = new StreamReader(path2);
             string line = sr.ReadLine();
@@ -156,7 +152,7 @@ namespace Project_A3_ESILV
             File.Move("temp2.csv", path2);
         }
         public void AddFileInd(Salarie s, string nom, string prenom, string path2,int i )
-        {
+        {//ajoute à la i-ème ligne
             TextWriter tr = new StreamWriter("temp2.csv", false);
             TextReader sr = new StreamReader(path2);
             string line = sr.ReadLine();
@@ -191,7 +187,7 @@ namespace Project_A3_ESILV
         {
             TextReader tr = new StreamReader(path);
             TextWriter temp = new StreamWriter("temp.txt");
-            bool haveWeRemovedThePdg = false;
+            bool haveWeRemovedThePdg = false; // si on enlève le pdg, le fonctionnement du programme est modifié, d'où ce booléen
             string prenom ="";
             string nom="";
             string bossNom = "";
@@ -596,7 +592,7 @@ namespace Project_A3_ESILV
         {
             string[] formats = { "h\\hm", "h\\h", "h\\hmm", "mm\\m\\n" };
 
-            //version avec erreur si le format nest pas reconnu (Parse)
+            //version avec erreur si le format n'est pas reconnu (Parse)
             //TimeSpan duree = TimeSpan.ParseExact(mots[3], formats, CultureInfo.InvariantCulture, TimeSpanStyles.None);
 
             //version sans erreur si le format nest pas reconnu (TryParse)
@@ -652,7 +648,7 @@ namespace Project_A3_ESILV
             tw.Close();
         }
         static string Chiffrer(string line, string permu)
-        {
+        {//chiffre une string avec un algorithme de permutation
             string res = "";
             foreach (char c in line)
             {
@@ -672,7 +668,7 @@ namespace Project_A3_ESILV
             return res;
         }
         static string Dechiffrer(string line, string permu)
-        {
+        {//déchiffre une string avec un algorithme de permutation
             string res = "";
             foreach (char c in line)
             {

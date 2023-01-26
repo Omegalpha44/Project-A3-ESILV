@@ -185,7 +185,7 @@
 
         #region Génération de commandes
         private Salarie ChooseDriver(DateTime dateLivraison)
-        {
+        { // renvoie un salarié de poste chauffeur qui est disponible à la date de livraison
             Salarie s = null;
             s=salaries.Find(s => s.IsDriver() && s.EstDisponible(dateLivraison));
             if (s != null)
@@ -200,7 +200,7 @@
             return s;
         }
         private Vehicule ChooseVehicle(int typeVehicule, DateTime dateLivraison, float distanceTotale) // il faudra définir ici le type de véhicule que l'on souhaite utiliser pour faire le trajet
-        {
+        { // renvoie un véhicule disponible à la date de livraison et qui peut faire le trajet
             Vehicule v = null;
             string labelTypeVehicule = "";
             switch (typeVehicule)
@@ -232,7 +232,7 @@
         }
 
         public Commande GenerationDeCommande(int id, Client client, string depart, string arrivee, int typeVehicule, DateTime dateLivraison) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
-        {
+        { // génère la commande en se basant sur les données qui lui sont fournis
             Commande c = new Commande(id, client, depart, arrivee, dateLivraison, new Vehicule(), new Salarie());
             c.Itineraire = graphe.Dijkstra(depart, arrivee);
 
@@ -275,11 +275,6 @@
             clients.Sort((x, y) => x.PrixCommandes().CompareTo(y.PrixCommandes()));
         }
         #endregion
-
-        #region gestion sous la forme d'un arbre n-aire des salaries
-
-        #endregion
-
         #endregion
     }
 }

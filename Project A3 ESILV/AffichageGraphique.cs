@@ -16,8 +16,8 @@ namespace Project_A3_ESILV
         public LireFichier fileExplorerClient; // explorateur de fichier permettant de modifier la sauvegarde des clients
         public LireFichier fileExplorerDistances; // explorateur de fichier permettant de lire distances.csv
         public LireFichier fileExplorerCommandes; // explorateur de fichier permettant de lire commandes.csv
-        bool display = false;
-        bool main = true;
+        bool display = false; // gère l'affichage de l'organigramme
+        bool main = true; // Gère si l'animation doit continuer
         #endregion
 
         #region Constructeurs
@@ -49,7 +49,7 @@ namespace Project_A3_ESILV
                 ExceptionManager(Affichage);
             }
         }
-        int GoodValue(int a, int b)
+        int GoodValue(int a, int b) // vérifie la valeur fournie en entrée
         {
             int r = int.Parse(Console.ReadLine());
             if (a <= r && r <= b)
@@ -62,7 +62,7 @@ namespace Project_A3_ESILV
                 return GoodValue(a, b);
             }
         }
-        public void MainAffichage()
+        public void MainAffichage() // affichage central
         {
             bool error = false;
             try
@@ -74,8 +74,8 @@ namespace Project_A3_ESILV
                     tr.Close();
                     if (permu != null)
                     {
-                        LireFichier.DechiffrageSub("employeeCipher.csv", "employee.csv", permu);
-                        LireFichier.DechiffrageSub("clientCipher.csv", "client.csv", permu);
+                        LireFichier.DechiffrageSub("employeeCipher.csv", "employee.csv", permu); // déchiffrement
+                        LireFichier.DechiffrageSub("clientCipher.csv", "client.csv", permu); // chiffrement
                     }
                 }
                 fileExplorerClient.ReadFileClient();
@@ -96,7 +96,7 @@ namespace Project_A3_ESILV
             
             if(!error) ExceptionManager(Affichage);
         }
-        void TransconnectStylised()
+        void TransconnectStylised() // effet stylisé en haut de la page d'accueil
         {
             string DecallageTexte(string text)
             {
@@ -981,7 +981,7 @@ namespace Project_A3_ESILV
         #endregion
         #region Module Statistiques
 
-        //les commandes à venir étant susceptibles d'être modifiées, seules les commandes archivées = effectuées sont utilisées pour ce module
+        
         void ModuleStatistique() 
         {
             Console.Clear();
@@ -1122,7 +1122,7 @@ namespace Project_A3_ESILV
 
             switch (r)
             {
-                case 1:
+                case 1: // chiffrement des données des dataset
                     {
                         Console.Clear();
                         Console.WriteLine("===============");
@@ -1145,11 +1145,12 @@ namespace Project_A3_ESILV
                                     Console.WriteLine("Chiffrage en cours. Veuillez ne pas modifier les set de donnée ...");
                                     LireFichier.ChiffrageSub("client.csv", "clientCipher.csv", permu);
                                     LireFichier.ChiffrageSub("employee.csv", "employeeCipher.csv", permu);
-                                    //chiffrage commandes
+
                                     Console.WriteLine("Chiffrage terminée avec succès");
                                     TextWriter tw = new StreamWriter("key.txt", false); // on suppose que le fichier est protégé par le système d'exploitation (W11 pro uniquement)
                                     tw.Write(permu);
                                     tw.Close();
+                                    //File.Encrypt("key.txt"); //UNIQUEMENT SUR WINDOWS PRO
                                 }
                                 else
                                 {
@@ -1159,7 +1160,7 @@ namespace Project_A3_ESILV
                         }
                         break;
                     }
-                case 2:
+                case 2: // déchiffrement des données des dataset
                     {
                         if(File.Exists("key.txt"))
                         {

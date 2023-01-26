@@ -1,7 +1,7 @@
 ﻿namespace Project_A3_ESILV
 {
     internal class SalariesArbre
-    {
+    { // classe représentant la structure d'arbre N-aire pour la hiérarchie des salariés
         #region Champs
         Salarie s;
         SalariesArbre frere;
@@ -26,7 +26,7 @@
         #region Méthodes
 
         #region gestion de l'arbre
-        public void CreerArbre(List<Salarie> salaries, SalariesArbre boss = null) // création rapide d'un arbre n-aire L'ORDRE N'EST PAS RESPECTE
+        public void CreerArbre(List<Salarie> salaries, SalariesArbre boss = null) // création rapide d'un arbre n-aire à des fins de test
         {
             if (salaries.Count > 1)
             {
@@ -52,20 +52,7 @@
                 salaries.RemoveAt(0);
             }
         }
-        public void AfficherArbre() // obsolète, préférez AfficherHierarchie
-        {
-            if (fils != null)
-            {
-                Console.WriteLine("Fils : " + fils.s.Nom);
-                fils.AfficherArbre();
-            }
-            if (frere != null)
-            {
-                Console.WriteLine("Frere : " + frere.s.Nom);
-                frere.AfficherArbre();
-            }
-        }
-        public int NombreFreres()
+        public int NombreFreres() 
         {
             if (frere != null) return 1 + frere.NombreFreres();
             else return 1;
@@ -107,13 +94,13 @@
                 if (boss == null) Console.WriteLine("PDG");
                 else Console.WriteLine(boss);
             }
-            else
+            else // sinon, on recherche dans les Salarie restants
             {
                 if (fils != null) fils.AfficherManager(prenom, nom, poste, s);
                 if (frere != null) frere.AfficherManager(prenom, nom, poste, boss);
             }
         }
-        public void AfficherEmployees(string prenom, string nom, string poste)
+        public void AfficherEmployees(string prenom, string nom, string poste) // affiche les employées du salarié dont le nom, le prénom et le poste sont donnés
         {
             nom = nom.ToUpper();
             prenom = prenom.ToUpper();
@@ -249,7 +236,7 @@
                 else return new string[2] { "erreur", "erreur" };
             }
         }
-        public List<Salarie> ListeDesSalaries()
+        public List<Salarie> ListeDesSalaries() // renvoie une liste contenant les salariés de l'arbre n-aire
         {
             List<Salarie> temp = new List<Salarie>();
             if (s != null) temp.Add(s);
@@ -257,9 +244,8 @@
             if (fils != null) temp.AddRange(fils.ListeDesSalaries());
             return temp;
         }
-        public string[,] GrapheAdjacence() // renvoie le graphe d'adjacence de l'arbre n-aire
+        public string[,] GrapheAdjacence() // renvoie la liste d'adjacence de l'arbre n-aire
         {
-            // erreur lié à la fonction CoupleSalarieEmployeur ne renvoyant pas le père de l'employé quand call dans la fonction principale
             List<Salarie> temp = ListeDesSalaries();
             List<String> name = new List<string>(); // liste contenant les noms sous la forme nom prenom poste
             foreach (Salarie sal in temp)
@@ -286,46 +272,8 @@
             }
             return graphe;
         }
-
-        //public void Affichage(int profondeur = 0, int profondeurPere = 0, List<Tuple<int, int>> UnfinishedBranch = null) // outdated, à supprimer
-        //{
-        //    if (UnfinishedBranch == null) UnfinishedBranch = new List<Tuple<int, int>>();
-        //    if (s != null)
-        //    {
-        //        if (profondeurPere == 0 && profondeur == 0)
-        //        {
-        //            Console.WriteLine(s.Nom + " " + s.Prenom + " " + s.Poste);
-        //            if (fils != null)
-        //            {
-        //                if (frere != null) UnfinishedBranch.Add(new Tuple<int, int>(profondeur, profondeurPere));
-        //                fils.Affichage(profondeur + 2, profondeur + 1, UnfinishedBranch);
-        //            }
-        //            if (frere != null) frere.Affichage(profondeur, profondeurPere, UnfinishedBranch);
-
-        //        }
-        //        else
-        //        {
-        //            string temp = "";
-        //            for (int i = 0; i < profondeurPere; i++)
-        //            {
-        //                if (UnfinishedBranch.Contains(new Tuple<int, int>(profondeurPere, i))) temp += "│   ";
-        //                else temp += "    ";
-        //            }
-        //            if (profondeurPere != 0) temp += "├── ";
-        //            Console.WriteLine(temp + s.Nom + " " + s.Prenom + " " + s.Poste);
-        //            if (fils != null)
-        //            {
-        //                if (frere != null) UnfinishedBranch.Add(new Tuple<int, int>(profondeur, profondeurPere));
-        //                fils.Affichage(profondeur + 1, profondeur, UnfinishedBranch);
-        //            }
-        //            if (frere != null) frere.Affichage(profondeur, profondeurPere, UnfinishedBranch);
-        //        }
-
-        //    }
-
-        //}
-        public void Affichage2(int profondeur = 0, int profondeurPere = 0, List<int> barreNonFini = null, int pass = 0)
-        {
+        public void Affichage2(int profondeur = 0, int profondeurPere = 0, List<int> barreNonFini = null, int pass = 0) // méthode d'affichage sous forme d'arbre 
+        {// barreNonFini correspond au barreau non fini, et pass correspond au barreau spécifiquement de la branche du PDG (condition au borne)
             if (barreNonFini == null) barreNonFini = new List<int>();
             if (s != null)
             {
@@ -335,7 +283,6 @@
                     if(fils!= null)pass = fils.NombreFreres();
                     if (fils != null)
                     {
-                        if (frere != null) barreNonFini.Add(profondeurPere);
                         fils.Affichage2(2, 1, barreNonFini,pass);
                     }
                     if (frere != null) frere.Affichage2(profondeur, profondeurPere, barreNonFini,pass);
@@ -347,7 +294,7 @@
                     string temp = "";
                     for (int i = 0; i < profondeurPere; i++)
                     {
-                        if (profondeurPere == 1) pass-=1;
+                        if (profondeurPere == 1) pass -= 1; // on réduit de 1 pass si on est sur un fils du PDG
                         if (barreNonFini.Contains(i) || (i ==1  && pass>0)) temp += "│   ";
                         else temp += "    ";
                     }
@@ -357,12 +304,12 @@
                         else
                         {
                             temp += "└── ";
-                            barreNonFini.Remove(profondeurPere);
+                            barreNonFini.Remove(profondeurPere); // on a attend le dernier frère pour supprimer la profondeur de la barre
                         }
                         Console.WriteLine(temp + s.Nom + " " + s.Prenom + " " + s.Poste);
                         if (fils != null)
                         {
-                            if (frere != null) barreNonFini.Add(profondeur);
+                            barreNonFini.Add(profondeur);
                             fils.Affichage2(profondeur + 1, profondeur, barreNonFini,pass);
                         }
                         if (frere != null) frere.Affichage2(profondeur, profondeurPere, barreNonFini,pass);

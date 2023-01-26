@@ -60,7 +60,7 @@
         public override string ToStringComplete()
         {
             //renvoie une string contenant tout les paramètres protected de la classe Personne
-            string res = "Client : " + base.ToStringComplete() + " " + id;
+            string res = "Client : " + base.ToStringComplete() + "ID : " + id;
             foreach (Commande com in commandes)
             {
                 res += "\n" + com.ToString();
