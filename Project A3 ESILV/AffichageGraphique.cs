@@ -599,7 +599,7 @@ namespace Project_A3_ESILV
             switch (r)
             {
                 case 1: AjouterCommande(); break;
-                //case 2: ModifierCommande(); break;
+                case 2: ModifierCommande(); break;
                 case 3: SupprimerCommande(); break;
                 case 4: AfficherCommande(); break;
                 case 5: ArchiverCommande(); break;
@@ -985,7 +985,7 @@ namespace Project_A3_ESILV
         void ModuleStatistique() 
         {
             Console.Clear();
-            Console.WriteLine("Vous avez choisi le module Autre :");
+            Console.WriteLine("Vous avez choisi le module Statistiques :");
             Console.WriteLine("===============");
             Console.WriteLine("Disclaimer : Les commandes à venir étant susceptibles d'être modifiées, seules les commandes archivées = effectuées sont utilisées pour ce module");
             Console.WriteLine("Choisissez votre action :");
@@ -995,9 +995,10 @@ namespace Project_A3_ESILV
             Console.WriteLine("3 : Afficher moyenne des prix des commandes");
             Console.WriteLine("4 : Afficher moyenne des prix / client");
             Console.WriteLine("5 : Afficher liste commandes pour un client");
+            Console.WriteLine("6 : Retour");
             Console.WriteLine("===============");
             Console.WriteLine("Votre choix : ");
-            int r = GoodValue(1, 5);
+            int r = GoodValue(1, 6);
             Console.Clear();
             List<Commande> commandes = new List<Commande>();
             float moy = 0;
@@ -1010,6 +1011,8 @@ namespace Project_A3_ESILV
                     Console.WriteLine("===============");
                     List<Salarie> listeChauffeurs = manager.Salaries.FindAll(x => x.IsDriver());
                     listeChauffeurs.ForEach(x=> Console.WriteLine(x.Nom+" "+x.Prenom+" : "+NbLivraisons(x)+" livraisons effectuées"));
+                    FooterMenu();
+                    ModuleStatistique();
                     break;
                 case 2:
                     Console.WriteLine("Commandes / période de temps (parmi les livraisons archivées) :");
@@ -1019,12 +1022,21 @@ namespace Project_A3_ESILV
                     DateTime dateFin = DateTime.Parse(Console.ReadLine());
                     foreach (Client c in manager.Clients)
                     {
-                        commandes.Concat<Commande>(c.Commandes.FindAll(x=>x.DateLivraison>=dateDebut && x.DateLivraison<=dateFin));
+                        foreach(Commande commande in c.Commandes)
+                        {
+                            if(commande.DateLivraison<=dateFin && commande.DateLivraison >= dateDebut)
+                            {
+                                commandes.Add(commande);
+                            }
+                        }
+                        //commandes.Concat<Commande>(c.Commandes.FindAll(x => x.DateLivraison >= dateDebut && x.DateLivraison <= dateFin));
+
                     }
-                    Console.Clear();
                     Console.WriteLine("Commandes entre {0} et {1} (archivées) :", dateDebut.Date,dateFin.Date);
                     Console.WriteLine("===============");
                     commandes.ForEach(x => Console.WriteLine(x));
+                    FooterMenu();
+                    ModuleStatistique();
                     break;
                 case 3:
                     Console.WriteLine("Moyenne des prix des commandes");
@@ -1047,6 +1059,8 @@ namespace Project_A3_ESILV
                     }
                     moy /= (float)nbCommandesBDD;
                     Console.WriteLine("Moyenne des prix des commandes à venir (=dans la BDD) : " + moy);
+                    FooterMenu();
+                    ModuleStatistique();
                     break;
                 case 4:
                     Console.WriteLine("Moyenne des prix des commandes / client : ");
@@ -1061,6 +1075,8 @@ namespace Project_A3_ESILV
                         moy/=(float) client.Commandes.Count;
                         Console.WriteLine(client.Nom+" "+client.Prenom+" : "+moy+"€ / commande");
                     }
+                    FooterMenu();
+                    ModuleStatistique();
                     break;
                 case 5:
                     Console.WriteLine("Liste des commandes pour un client : ");
@@ -1078,11 +1094,13 @@ namespace Project_A3_ESILV
                         else Console.WriteLine("Le client ne possède pas de commandes archivées");
                     }
                     else Console.WriteLine("Le client n'a pas été trouvé dans la BDD");
+                    FooterMenu();
+                    ModuleStatistique();
                     break;
+                case 6: Affichage(); break;
                   
             }
-            FooterMenu();
-            ModuleStatistique();
+            
         }
         #endregion
         #region Module Autre

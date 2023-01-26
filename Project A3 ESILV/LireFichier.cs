@@ -571,7 +571,7 @@ namespace Project_A3_ESILV
         public void Add(Commande c) // on ajoute la commande à la liste d'archivage
         {
             TextWriter tr = new StreamWriter(path, true);
-            tr.WriteLine(c.Id + ", " + c.Client.Id + ", " + c.Depart + ", " + c.Arrivee + ", " + c.Vehicule.Immatriculation + ", " + c.Chauffeur.Id + ", " + c.DateLivraison + ", " + c.Prix);
+            tr.WriteLine(c.Id + sep + c.Client.Id + sep + c.Depart + sep + c.Arrivee + sep + c.Vehicule.Immatriculation + sep + c.Chauffeur.Id + sep + c.DateLivraison + sep + c.Prix);
             tr.Close();
         }
         #endregion

@@ -187,7 +187,7 @@
         private Salarie ChooseDriver(DateTime dateLivraison)
         {
             Salarie s = null;
-            salaries.Find(s => s.IsDriver() && s.EstDisponible(dateLivraison));
+            s=salaries.Find(s => s.IsDriver() && s.EstDisponible(dateLivraison));
             if (s != null)
             {
                 s.Planning.Add(dateLivraison);
@@ -244,6 +244,7 @@
             {
                 c.Chauffeur = s;
                 c.Vehicule = v;
+                c.getPrix();
             }
             
             return c;

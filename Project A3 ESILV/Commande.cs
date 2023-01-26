@@ -167,7 +167,7 @@
             return res;
         }
 
-        public float getPrix()
+        public void getPrix()
         {
             float res = 5; // montant minimal pour les livraisons au sein d'une même ville
             res += (float)getDureeTotale().TotalHours * chauffeur.TarifHoraire;
@@ -188,7 +188,7 @@
 
             }
             this.Prix = (int)res;
-            return res;
+            
         }
         #endregion
     }
