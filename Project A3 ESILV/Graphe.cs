@@ -122,7 +122,7 @@
 
         public List<Arete> Dijkstra(string sommetDepart, string arrivee)
         {
-            if (!sommets.Contains(sommetDepart) || !sommets.Contains(arrivee)) Console.WriteLine("Une ville au moins n'a pas été reconnue.");
+            if (!sommets.Contains(sommetDepart) || !sommets.Contains(arrivee)) Console.WriteLine("Une ville au moins n'a pas été trouvée dans le graphe");
         
         
             // Initialise le tableau des distances, des parents, et des sommets à visiter

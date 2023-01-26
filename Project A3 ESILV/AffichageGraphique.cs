@@ -725,7 +725,7 @@ namespace Project_A3_ESILV
                 }
             }
             FooterMenu();
-            ModuleClient();
+            ModuleCommande();
         }
         void SupprimerCommande()
         {
@@ -883,7 +883,7 @@ namespace Project_A3_ESILV
             int capacite = 0;
             Vehicule v=null;
 
-            Console.WriteLine("Quel type de véhicule souhaitez-vous ajouter : (1=voiture, 2=camion citerne, 3=camion benne, 4 = camion frigorifique");
+            Console.WriteLine("Quel type de véhicule souhaitez-vous ajouter : (1=voiture, 2=camion citerne, 3=camion benne, 4 = camion frigorifique)");
             int r = GoodValue(1, 4);
             switch (r)
             {
