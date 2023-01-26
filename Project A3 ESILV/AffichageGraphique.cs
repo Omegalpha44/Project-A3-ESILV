@@ -13,18 +13,20 @@ namespace Project_A3_ESILV
         public Manager manager;
         public LireFichier fileExplorer; // explorateur de fichier permettant de modifier la sauvegarde des salariés
         public LireFichier fileExplorerClient; // explorateur de fichier permettant de modifier la sauvegarde des clients
-        public LireFichier fileExplorerDistances; // esplorateur de fichier permettant de lire distances.csv
+        public LireFichier fileExplorerDistances; // explorateur de fichier permettant de lire distances.csv
+        public LireFichier fileExplorerCommandes; // explorateur de fichier permettant de lire commandes.csv
         bool display = false;
         bool main = true;
         #endregion
 
         #region Constructeurs
-        public AffichageGraphique(string pathSalaries,string pathClients, string pathDistances, Manager manager)
+        public AffichageGraphique(string pathSalaries,string pathClients, string pathDistances, string pathCommandes, Manager manager)
         {
             this.manager = manager;
             this.fileExplorer = new LireFichier(manager, pathSalaries);
             this.fileExplorerClient = new LireFichier(manager, pathClients);
             this.fileExplorerDistances = new LireFichier(manager, pathDistances);
+            this.fileExplorerCommandes = new LireFichier(manager, pathCommandes);
         }
         #endregion
 

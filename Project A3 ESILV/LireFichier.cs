@@ -60,17 +60,11 @@ namespace Project_A3_ESILV
             //exemple:
             // Dupont, Jean, 01/01/1990, 1 rue de la paix, dupont@gmail.com, 0719203, 01/01/2002, 10000, chauffeur, id
 
-            //on ouvre le fichier
-            if (!File.Exists(path))
-            {
-                //on créé le fichier s'il n'existe pas
-                StreamWriter writer = new StreamWriter(path);
-                writer.WriteLine("nom" + sep + "prenom" + sep + "date de naissance" + sep + "adresse" + sep + "adresse mail" + sep + "téléphone" + sep + "date d'embauche" + sep + "salaire" + sep + "poste" + sep + "Employeur :" + sep + "Nom" + sep + "Prenom" + sep + "id");
-                writer.Close();
-            }
+            string[] champsCSV = { "nom", "prenom", "date de naissance", "adresse", "adresse mail", "téléphone", "date d'embauche", "salaire", "poste", "Employeur :", "Nom", "Prenom", "id" };
+            StreamReader sr = OuvertureSecurisee(champsCSV);
             manager.Salaries.Clear();
             manager.SalariesHierarchie = null;
-            StreamReader sr = new StreamReader(path);
+            
             string line = sr.ReadLine();
             line = sr.ReadLine();
 
@@ -108,15 +102,10 @@ namespace Project_A3_ESILV
         }
         public void ReadFileClient()
         {
-            if (!File.Exists(path))
-            {
-                //on créé le fichier si il n'existe pas
-                StreamWriter writer = new StreamWriter(path);
-                writer.WriteLine("nom" + sep + "prenom" + sep + "date de naissance" + sep + "adresse" + sep + "adresse mail" + sep + "téléphone" + sep + "id");
-                writer.Close();
-            }
+            string[] champsCSV = { "nom", "prenom", "date de naissance", "adresse", "adresse mail", "téléphone", "id" };
+            TextReader sr = OuvertureSecurisee(champsCSV);
             manager.Clients.Clear();
-            TextReader sr = new StreamReader(path);
+
             string line = sr.ReadLine();
             line = sr.ReadLine();
             while (line != null)
@@ -507,16 +496,8 @@ namespace Project_A3_ESILV
                 //on découpe la ligne en fonction des virgules
                 string[] mots = line.Split(sep);
 
-                //récupération de la durée
-                string[] formats = { "h\\hm","h\\h","h\\hmm", "mm\\m\\n" };
+                TimeSpan duree = ParseDuree(mots[3]);
 
-                //version avec erreur si le format nest pas reconnu (Parse)
-                //TimeSpan duree = TimeSpan.ParseExact(mots[3], formats, CultureInfo.InvariantCulture, TimeSpanStyles.None);
-
-                //version sans erreur si le format nest pas reconnu (TryParse)
-                TimeSpan duree = TimeSpan.Zero;
-                TimeSpan.TryParseExact(mots[3], formats, CultureInfo.InvariantCulture, TimeSpanStyles.None, out duree);
-                
                 //on crée un objet de type Arete avec les informations de la ligne
                 Arete arete = new Arete(mots[0], mots[1], float.Parse(mots[2]), duree); //départ, arrivée, distance, durée
                 //on ajoute l'arête à la liste des arêtes du graphe
@@ -528,6 +509,124 @@ namespace Project_A3_ESILV
             }
             sr.Close();
         }
+        #endregion
+        #region BDD Commandes
+        // pos = 0 : idCommande
+        // pos = 1 : idClient
+        // pos = 2 : villeDepart
+        // pos = 3 : villeArrivee
+        // pos = 4 : itineraire
+        // pos = 5 : idVehicule
+        // pos = 6 : idChauffeur
+        // pos = 7 : dateLivraison
+        // pos = 8 : prix
+
+        public void ReadFileCommande()
+        {
+            /*-------------------------------------------------------------------------------------------------------
+            lis un fichier CSV et en tire les informations pour créer des objets de type Commande
+            le fichier doit être de la forme suivante:
+            idCommande,idClient,villeDepart,villeArrivee,itineraire,idVehicule,idChauffeur,dateLivraison,prix
+            Example:
+            02345,6578,Paris,Nancy,(Paris-->Lyon,256,3h15)|(Lyon-->Nancy,323,4h15),324,879,01/01/2023
+            -------------------------------------------------------------------------------------------------------*/
+
+            string[] champsCSV = { "idCommande", "idClient", "villeDepart", "villeArrivee", "itineraire", "idVehicule", "idChauffeur", "dateLivraison", "prix" };
+            StreamReader sr = OuvertureSecurisee(champsCSV);
+            
+            string line = sr.ReadLine();
+
+            //on lit le fichier ligne par ligne
+            while (line != null)
+            {
+                //on découpe la ligne en fonction des virgules
+                string[] mots = line.Split(", ");
+
+                //on crée un objet de type Commande avec les informations de la ligne
+                int idCommande = int.Parse(mots[0]);
+                int idClient = int.Parse(mots[1]);
+                string villeDepart = mots[2];
+                string villeArrivee = mots[3];
+
+                //on parse l'itinéraire
+                List<Arete> itineraire= new List<Arete>();
+                foreach (string motArete in mots[4].Split('|'))
+                {
+                    itineraire.Add(StringToArete(motArete));
+                }
+                int idVehicule = int.Parse(mots[4]);
+
+                DateTime dateLivraison = DateTime.Parse(mots[7]);
+
+                
+                //Client cl = manager.Clients.Find(x => x.Id == idClient);
+                //if (cl == null) Console.WriteLine("Votre client n°{0} n'a pas été trouvé dans la BDD, veuillez d'abord l'ajouter via le Module Client", idClient);
+                //else
+                //{
+                //    Commande commande = manager.GenerationDeCommande(manager.Commandes.Count, cl, mots[2], mots[3], dateLivraison);
+                //    Console.WriteLine(commande);
+                //    //on ajoute la commande à la liste des commandes
+                //    manager.Commandes.Add(commande);
+                //}
+                //on lit la ligne suivante
+                line = sr.ReadLine();
+            }
+            sr.Close();
+        }
+
+        public void Add(Commande c, string nom, string prenom)
+        {
+
+        }
+        public void Remove(int idCommande)
+        {
+
+        }
+        #endregion
+
+        #region fonctions utilitaires
+
+        //crée le fichier CSV avec les champs entrés en paramètres au lieu path s'il n'existe pas, puis l'ouvre
+        public StreamReader OuvertureSecurisee(string[] champsCSV) 
+        {
+            if (!File.Exists(path))
+            {
+                //on créé le fichier s'il n'existe pas
+                StreamWriter writer = new StreamWriter(path);
+                string firstLine = string.Join(sep, champsCSV);
+                writer.WriteLine(firstLine);
+                writer.Close();
+            }
+            return new StreamReader(path);
+        }
+
+        public static TimeSpan ParseDuree(string motDuree)
+        {
+            string[] formats = { "h\\hm", "h\\h", "h\\hmm", "mm\\m\\n" };
+
+            //version avec erreur si le format nest pas reconnu (Parse)
+            //TimeSpan duree = TimeSpan.ParseExact(mots[3], formats, CultureInfo.InvariantCulture, TimeSpanStyles.None);
+
+            //version sans erreur si le format nest pas reconnu (TryParse)
+            TimeSpan duree = TimeSpan.Zero;
+            TimeSpan.TryParseExact(motDuree, formats, CultureInfo.InvariantCulture, TimeSpanStyles.None, out duree);
+            return duree;
+        }
+
+        //recrée une arête à partir de sa représentation sous forme de chaine de caractères
+        public static Arete StringToArete(string motArete)
+        {
+            string[] parts = motArete.TrimStart('(').TrimEnd(')').Split(','); // parts=["Paris-->Lyon";"256";"3h15"]
+            string[] villes = parts[0].Split("-->");                          // villes=["Paris";"Lyon"]
+            string departArete = villes[0];                                   // departArete="Paris"
+            string arriveeArete = villes[1];                                  // arriveeArete="Lyon"
+            float distanceArete = float.Parse(parts[1]);                      // distanceArete=256
+            TimeSpan dureeArete = ParseDuree(parts[2]);
+
+            Arete arete = new Arete(departArete, arriveeArete, distanceArete, dureeArete);
+            return arete;
+        }
+
         #endregion
         #region utilitaire de transformation du fichier de sauvegarde
         static string alpha = "abcdefghijklmnopqrstuvwxyz"; // les permutations dépendront toute de l'alphabet

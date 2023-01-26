@@ -5,10 +5,10 @@
         #region Champs
         int id;
         Client client;
-        string arrivee;
         string depart;
-        DateTime dateLivraison;
+        string arrivee;
         List<Arete> itineraire;
+        DateTime dateLivraison;
         int prix;
         Vehicule vehicule;
         Salarie chauffeur;

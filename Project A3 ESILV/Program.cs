@@ -45,7 +45,7 @@ namespace Solution
 
 
             Manager MainManager = new Manager(); // on créé un manager vide
-            AffichageGraphique graphique = new AffichageGraphique(@"employee.csv",@"client.csv",@"distances.csv",MainManager); // on créé un afficheur graphique vide, contenant le path vers le fichier txt pour les employées et le manager à modifier
+            AffichageGraphique graphique = new AffichageGraphique(@"employee.csv",@"client.csv",@"distances.csv",@"commandes.csv",MainManager); // on créé un afficheur graphique vide, contenant le path vers le fichier txt pour les employées et le manager à modifier
             graphique.fileExplorerDistances.InitialisationGraphe(); //on génère le graphe à partir du fichier "distances.csv"
             graphique.MainAffichage();
             
