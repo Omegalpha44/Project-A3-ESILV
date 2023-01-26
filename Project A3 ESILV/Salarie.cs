@@ -21,6 +21,16 @@
             this.nbLivraisons = 0; 
             this.planning = new List<DateTime>();
         }
+
+        public Salarie() : base()
+        {
+            this.dateEmbauche = new DateTime();
+            this.poste = poste = "";
+            this.salaire = 0 ;
+            this.hasDrivenToday = false; // useless
+            this.nbLivraisons = 0;
+            this.planning = new List<DateTime>();
+        }
         #endregion
 
         #region getter-setter
@@ -43,7 +53,7 @@
             get { return salaire; }
             set { salaire = value; }
         }
-        bool IsDriver()
+        public bool IsDriver()
         {
             return poste.ToUpper() == "CHAUFFEUR";
         }
@@ -85,6 +95,11 @@
         public static bool Equal(Salarie s1, Salarie s2)
         {
             return s1.Nom == s2.Nom && s2.Prenom == s2.Prenom;
+        }
+
+        public bool EstDisponible(DateTime dateLivraison)
+        {
+            return !this.Planning.Contains(dateLivraison);
         }
         #endregion
     }
