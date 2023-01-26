@@ -85,6 +85,12 @@
             get { return chauffeur; }
             set { chauffeur = value; }
         }
+
+        public Vehicule Vehicule
+        {
+            get { return vehicule; }
+            set { vehicule = value; }
+        }
         #endregion
 
         #region Méthodes

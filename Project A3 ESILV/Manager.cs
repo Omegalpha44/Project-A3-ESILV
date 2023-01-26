@@ -187,37 +187,65 @@
         private Salarie ChooseDriver(DateTime dateLivraison)
         {
             Salarie s = null;
-            foreach (Salarie salarie in salaries)
+            salaries.Find(s => s.IsDriver() && s.EstDisponible(dateLivraison));
+            if (s != null)
             {
-                if (salarie.Poste == "chauffeur" && salarie.HasDrivenToday == false && !salarie.Planning.Contains(dateLivraison))
-                {
-                    s = salarie;
-                    salarie.HasDrivenToday = true;
-                    break;
-                }
+                s.Planning.Add(dateLivraison);
+            }
+            else
+            {
+                Console.WriteLine("Aucun Chauffeur approprié n'a été trouvé.");
+                Console.WriteLine("Veuillez en ajouter dans la BDD (Module Salarié)");
             }
             return s;
         }
-        private Vehicule ChooseVehicle() // il faudra définir ici le type de véhicule que l'on souhaite utiliser pour faire le trajet
+        private Vehicule ChooseVehicle(int typeVehicule, DateTime dateLivraison, float distanceTotale) // il faudra définir ici le type de véhicule que l'on souhaite utiliser pour faire le trajet
         {
             Vehicule v = null;
-            foreach (Vehicule vehicule in vehicules)
+            string labelTypeVehicule = "";
+            switch (typeVehicule)
             {
-                if (vehicule.Disponible)
-                {
-                    v = vehicule;
-                    vehicule.Disponible = false;
-                    break;
-                }
+                case 1: labelTypeVehicule += "Voiture"; break;
+                case 2: labelTypeVehicule += "Camion_benne"; break;
+                case 3: labelTypeVehicule += "Camion_citerne"; break;
+                case 4: labelTypeVehicule += "Camion_frigorifique"; break;
+                default: break;
             }
+
+            if (typeVehicule == 4) // Camion frigorifique --> prend en compte l'autonomie frigorifique
+            {
+                v = vehicules.Find(v => v.EstDisponible(dateLivraison) && v.GetType().Name == labelTypeVehicule && ((Camion_frigorifique)v).Autonomie >= distanceTotale);
+            }
+            else v = vehicules.Find(v => v.EstDisponible(dateLivraison) && v.GetType().Name == labelTypeVehicule);
+
+            if (v != null)
+            {
+                v.Planning.Add(dateLivraison);
+            }
+            else
+            {
+                Console.WriteLine("Aucun véhicule approprié n'a été trouvé.");
+                Console.WriteLine("Veuillez en ajouter dans la BDD (Module Autre)");
+            }
+           
             return v;
         }
-        public Commande GenerationDeCommande(int id, Client client, string depart, string arrivee, DateTime dateLivraison) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
+
+        public Commande GenerationDeCommande(int id, Client client, string depart, string arrivee, int typeVehicule, DateTime dateLivraison) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
         {
+            Commande c = new Commande(id, client, depart, arrivee, dateLivraison, new Vehicule(), new Salarie());
+            c.Itineraire = graphe.Dijkstra(depart, arrivee);
+
             Salarie s = ChooseDriver(dateLivraison);
-            Vehicule v = ChooseVehicle();
-            Commande c = new Commande(id, client, depart, arrivee, dateLivraison, v, s);
-            c.Itineraire = graphe.Dijkstra(depart,arrivee);
+            Vehicule v = ChooseVehicle(typeVehicule, dateLivraison, c.getDistanceTotale());
+
+            if (s == null || v == null) c = null; // on annule la commande si pas de chauffeur ou vehicule
+            else
+            {
+                c.Chauffeur = s;
+                c.Vehicule = v;
+            }
+            
             return c;
         }
         #endregion

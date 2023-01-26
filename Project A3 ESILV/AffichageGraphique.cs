@@ -647,9 +647,13 @@ namespace Project_A3_ESILV
             }
             else //le client à été trouvé
             {
+                Console.WriteLine("Veuillez sélectionner un type de véhicule");
+                Console.WriteLine("1 = Voiture\n2 = Camion benne\n3 = Camion citerne\n4 = Camion frigorifique");
+                Console.Write("Votre choix : ");
+                int typeVehicule = GoodValue(1, 4);
                 //On génère une commande et le prix suivant le parcours déterminé par Dijkstra
-                Commande offreCommande = manager.GenerationDeCommande(idCommande, clientCommande, depart, arrivee, dateLivraison);
-                if(offreCommande.Itineraire.Count!=0)
+                Commande offreCommande = manager.GenerationDeCommande(idCommande, clientCommande, depart, arrivee,typeVehicule, dateLivraison);
+                if(offreCommande!= null && offreCommande.Itineraire.Count!=0) // la commande et son itinéraire ont été correctement générés
                 {
                     Console.WriteLine("Commande générée : ");
                     Console.WriteLine("===============");
