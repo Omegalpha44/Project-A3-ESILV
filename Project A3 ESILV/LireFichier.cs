@@ -408,11 +408,12 @@ namespace Project_A3_ESILV
             {
                 TextReader tr = new StreamReader(path);
                 TextWriter tw = new StreamWriter("temp.csv");
-                string line = tr.ReadLine();
-                while (line != null)
+                string line = tr.ReadLine().ToUpper();
+                while (line != null) // tant que nous n'avons pas parcouru le fichier
                 {
+                    line = line.ToUpper();
                     string[] mots = line.Split(sep);
-                    if (mots[0] == employee.Nom && mots[1] == employee.Prenom) // on a trouvé le nouvel employé 
+                    if (mots[0] == employee.Nom.ToUpper() && mots[1] == employee.Prenom.ToUpper()) // on a trouvé le nouvel employé 
                     {
                         tw.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + s.Nom + sep + s.Prenom + sep + mots[12] + "\n");
                     }
@@ -433,11 +434,12 @@ namespace Project_A3_ESILV
                 int j = 0;
                 TextReader tr = new StreamReader(path);
                 TextWriter tw = new StreamWriter("temp.csv");
-                string line = tr.ReadLine();
+                string line = tr.ReadLine().ToUpper();
                 while (line != null)
                 {
+                    line = line.ToUpper();
                     string[] mots = line.Split(sep);
-                    if (mots[10] == employeur.Nom && mots[11] == employeur.Prenom && mots[0] == employee.Nom && mots[1] == employee.Prenom) // on a trouvé le nouvel employé 
+                    if (mots[10] == employeur.Nom.ToUpper() && mots[11] == employeur.Prenom.ToUpper() && mots[0] == employee.Nom.ToUpper() && mots[1] == employee.Prenom.ToUpper()) // on a trouvé le nouvel employé 
                     {
                         tw.Write(mots[0] + sep + mots[1] + sep + mots[2] + sep + mots[3] + sep + mots[4] + sep + mots[5] + sep + mots[6] + sep + mots[7] + sep + mots[8] + sep + mots[9] + sep + s.Nom + sep + s.Prenom + sep + mots[12] + "\n");
                         j = i;

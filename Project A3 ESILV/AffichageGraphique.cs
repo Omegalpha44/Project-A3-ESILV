@@ -3,6 +3,7 @@ using System.Threading;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
 
 namespace Project_A3_ESILV
 {
@@ -358,7 +359,7 @@ namespace Project_A3_ESILV
             AfficherOrganigramme();
             Console.WriteLine("Bienvenue dans le module salarié");
             Console.WriteLine("Choississez votre action");
-            Console.WriteLine("================");
+            Console.WriteLine("===============");
             Console.WriteLine("1. Ajouter un salarié");
             Console.WriteLine("2. Modifier un salarié");
             Console.WriteLine("3. Supprimer un salarié");
@@ -1199,11 +1200,42 @@ namespace Project_A3_ESILV
             Salarie s = manager.Salaries.Find(x => x.Nom.ToUpper() == nom && x.Prenom.ToUpper() == prenom);
             Salarie employeur = manager.Salaries.Find(x => x.Nom.ToUpper() == nomEmployeur && x.Prenom.ToUpper() == prenomEmployeur);
             Salarie employee = manager.Salaries.Find(x => x.Nom.ToUpper() == nomEmployeDirect && x.Prenom.ToUpper() == prenomEmployeDirect);
-            if (s != null && employee != null) // employeur peut être null
+            string boss = "";
+            string[] couple = { "", "" };
+            if (employeur != null && employee != null)
             {
-                fileExplorer.Promote(s, employeur, employee, newPoste);
-                fileExplorer.ReadFile();
-                Console.WriteLine("salarié promu !");
+                couple = manager.salariesHierarchie.CoupleSalarieEmployeur(nomEmployeDirect, prenomEmployeDirect, employee.Poste);
+                boss = nomEmployeur + " " + prenomEmployeur + " " + employeur.Poste;
+                Console.WriteLine(boss);
+                Console.WriteLine(couple[0] + " " + couple[1]);
+            }
+            if (s != null && employee != null && boss == couple[0] && !Salarie.Equal(s, employee))
+            {
+                if( employeur != null) // le salarié n'est pas promu PDG
+                {
+                    if (!Salarie.Equal(employeur, s))
+                    {
+                        fileExplorer.Promote(s, employeur, employee, newPoste);
+                        fileExplorer.ReadFile();
+                        Console.WriteLine("salarié promu !");
+                    }
+                    else Console.WriteLine("l'employeur est le salarié promu !");
+                }
+                else // le salarié est promu PDG
+                {
+                    couple = manager.salariesHierarchie.CoupleSalarieEmployeur(nomEmployeDirect, prenomEmployeDirect, employee.Poste);
+                    if (couple[0] == "PDG")
+                    {
+                        fileExplorer.Promote(s, employeur, employee, newPoste);
+                        fileExplorer.ReadFile();
+                        Console.WriteLine("salarié promu !");
+                    }
+                    else
+                    {
+                        Console.WriteLine("l'employeur n'a pas été trouvé et l'employé directe n'est pas l'ancien PDG. Veuillez vérifier les données fournis");
+                    }
+                    
+                }
             }
             else
             {

@@ -287,7 +287,7 @@
             return graphe;
         }
 
-        //public void Affichage(int profondeur = 0, int profondeurPere = 0, List<Tuple<int, int>> UnfinishedBranch = null)
+        //public void Affichage(int profondeur = 0, int profondeurPere = 0, List<Tuple<int, int>> UnfinishedBranch = null) // outdated, à supprimer
         //{
         //    if (UnfinishedBranch == null) UnfinishedBranch = new List<Tuple<int, int>>();
         //    if (s != null)
