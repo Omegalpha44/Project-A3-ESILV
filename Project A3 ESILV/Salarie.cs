@@ -90,6 +90,8 @@
         {
             return !this.Planning.Contains(dateLivraison);
         }
+
+    
         #endregion
     }
 }

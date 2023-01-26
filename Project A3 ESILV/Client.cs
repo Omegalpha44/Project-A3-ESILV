@@ -1,6 +1,6 @@
 ﻿namespace Project_A3_ESILV
 {
-    internal class Client : Personne
+    internal class Client : Personne, ICloneable
     {
         #region Champs
         List<Commande> commandes; // les commandes archivées
@@ -11,7 +11,7 @@
         {
             this.commandes = new List<Commande>();
         }
-
+        
         public Client() : base()
         {
             this.commandes = new List<Commande>();
@@ -84,6 +84,19 @@
                 }
             }
             return prix;
+        }
+        public object Clone() // possibilité de backup d'un client avant manipulation. Fonction non utilisé dans le programme principal, utilisé principalement pour des tests.
+        {
+            Client client = new Client();
+            client.id = this.id;
+            client.nom = this.nom;
+            client.prenom = this.prenom;
+            client.dateNaissance = this.dateNaissance;
+            client.adresse = this.adresse;
+            client.adresseMail = this.adresseMail;
+            client.telephone = this.telephone;
+            client.commandes = this.commandes;
+            return client;
         }
         #endregion
     }
