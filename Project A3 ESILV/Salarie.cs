@@ -8,7 +8,7 @@
         int salaire;
         bool hasDrivenToday;//useless
         int nbLivraisons; // nombre de livraisons effectuées par le conducteur NE S'APPLIQUE QUE SI CHAUFFEUR
-        List<DateTime> isFree; //liste des dates où le conducteur n'est plus libre A RENOMMER
+        List<DateTime> planning; //liste des dates où le conducteur n'est plus libre A RENOMMER
         #endregion
 
         #region Constructeur
@@ -19,7 +19,7 @@
             this.salaire = salaire;
             this.hasDrivenToday = false; // useless
             this.nbLivraisons = 0; 
-            this.isFree = new List<DateTime>();
+            this.planning = new List<DateTime>();
         }
         #endregion
 
@@ -57,10 +57,10 @@
             get { if (IsDriver()) return nbLivraisons; else return -1; }
             set { nbLivraisons = value; }
         }
-        public List<DateTime> IsFree // renvoie si le salarié est libre ou non
+        public List<DateTime> Planning // renvoie si le salarié est libre ou non
         {
-            get { if (IsDriver()) return isFree; else return null; }
-            set { isFree = value; }
+            get { if (IsDriver()) return planning; else return null; }
+            set { planning = value; }
         }
         public float TarifHoraire
         {

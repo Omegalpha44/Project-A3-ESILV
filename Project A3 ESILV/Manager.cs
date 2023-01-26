@@ -184,12 +184,12 @@
         #endregion
 
         #region Génération de commandes
-        private Salarie ChooseDriver()
+        private Salarie ChooseDriver(DateTime dateLivraison)
         {
             Salarie s = null;
             foreach (Salarie salarie in salaries)
             {
-                if (salarie.Poste == "chauffeur" && salarie.HasDrivenToday == false)
+                if (salarie.Poste == "chauffeur" && salarie.HasDrivenToday == false && !salarie.Planning.Contains(dateLivraison))
                 {
                     s = salarie;
                     salarie.HasDrivenToday = true;
@@ -214,7 +214,7 @@
         }
         public Commande GenerationDeCommande(int id, Client client, string depart, string arrivee, DateTime dateLivraison) // Permet de générer une commande en indiquant selon les disponibilités des véhicules et des conducteurs si ils peuvent faire le trajet
         {
-            Salarie s = ChooseDriver();
+            Salarie s = ChooseDriver(dateLivraison);
             Vehicule v = ChooseVehicle();
             Commande c = new Commande(id, client, depart, arrivee, dateLivraison, v, s);
             c.Itineraire = graphe.Dijkstra(depart,arrivee);
