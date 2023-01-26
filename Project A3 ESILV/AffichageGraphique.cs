@@ -1292,7 +1292,7 @@ namespace Project_A3_ESILV
             Console.ReadKey();
             Console.Clear();
         }
-        string GoodPermu()
+        string GoodPermu() // vérifie si la permutation est correcte ou non
         {
             string alpha = "abcdefghijklmnopqrstuvwxyz";
             Console.WriteLine("Veuillez entrer une permutation à appliquer au jeu de donnée. Elle doit contenir toutes les lettres de l'alphabet et ne pas avoir de répétition.");
@@ -1348,7 +1348,7 @@ namespace Project_A3_ESILV
             
 
         }
-        void Exit() 
+        void Exit() // permet de quitter le programme, mais aussi 
         {
             if(File.Exists("key.txt"))
             {
