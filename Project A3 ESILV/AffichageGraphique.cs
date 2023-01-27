@@ -718,6 +718,7 @@ namespace Project_A3_ESILV
                     else
                     {
                         Commande temp = new Commande();
+                        temp.Chauffeur = cible.Chauffeur;
                         temp.Itineraire = nouvelItineraire;
                         temp.AfficherItineraire();
                         temp.getPrix();
@@ -1051,7 +1052,7 @@ namespace Project_A3_ESILV
                         }
                     }
                     moy /= (float)nbCommandesArchivees;
-                    Console.WriteLine("Moyenne des prix des commandes archivées : "+moy);
+                    Console.WriteLine("Moyenne des prix des commandes archivées : "+moy+" euros");
                     moy = 0;
                     foreach(Commande commande in manager.Commandes)
                     {
@@ -1059,7 +1060,7 @@ namespace Project_A3_ESILV
                         nbCommandesBDD++;
                     }
                     moy /= (float)nbCommandesBDD;
-                    Console.WriteLine("Moyenne des prix des commandes à venir (=dans la BDD) : " + moy);
+                    Console.WriteLine("Moyenne des prix des commandes à venir (=dans la BDD) : " + moy+" euros");
                     FooterMenu();
                     ModuleStatistique();
                     break;
@@ -1074,7 +1075,7 @@ namespace Project_A3_ESILV
                             moy += commande.Prix;
                         }
                         moy/=(float) client.Commandes.Count;
-                        Console.WriteLine(client.Nom+" "+client.Prenom+" : "+moy+"€ / commande");
+                        Console.WriteLine(client.Nom+" "+client.Prenom+" : "+moy+" euros / commande");
                     }
                     FooterMenu();
                     ModuleStatistique();
@@ -1152,7 +1153,7 @@ namespace Project_A3_ESILV
                                     TextWriter tw = new StreamWriter("key.txt", false); // on suppose que le fichier est protégé par le système d'exploitation (W11 pro uniquement)
                                     tw.Write(permu);
                                     tw.Close();
-                                    File.Encrypt("key.txt"); //UNIQUEMENT SUR WINDOWS PRO
+                                    // File.Encrypt("key.txt"); //à activer uniquement si le système d'exploitation de l'utilisateur est windows professionnel. le cas contraire, cela empêchera partiellement le bon fonctionnement du programme
                                 }
                                 else
                                 {

@@ -121,12 +121,12 @@
         #region Méthodes
         public override string ToString()
         {
-            return "Commande n° : " + id + ", Client : " + client.Nom + " " + client.Prenom + ", Route : " + depart + "-->" + arrivee + ", Date de livraison : " + dateLivraison.Date + ", chauffeur : "+ chauffeur.Nom + " " + chauffeur.Prenom+", prix : "+prix+"€";
+            return "Commande n° : " + id + ", Client : " + client.Nom + " " + client.Prenom + ", Route : " + depart + "-->" + arrivee + ", Date de livraison : " + dateLivraison.Date + ", chauffeur : "+ chauffeur.Nom + " " + chauffeur.Prenom+", prix : "+prix+" euros";
         }
 
         public string DescriptionComplete()
         {
-            return "Commande n°" + id + " : " + client.Nom + " " + client.Prenom + " a commandé un " + vehicule.Immatriculation + " pour aller de " + depart + " à " + arrivee + " pour un prix de " + prix + "€." + " Le chauffeur est " + chauffeur.Nom + " " + chauffeur.Prenom + " " + chauffeur.Nom;
+            return "Commande n°" + id + " : " + client.Nom + " " + client.Prenom + " a commandé un " + vehicule.Immatriculation + " pour aller de " + depart + " à " + arrivee + " pour un prix de " + prix + " euros." + " Le chauffeur est " + chauffeur.Nom + " " + chauffeur.Prenom + " " + chauffeur.Nom;
         }
 
         public void AfficherItineraire() //Affichage des itinéraires dans la console
