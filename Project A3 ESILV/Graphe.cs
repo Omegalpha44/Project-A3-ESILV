@@ -122,86 +122,91 @@
 
         public List<Arete> Dijkstra(string sommetDepart, string arrivee)
         {
-            if (!sommets.Contains(sommetDepart) || !sommets.Contains(arrivee)) Console.WriteLine("Une ville au moins n'a pas été trouvée dans le graphe");
-        
-        
-            // Initialise le tableau des distances, des parents, et des sommets à visiter
-            int n = sommets.Count;
-            float[,] matrAdj = this.GraphToMatr();
-            float[] distances = new float[n];
-            string[] parents = new string[n];
-            List<string> sommetsRestants = new List<string>();
-            List<Arete> res = new List<Arete>();
-            for (int i = 0; i < n; i++)
+            if (!sommets.Contains(sommetDepart) || !sommets.Contains(arrivee))
             {
-                distances[i] = int.MaxValue; //correspond à une distance infinie ici
-                sommetsRestants.Add(sommets[i]);
+                Console.WriteLine("Une ville au moins n'a pas été trouvée dans le graphe");
+                return new List<Arete>();
             }
-            distances[sommets.IndexOf(sommetDepart)] = 0;
-
-            // Boucle principale de l'algorithme
-            while (sommetsRestants.Count > 0)
-            {
-                //foreach (string sommet in sommetsRestants) Console.WriteLine(sommet);
-
-                // Trouve le sommet avec la distance minimale
-                int u = MinDistance(distances, sommetsRestants);
-                //Console.WriteLine("indice min : "+u);
-
-                // Pour chaque voisin v du sommet u
-                for (int v = 0; v < n; v++)
-                {
-                    if (matrAdj[u, v] <float.MaxValue) // s'il existe une arête (u,v)
-                    {
-                        Relachement(distances, matrAdj, parents, sommets[u], sommets[v]);
-                    }
-                }
-
-                // Retire le sommet trouvé de la liste des sommets restants
-                sommetsRestants.Remove(sommets[u]);
-                
-            }
-
-            #region Construction de l'itinéraire
-            //A partir de distances et parents on construit l'itinéraire
-            string ville = arrivee;
-            string parent = parents[sommets.IndexOf(ville)];
-
-            //cas livraisons dans une même ville. exemple : Paris-->Paris
-            if (sommetDepart == arrivee)
-            {
-                res.Add(new Arete(sommetDepart, arrivee, 0, new TimeSpan(0)));
-            }
-
-            //cas où le trajet n'est pas possible avec les arêtes de distances.csv 
-            else if (parent == null)
-            {
-                Console.WriteLine("Aucun itinéraire n'a été trouvé, veuillez vérifier le fichier distances.csv");
-            }
-
-            //cas où le trajet est possible
             else
             {
-                int indexVille = sommets.IndexOf(ville);
-                int indexParent = sommets.IndexOf(parent);
-                int nMax = 0; //gère le cas de graphe non connexe où le chemin ville départ --> ville arrivée n'existe pas
-                TimeSpan duree = new TimeSpan(0);
-                while (parent != sommetDepart && nMax < sommets.Count)
+                // Initialise le tableau des distances, des parents, et des sommets à visiter
+                int n = sommets.Count;
+                float[,] matrAdj = this.GraphToMatr();
+                float[] distances = new float[n];
+                string[] parents = new string[n];
+                List<string> sommetsRestants = new List<string>();
+                List<Arete> res = new List<Arete>();
+                for (int i = 0; i < n; i++)
                 {
-                    duree = aretes.Find(x => x.Depart == parent && x.Arrivee == ville).Duree;
-                    res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille],duree));
-                    ville = parent;
-                    parent = parents[sommets.IndexOf(ville)];
-                    indexVille = sommets.IndexOf(ville);
-                    indexParent = sommets.IndexOf(parent);
-                    nMax++;
+                    distances[i] = int.MaxValue; //correspond à une distance infinie ici
+                    sommetsRestants.Add(sommets[i]);
                 }
-                duree = aretes.Find(x => x.Depart == parent && x.Arrivee == ville).Duree;
-                res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille], duree));
-                //foreach (Arete arete in res) Console.WriteLine(arete.ToString());
+                distances[sommets.IndexOf(sommetDepart)] = 0;
+
+                // Boucle principale de l'algorithme
+                while (sommetsRestants.Count > 0)
+                {
+                    //foreach (string sommet in sommetsRestants) Console.WriteLine(sommet);
+
+                    // Trouve le sommet avec la distance minimale
+                    int u = MinDistance(distances, sommetsRestants);
+                    //Console.WriteLine("indice min : "+u);
+
+                    // Pour chaque voisin v du sommet u
+                    for (int v = 0; v < n; v++)
+                    {
+                        if (matrAdj[u, v] < float.MaxValue) // s'il existe une arête (u,v)
+                        {
+                            Relachement(distances, matrAdj, parents, sommets[u], sommets[v]);
+                        }
+                    }
+
+                    // Retire le sommet trouvé de la liste des sommets restants
+                    sommetsRestants.Remove(sommets[u]);
+
+                }
+
+                #region Construction de l'itinéraire
+                //A partir de distances et parents on construit l'itinéraire
+                string ville = arrivee;
+                string parent = parents[sommets.IndexOf(ville)];
+
+                //cas livraisons dans une même ville. exemple : Paris-->Paris
+                if (sommetDepart == arrivee)
+                {
+                    res.Add(new Arete(sommetDepart, arrivee, 0, new TimeSpan(0)));
+                }
+
+                //cas où le trajet n'est pas possible avec les arêtes de distances.csv 
+                else if (parent == null)
+                {
+                    Console.WriteLine("Aucun itinéraire n'a été trouvé, veuillez vérifier le fichier distances.csv");
+                }
+
+                //cas où le trajet est possible
+                else
+                {
+                    int indexVille = sommets.IndexOf(ville);
+                    int indexParent = sommets.IndexOf(parent);
+                    int nMax = 0; //gère le cas de graphe non connexe où le chemin ville départ --> ville arrivée n'existe pas
+                    TimeSpan duree = new TimeSpan(0);
+                    while (parent != sommetDepart && nMax < sommets.Count)
+                    {
+                        duree = aretes.Find(x => x.Depart == parent && x.Arrivee == ville).Duree;
+                        res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille], duree));
+                        ville = parent;
+                        parent = parents[sommets.IndexOf(ville)];
+                        indexVille = sommets.IndexOf(ville);
+                        indexParent = sommets.IndexOf(parent);
+                        nMax++;
+                    }
+                    duree = aretes.Find(x => x.Depart == parent && x.Arrivee == ville).Duree;
+                    res.Insert(0, new Arete(parent, ville, matrAdj[indexParent, indexVille], duree));
+                    //foreach (Arete arete in res) Console.WriteLine(arete.ToString());
+                }
+                #endregion
+                return res;
             }
-            #endregion
-            return res;
         }
 
         #region autre implémentation de Dijkstra (avec dictionnaire, tuples...) (pour justifier le choix de notre implémentation)

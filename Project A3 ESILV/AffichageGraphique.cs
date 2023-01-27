@@ -692,38 +692,52 @@ namespace Project_A3_ESILV
                 {
                     Commande cible = manager.Commandes.Find(x => x.Id == r);
                     Console.WriteLine("Modification de {0}", cible.Id + "  " + cible.Depart + " " + cible.Arrivee + " " + cible.DateLivraison);
-                    Console.WriteLine("Que souhaitez vous modifier ? \n 1 : Départ, 2 : Arrivée, 3 : Date de livraison");
-                    Console.WriteLine("  :  ");
+                    Console.WriteLine("Que souhaitez vous modifier ? \n 1 = Départ, 2 = Arrivée, 3 = Date de livraison : ");
+                    Commande temp = new Commande();
                     int l = GoodValue(1, 3);
                     switch (l)
                     {
-                        case 1: Console.WriteLine("Entrez le nouveau départ : "); cible.Depart = Console.ReadLine(); break;
-                        case 2: Console.WriteLine("Entrez la nouvelle arrivée : "); cible.Arrivee = Console.ReadLine(); break;
+                        case 1: Console.WriteLine("Entrez le nouveau départ : "); temp.Depart = Console.ReadLine(); temp.Arrivee = cible.Arrivee;temp.DateLivraison = cible.DateLivraison;  break;
+                        case 2: Console.WriteLine("Entrez la nouvelle arrivée : "); temp.Arrivee = Console.ReadLine(); temp.Depart = cible.Depart;temp.DateLivraison = cible.DateLivraison; break;
                         case 3:
                             {
                                 Console.WriteLine("Entrez la nouvelle date de livraison  (jour/mois/année) : ");
                                 string date = Console.ReadLine();
                                 string[] dates = date.Split('/');
                                 DateTime dateLivraison = new DateTime(int.Parse(dates[2]), int.Parse(dates[1]), int.Parse(dates[0]));
-                                cible.DateLivraison = dateLivraison;
+                                temp.Arrivee = cible.Arrivee;
+                                temp.Depart = cible.Depart;
+                                temp.DateLivraison = dateLivraison;
                                 break;
                             }
                     }
 
-                    List<Arete> nouvelItineraire = manager.Graphe.Dijkstra(cible.Depart, cible.Arrivee);
+                    List<Arete> nouvelItineraire = manager.Graphe.Dijkstra(temp.Depart, temp.Arrivee);
                     if (nouvelItineraire.Count == 0) 
                     {
                         Console.WriteLine("Impossible de changer l'itinéraire, nouvel itinéraire incompatible");
                     }
                     else
                     {
-                        Commande temp = new Commande();
+                        
                         temp.Chauffeur = cible.Chauffeur;
                         temp.Itineraire = nouvelItineraire;
                         temp.AfficherItineraire();
-                        temp.getPrix();
+                        //temp.getPrix();
                         Console.WriteLine("===============");
                         Console.WriteLine("Ce nouvel itinéraire vous convient-il ? (1=oui 2=non) : ");
+                        int j = GoodValue(1, 2);
+                        switch(j)
+                        {
+                            case 1:// on remodifie les paramètres de temp si l'op les valide
+                                cible.Itineraire = nouvelItineraire;
+                                cible.getPrix();
+                                cible.Depart=temp.Depart;
+                                cible.Arrivee=temp.Arrivee;
+                                cible.DateLivraison = temp.DateLivraison;
+                                break;
+                            case 2: break;
+                        }
                     }
                 }
             }
