@@ -75,7 +75,7 @@
         #region méthodes
         public override string ToString()
         {
-            return "Salarié : " + base.ToString() + " Date d'embauche : " + dateEmbauche + " Poste : " + poste + " Salaire : " + salaire +  " Sécurité sociale : " + id;
+            return "Salarié : " + base.ToString() + ", Date d'embauche : " + dateEmbauche + ", Poste : " + poste + ", Salaire : " + salaire + ", Sécurité sociale : " + id + ", adresse mail : " + adresseMail + ", téléphone : " + telephone + ", adresse : " + adresse ;
         }
         public override string ToStringComplete()
         {

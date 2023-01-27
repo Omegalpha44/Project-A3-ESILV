@@ -343,6 +343,7 @@ namespace Project_A3_ESILV
                 {
                     if (boo) Console.WriteLine(c.ToStringComplete());
                     else Console.WriteLine(c.ToString());
+                    Console.WriteLine();
                 }
             }
             else Console.WriteLine("Pas de client dans la banque de donnée : Veuillez en rajouter avant de procéder à un affichage");
@@ -568,7 +569,7 @@ namespace Project_A3_ESILV
                             }
                             break;
                         }
-                    case 3: manager.Salaries.ForEach(x => Console.WriteLine(x)); break;
+                    case 3: manager.Salaries.ForEach(x => Console.WriteLine(x+"\n")); break;
                     case 4: manager.SalariesHierarchie.AfficherHierarchie(); break;
                 }
                 Console.WriteLine("===============");
