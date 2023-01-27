@@ -988,7 +988,7 @@ namespace Project_A3_ESILV
                     Vehicule cible = manager.Vehicules.Find(x => x.Immatriculation == idVehicule);
                     Console.WriteLine(cible);
                 }
-                else Console.WriteLine("La commande n'a pas été trouvée dans la BDD");
+                else Console.WriteLine("Le véhicule n'a pas été trouvée dans la BDD");
 
             }
             FooterMenu();
@@ -1300,7 +1300,7 @@ namespace Project_A3_ESILV
                     Console.WriteLine(obj);
                 }
             }
-            else Console.WriteLine("Pas de commande dans la banque de donnée : Veuillez en rajouter avant de procéder à une suppression");
+            else Console.WriteLine("Pas de {0} dans la banque de donnée",label);
         }
         static void FooterMenu()
         {
